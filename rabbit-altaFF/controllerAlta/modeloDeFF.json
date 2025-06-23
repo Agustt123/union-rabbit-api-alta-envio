@@ -1,0 +1,89 @@
+{
+    "operador": "enviosmlia",
+    "data": {
+        "token": "128caracteres",
+        "didDeposito": 1,
+        "didEmpresa": 274,
+        "ff": 1,
+        "ia": 1,
+        "operador": "enviosMLIA",
+        "fulfillment": 1,
+        "gtoken": "",
+        "flex": 1,
+        "turbo": 0,
+        "status_order": "paid",
+        "fecha_inicio": "2025-06-19",
+        "fechaunix": 1750354251,
+        "ml_shipment_id": 45031797291,
+        "ml_vendedor_id": "294771171",
+        "ml_venta_id": 2000011987498008,
+        "ml_pack_id": null,
+        "mode": "cross_docking",
+        "didMetodoEnvio": 2,
+        "ml_qr_seguridad": "",
+        "didCliente": 3,
+        "didCuenta": 28,
+        "didServicio": 1,
+        "peso": 3000,
+        "volumen": 0,
+        "bultos": 1,
+        "valor_declarado": 65000,
+        "monto_total_a_cobrar": 0,
+        "tracking_method": "Places Pickup",
+        "tracking_number": 45031797291,
+        "fecha_venta": "2025-06-17T14:39:31.000-04:00",
+        "destination_receiver_name": "Rayeb Matías",
+        "destination_receiver_phone": "XXXXXXX",
+        "destination_receiver_email": "",
+        "destination_comments": "",
+        "delivery_preference": "C",
+        "quien": 0,
+        "enviosObservaciones": {
+            "observacion": ""
+        },
+        "enviosDireccionesDestino": {
+            "calle": "Av. Arias",
+            "numero": "2098",
+            "address_line": "Av. Arias 2098",
+            "cp": "8000",
+            "localidad": "Bahía Blanca",
+            "provincia": "Buenos Aires",
+            "pais": "Argentina",
+            "latitud": -38.753768,
+            "longitud": -62.265033,
+            "quien": 0,
+            "destination_comments": "",
+            "delivery_preference": "C"
+        },
+        "enviosItems": [
+            {
+                "codigo": "MLA1570073844",
+                "imagen": "",
+                "descripcion": "Combo X4 Almohadas Inteligentes Viscoelasticas Con Funda",
+                "ml_id": "MLA1570073844",
+                "dimensions": "33.0x41.0x52.0",
+                "cantidad": 1,
+                "variacion": 179261079300,
+                "seller_sku": "INTELIGX4"
+            }
+        ],
+        "orders": [
+            {
+                "number": "2000011987498008",
+                "fecha_venta": "2025-06-17T14:39:31.000-04:00",
+                "items": [
+                    {
+                        "codigo": "MLA1570073844",
+                        "imagen": "",
+                        "descripcion": "Combo X4 Almohadas Inteligentes Viscoelasticas Con Funda",
+                        "ml_id": "MLA1570073844",
+                        "dimensions": "33.0x41.0x52.0",
+                        "cantidad": 1,
+                        "variacion": 179261079300,
+                        "seller_sku": "INTELIGX4"
+                    }
+                ]
+            }
+        ]
+    }
+}
