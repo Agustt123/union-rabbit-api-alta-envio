@@ -20,7 +20,7 @@ FF.post("/altaEnvioFF", async (req, res) => {
         }
 
         if (idEmpresa === 82) {
-            console.log("Procesando mensaje para idEmpresa 274:", data);
+            console.log("Procesando mensaje para idEmpresa :", data);
 
             const company = await getCompanyById(idEmpresa);
             await AltaEnvio(company, data);
@@ -32,7 +32,8 @@ FF.post("/altaEnvioFF", async (req, res) => {
         }
     } catch (error) {
         console.error("Error en /altaEnvioFF:", error);
-        return res.status(500).json({ estado: false, error: -1, message: error });
+        return res.status(500).json({ estado: false, error: -1, message: error.message });
+
     }
 });
 FF.get("/test", (req, res) => {
