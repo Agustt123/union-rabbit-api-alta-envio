@@ -29,7 +29,7 @@ async function startConsumer() {
             return channel.ack(msg);
           }
 
-          if (idEmpresa == 274) {
+          if (idEmpresa == 999) {
             console.log("Procesando mensaje para idEmpresa 315:", data);
 
             // const connectionDb = await getConnection(idEmpresa);

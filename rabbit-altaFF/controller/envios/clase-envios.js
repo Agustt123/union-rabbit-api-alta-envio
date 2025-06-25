@@ -36,23 +36,23 @@ class Envios {
       didMetodoEnvio: data.didMetodoEnvio ?? 0,
       didServicio: data.didServicio ?? 1,
       didSucursalDistribucion: data.didSucursalDistribucion ?? 1,
-      peso: data.peso ?? "",
+      peso: data.peso ?? "0",
       destination_types: data.destination_types ?? " ",
       // estado_envio: data.estado_envio ?? 0,
 
-      volumen: data.volumen ?? "",
+      volumen: data.volumen ?? "0",
       bultos: data.bultos ?? 1,
-      valor_declarado: data.valor_declarado ?? "",
-      monto_total_a_cobrar: data.monto_total_a_cobrar ?? "",
-      tracking_method: data.tracking_method ?? "",
+      valor_declarado: data.valor_declarado ?? "0",
+      monto_total_a_cobrar: data.monto_total_a_cobrar ?? "0",
+
       tracking_number: data.tracking_number,
       fecha_venta: data.fecha_venta ?? "",
       destination_receiver_name: data.destination_receiver_name ?? " ",
-      destination_receiver_phone: data.destination_receiver_phone,
-      destination_receiver_email: data.destination_receiver_email,
-      destination_comments: data.destination_comments ?? "   ",
-      delivery_preference: data.delivery_preference ?? " ",
-      quien: data.quien,
+      destination_receiver_phone: data.destination_receiver_phone ?? " ",
+      destination_receiver_email: data.destination_receiver_email ?? " ",
+
+
+      quien: data.quien ?? 0,
       elim: data.elim ?? 0,
     };
 

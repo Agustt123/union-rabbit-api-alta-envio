@@ -1,22 +1,21 @@
 const { executeQuery } = require("../dbconfig");
 
-async function checkToken(token, didCliente, connection) {
-
-
+async function checkToken(token, connection) {
     if (typeof token !== 'string' || token.length !== 128) {
-        return false; // o podés lanzar un error si querés manejarlo distinto
+        return null; // o podés lanzar un error
     }
 
-
-    const query = 'SELECT * FROM clientes WHERE token_api_ext = ? AND did = ?';
-    const result = await executeQuery(connection, query, [token, didCliente]);
+    const query = 'SELECT didCliente, didCuenta FROM clientes WHERE token_api_ext = ?';
+    const result = await executeQuery(connection, query, [token]);
 
     if (result.length > 0) {
-        return true;
+        return {
+            didCliente: result[0].didCliente,
+            didCuenta: result[0].didCuenta
+        };
     } else {
-        return false;
+        return null;
     }
-
 }
 
 module.exports = { checkToken };

@@ -17,7 +17,17 @@ const { log } = require("console");
 const { checkToken } = require("../fuctions/checkTokenCliente");
 
 async function AltaEnvio(company, data) {
+
+
   const connection = await getConnection(company.did);
+  const tokenData = await checkToken(data.data.token, connection);
+  if (!tokenData) {
+    throw new Error("Token inválido");
+  }
+
+  // Insertamos didCliente y didCuenta en data.data
+  data.data.didCliente = tokenData.didCliente;
+  data.data.didCuenta = tokenData.didCuenta;
   data.data.status_order = "paid";
 
   try {
@@ -29,14 +39,14 @@ async function AltaEnvio(company, data) {
       };
     }
 
-    const check = await checkToken(data.data.token, data.data.didCliente, connection);
-    if (!check) {
-      return {
-        status: 400,
-        message: "El token no es valido",
-      };
-    }
-
+    /* const check = await checkToken(data.data.token, data.data.didCliente, connection);
+     if (!check) {
+       return {
+         status: 400,
+         message: "El token no es valido",
+       };
+     }
+ */
     let insertId;
     // Lógica para insertar un envío flex
     if (data.data.flex === 1 && data.data.mlIa == 88) {
@@ -90,7 +100,7 @@ async function checkExistingShipment(data, connection) {
       WHERE ml_vendedor_id = ? AND ml_shipment_id = ? and elim in (0,52) AND superado = 0`;
 
     const result = await executeQuery(connection, queryCheck, [
-      data.data.ml_vendedor_id,
+      data.data.ml_vendedor_id || "",
       data.data.ml_shipment_id,
     ]);
     return result.length > 0;
@@ -102,7 +112,7 @@ async function insertEnvioFlex(data, company, connection) {
   const envioflex = new EnviosFlex(
     data.data.did,
     data.data.ml_shipment_id,
-    data.data.ml_vendedor_id,
+    data.data.ml_vendedor_id || "",
     data.data.ml_qr_seguridad,
     data.data.didCliente,
     data.data.didCuenta,
@@ -348,10 +358,10 @@ async function insertEnviosItems(data, insertId, company, connection) {
         item.codigo,
         item.imagen,
         item.descripcion,
-        item.ml_id,
-        item.dimensions,
+        item.ml_id || "",
+        item.dimensions || "",
         item.cantidad,
-        item.variacion,
+        item.variacion || "",
         item.seller_sku,
         item.descargado,
         item.autofecha,
@@ -373,7 +383,7 @@ async function insertOrders(data, insertId, company, connection) {
         didEnvio: insertId,
         didCliente: data.data.didCliente,
         didCuenta: data.data.didCuenta,
-        status: data.data.status_order || "nollego",
+        status: data.data.status_order || "paid",
         flex: data.data.flex,
         fecha_venta: ordenData.fecha_venta || data.data.fecha_venta || "",
         number: ordenData.number || "",
