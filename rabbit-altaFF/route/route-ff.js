@@ -19,7 +19,7 @@ FF.post("/altaEnvioFF", async (req, res) => {
             return res.status(200).json({ mensaje: `Empresa ${idEmpresa} ignorada.` });
         }
 
-        if (idEmpresa == 82) {
+        if (idEmpresa === 82) {
             console.log("Procesando mensaje para idEmpresa 274:", data);
 
             const company = await getCompanyById(idEmpresa);
