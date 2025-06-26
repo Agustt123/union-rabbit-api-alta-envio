@@ -16,6 +16,7 @@ const { stat } = require("fs");
 const { log } = require("console");
 const { checkToken } = require("../fuctions/checkTokenCliente");
 
+
 async function AltaEnvio(company, data) {
 
 
@@ -96,22 +97,21 @@ async function AltaEnvio(company, data) {
 }
 
 async function checkExistingShipment(data, connection) {
-  if (data.data.operador === "enviosMLIA" && data.data.ia === 1) {
-    const queryCheck = `
+
+  const queryCheck = `
       SELECT ml_vendedor_id, ml_shipment_id 
       FROM envios 
       WHERE  AND ml_shipment_id = ? AND elim IN (0,52) AND superado = 0
     `;
 
-    const result = await executeQuery(connection, queryCheck, [
-      data.data.ml_vendedor_id || "",
-      data.data.ml_shipment_id,
-    ]);
+  const result = await executeQuery(connection, queryCheck, [
+    data.data.ml_vendedor_id || "",
+    data.data.ml_shipment_id,
+  ]);
 
-    return result.length > 0;
-  }
+  return result.length > 0;
 
-  return false;
+
 }
 
 async function insertEnvioFlex(data, company, connection) {
