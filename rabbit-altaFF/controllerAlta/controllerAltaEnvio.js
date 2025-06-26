@@ -142,11 +142,11 @@ async function handleFulfillment(data, connection, company) {
   const queryCheck = `
     SELECT ml_vendedor_id, ml_shipment_id, estado, did 
     FROM envios 
-    WHERE ml_venta_id = ? AND ml_pack_id = ? AND superado = 0`;
+    WHERE ml_shipment_id = ? AND superado = 0`;
 
   const result = await executeQuery(connection, queryCheck, [
-    data.data.ml_venta_id,
-    data.data.ml_pack_id,
+    data.data.ml_shipment_id,
+
   ]);
 
   let estadollega;
@@ -183,7 +183,7 @@ async function handleFulfillment(data, connection, company) {
   }
 
   // Si el estado es diferente, continuar con la lógica
-  data.data.did = result[0].did;
+  ;
   const envio = new Envios(data.data, company, connection);
   await envio.insert();
   return {
