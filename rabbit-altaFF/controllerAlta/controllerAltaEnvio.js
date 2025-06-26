@@ -405,7 +405,7 @@ async function insertOrders(data, insertId, company, connection) {
       // Usar el insertId si did es 0, de lo contrario usar did
       const orderIdToUse = resultadoOrden.did !== 0 ? resultadoOrden.did : resultadoOrden.insertId;
 
-      await insertOrderItems(ordenData.items, orderIdToUse, connection);
+      await insertOrderItems(data.data.items, orderIdToUse, connection);
     }
   }
 }
