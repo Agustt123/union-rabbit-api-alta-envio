@@ -5,13 +5,14 @@ async function checkToken(token, connection) {
         return null; // o podés lanzar un error
     }
 
-    const query = 'SELECT didCliente, didCuenta FROM clientes WHERE token_api_ext = ?';
+    const query = 'SELECT did FROM clientes WHERE token_api_ext = ?';
     const result = await executeQuery(connection, query, [token]);
 
     if (result.length > 0) {
         return {
-            didCliente: result[0].didCliente,
-            didCuenta: result[0].didCuenta
+            didCliente: result[0].did,
+            didCuenta: 0
+
         };
     } else {
         return null;
