@@ -38,7 +38,7 @@ async function AltaEnvio(company, data) {
     logYellow(`yaExiste: ${yaExiste}`);
     if (yaExiste) {
       return {
-        status: 400,
+        status: false,
         message: "El envío ya existe. Si querés volver a insertarlo, primero debés eliminarlo.",
       };
     }
