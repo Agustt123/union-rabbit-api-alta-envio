@@ -11,13 +11,13 @@ class Envios {
     fecha.setHours(fecha.getHours() - 3); // Ajustar la hora según sea necesario
     this.fecha_inicio = fecha.toISOString(); // Asignar la fecha en formato ISO
 
-    if (data.estado_envio == "paid") {
-      data.estado_envio = 1;
-    }
-    if (data.estado_envio == "cancelled") {
-      data.estado_envio = 0;
-    }
-
+    /*  if (data.estado_envio == "paid") {
+        data.estado_envio = 1;
+      }
+      if (data.estado_envio == "cancelled") {
+        data.estado_envio = 0;
+      }
+  */
     const campos = {
       did: data.did ?? 0,
       didDeposito: data.didDeposito ?? 1,
