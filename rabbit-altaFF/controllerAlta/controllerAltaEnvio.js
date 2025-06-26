@@ -35,6 +35,7 @@ async function AltaEnvio(company, data) {
     // Verificar si el envío ya existe
     const yaExiste = await checkExistingShipment(data, connection);
 
+    logYellow(`yaExiste: ${yaExiste}`);
     if (yaExiste) {
       return {
         status: 400,
