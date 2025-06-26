@@ -23,7 +23,11 @@ FF.post("/altaEnvioFF", async (req, res) => {
             console.log("Procesando mensaje para idEmpresa :", data);
 
             const company = await getCompanyById(idEmpresa);
-            await AltaEnvio(company, data);
+            const result = await AltaEnvio(company, data);
+            if (result.estado == false) {
+                return res.status(500).json(result);
+            }
+
 
             return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente." });
         } else {
