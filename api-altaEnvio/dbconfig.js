@@ -1,12 +1,12 @@
 const mysql = require('mysql');
 const redis = require('redis');
-const {logYellow,logRed} = require ("./fuctions/logsCustom")
+const { logYellow, logRed } = require("./fuctions/logsCustom")
 const redisClient = redis.createClient({
     socket: {
-        host: '192.99.190.137', 
-        port: 50301,           
+        host: '192.99.190.137',
+        port: 50301,
     },
-    password: 'sdJmdxXC8luknTrqmHceJS48NTyzExQg', 
+    password: 'sdJmdxXC8luknTrqmHceJS48NTyzExQg',
 });
 
 redisClient.on('error', (err) => {
@@ -20,7 +20,7 @@ redisClient.on('error', (err) => {
 let companiesList = {};
 async function getConnection(idempresa) {
     try {
-        console.log("idempresa recibido:", idempresa);
+        //     console.log("idempresa recibido:", idempresa);
 
         // Validación del tipo de idempresa
         if (typeof idempresa !== 'string' && typeof idempresa !== 'number') {
@@ -34,7 +34,7 @@ async function getConnection(idempresa) {
             throw new Error(`No se encontraron datos de empresas en Redis.`);
         }
 
-       // console.log("Datos obtenidos desde Redis:", empresasData);
+        // console.log("Datos obtenidos desde Redis:", empresasData);
 
         // Buscar la empresa por su id
         const empresa = empresasData[String(idempresa)];
@@ -42,7 +42,7 @@ async function getConnection(idempresa) {
             throw new Error(`No se encontró la configuración de la empresa con ID: ${idempresa}`);
         }
 
-        console.log("Configuración de la empresa encontrada:", empresa);
+        //    console.log("Configuración de la empresa encontrada:", empresa);
 
         // Configurar la conexión a la base de datos
         const config = {
@@ -51,12 +51,12 @@ async function getConnection(idempresa) {
             user: empresa.dbuser,               // Usuario desde Redis
             password: empresa.dbpass,           // Contraseña desde Redis
         };
-      /*  const config = {
-            host: 'localhost',  // Host fijo
-            database: "logisticaa",           // Base de datos desde Redis
-            user: "logisticaA",               // Usuario desde Redis
-            password: "logisticaa",           // Contraseña desde Redis
-        };*/
+        /*  const config = {
+              host: 'localhost',  // Host fijo
+              database: "logisticaa",           // Base de datos desde Redis
+              user: "logisticaA",               // Usuario desde Redis
+              password: "logisticaa",           // Contraseña desde Redis
+          };*/
 
         console.log("Configuración de la conexión:", config);
 
@@ -69,9 +69,9 @@ async function getConnection(idempresa) {
             status: 500,
             response: {
                 estado: false,
-              
+
                 error: -1,
-             
+
             },
         };
     }
@@ -88,15 +88,15 @@ async function getFromRedis(key) {
             status: 500,
             response: {
                 estado: false,
-              
+
                 error: -1
-              
+
             },
         };
     }
 }
 
- function getProdDbConfig(company) {
+function getProdDbConfig(company) {
     return {
         host: "bhsmysql1.lightdata.com.ar",
         user: company.dbuser,
@@ -117,7 +117,7 @@ async function loadCompaniesFromRedis() {
     }
 }
 
- async function executeQuery(connection, query, values, log = false) {
+async function executeQuery(connection, query, values, log = false) {
     if (log) {
         logYellow(`Ejecutando query: ${query} con valores: ${values}`);
     }
@@ -142,7 +142,7 @@ async function loadCompaniesFromRedis() {
         throw error;
     }
 }
- async function getCompanyById(companyId) {
+async function getCompanyById(companyId) {
     try {
         let company = companiesList[companyId];
 
