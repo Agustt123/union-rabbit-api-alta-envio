@@ -18,23 +18,18 @@ const { checkToken } = require("../fuctions/checkTokenCliente");
 
 
 async function AltaEnvio(company, data) {
-
-
   const connection = await getConnection(company.did);
   const tokenData = await checkToken(data.data.token, connection);
   if (!tokenData) {
     throw new Error("Token inválido");
   }
 
-  // Insertamos didCliente y didCuenta en data.data
   data.data.didCliente = tokenData.didCliente;
   data.data.didCuenta = tokenData.didCuenta;
   data.data.status_order = "paid";
 
   try {
-    // Verificar si el envío ya existe
     const yaExiste = await checkExistingShipment(data, connection);
-
     logYellow(`yaExiste: ${yaExiste}`);
     if (yaExiste) {
       return {
@@ -43,59 +38,47 @@ async function AltaEnvio(company, data) {
       };
     }
 
-
-    /* const check = await checkToken(data.data.token, data.data.didCliente, connection);
-     if (!check) {
-       return {
-         status: 400,
-         message: "El token no es valido",
-       };
-     }
- */
     let insertId;
-    // Lógica para insertar un envío flex
     if (data.data.flex === 1 && data.data.mlIa == 88) {
       insertId = await insertEnvioFlex(data, company, connection);
     } else {
-      // Validar datos del envío
       validateEnvioData(data);
+
       const email = data.data.destination_receiver_email;
       delete data.data.destination_receiver_email;
-
       if (email) {
         data.data.destination_receiver_email = email;
       }
 
-      // Establecer elim en 52 si fulfillment es 0
       if (data.data.ff === 1) {
         data.data.elim = 52;
         const result = await handleFulfillment(data, connection, company);
-
-        // Si no se encontraron resultados, se inserta un nuevo envío
         if (!result.status) {
           console.log("No se encontró fulfillment, insertando nuevo envío...");
           insertId = await insertStandardEnvio(data, company, connection);
         } else {
-          insertId = result.insertId; // Usar el ID existente
+          insertId = result.insertId;
         }
       } else {
-
-        // Insertar un envío estándar si no se cumple la condición de fulfillment
         insertId = await insertStandardEnvio(data, company, connection);
       }
     }
 
-    // Procesar datos relacionados
     await processRelatedData(data, insertId, company, connection);
 
     return true;
   } catch (error) {
     console.error("Error en la función principal:", error);
-    return false;
+    return {
+      estado: false,
+      error: -1,
+      message: `Error en la función principal: ${error.message}`
+    };
   } finally {
-    connection.end(); // Liberar la conexión
+    connection.end();
   }
 }
+
 
 async function checkExistingShipment(data, connection) {
   if (!data.data.ml_shipment_id) {

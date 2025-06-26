@@ -7,12 +7,21 @@ const { AltaEnvio } = require("../controllerAlta/controllerAltaEnvio");
 FF.post("/altaEnvioFF", async (req, res) => {
     try {
         const data = req.body;
-        const idEmpresa = data?.data?.didEmpresa;
+        const dataEnvio = data?.data;
 
-        if (!idEmpresa) {
-            return res.status(400).json({ error: "Falta didEmpresa en el body." });
+        // Validación de campos obligatorios
+        const camposObligatorios = ['token', 'didDeposito', 'didEmpresa', 'didServicio', 'ff'];
+        for (const campo of camposObligatorios) {
+            if (!dataEnvio?.[campo] && dataEnvio?.[campo] !== 0) {
+                return res.status(500).json({
+                    estado: false,
+                    error: -1,
+                    message: `Error en /altaEnvioFF: falta campo obligatorio '${campo}'`
+                });
+            }
         }
 
+        const idEmpresa = dataEnvio.didEmpresa;
         const empresasExcluidas = [149, 44, 86, 36];
         if (empresasExcluidas.includes(idEmpresa)) {
             console.log(`idEmpresa ${idEmpresa} está excluida.`);
@@ -24,10 +33,9 @@ FF.post("/altaEnvioFF", async (req, res) => {
 
             const company = await getCompanyById(idEmpresa);
             const result = await AltaEnvio(company, data);
-            if (result.estado == false) {
+            if (result.estado === false) {
                 return res.status(500).json(result);
             }
-
 
             return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente." });
         } else {
@@ -36,10 +44,10 @@ FF.post("/altaEnvioFF", async (req, res) => {
         }
     } catch (error) {
         console.error("Error en /altaEnvioFF:", error);
-        return res.status(500).json({ estado: false, error: -1, message: error.message });
-
+        return res.status(500).json({ estado: false, error: -1, message: `Error en /altaEnvioFF: ${error.message}` });
     }
 });
+
 FF.get("/test", (req, res) => {
     res.status(200).json({ estado: true });
 });
