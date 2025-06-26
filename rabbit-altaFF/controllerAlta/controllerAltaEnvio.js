@@ -107,7 +107,7 @@ async function checkExistingShipment(data, connection) {
     WHERE ml_shipment_id = ? AND elim IN (0,52) AND superado = 0
   `;
 
-  const result = await executeQuery(connection, queryCheck[
+  const result = await executeQuery(connection, queryCheck, [
     data.data.ml_shipment_id
   ]);
 
