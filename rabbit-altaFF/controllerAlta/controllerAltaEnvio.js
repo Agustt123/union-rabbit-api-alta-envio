@@ -32,12 +32,15 @@ async function AltaEnvio(company, data) {
 
   try {
     // Verificar si el envío ya existe
-    if (await checkExistingShipment(data, connection)) {
+    const yaExiste = await checkExistingShipment(data, connection);
+
+    if (yaExiste) {
       return {
         status: 400,
-        message: "El envio ya existe",
+        message: "El envío ya existe. Si querés volver a insertarlo, primero debés eliminarlo.",
       };
     }
+
 
     /* const check = await checkToken(data.data.token, data.data.didCliente, connection);
      if (!check) {
@@ -97,14 +100,17 @@ async function checkExistingShipment(data, connection) {
     const queryCheck = `
       SELECT ml_vendedor_id, ml_shipment_id 
       FROM envios 
-      WHERE ml_vendedor_id = ? AND ml_shipment_id = ? and elim in (0,52) AND superado = 0`;
+      WHERE  AND ml_shipment_id = ? AND elim IN (0,52) AND superado = 0
+    `;
 
     const result = await executeQuery(connection, queryCheck, [
       data.data.ml_vendedor_id || "",
       data.data.ml_shipment_id,
     ]);
+
     return result.length > 0;
   }
+
   return false;
 }
 
