@@ -12,10 +12,10 @@ class Envios {
     this.fecha_inicio = fecha.toISOString(); // Asignar la fecha en formato ISO
 
     if (data.estado_envio == "paid") {
-      data.estado_envio = 12;
+      data.estado_envio = 1;
     }
     if (data.estado_envio == "cancelled") {
-      data.estado_envio = 13;
+      data.estado_envio = 0;
     }
 
     const campos = {
@@ -38,6 +38,7 @@ class Envios {
       didSucursalDistribucion: data.didSucursalDistribucion ?? 1,
       peso: data.peso ?? "0",
       destination_types: data.destination_types ?? " ",
+      estado: data.estado ?? 1,
       // estado_envio: data.estado_envio ?? 0,
 
       volumen: data.volumen ?? "0",
