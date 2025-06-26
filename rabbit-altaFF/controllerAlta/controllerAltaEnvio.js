@@ -110,10 +110,12 @@ async function checkExistingShipment(data, connection) {
 
   const result = await executeQuery(connection, queryCheck, [
     data.data.ml_shipment_id
-  ], true);
+  ]);
 
-  // ✅ Solo consideramos válido si hay **exactamente uno**
-  return result.length === 1;
+  console.log("🚨 Cantidad de coincidencias:", result.length);
+
+  // Si hay al menos una coincidencia, no insertar
+  return result.length > 0;
 }
 
 
