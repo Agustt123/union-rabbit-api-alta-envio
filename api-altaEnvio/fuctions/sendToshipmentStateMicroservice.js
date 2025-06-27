@@ -1,54 +1,60 @@
 const { connect } = require('amqplib');
+const axios = require('axios');
+const { logRed, logGreen, logYellow } = require('./logsCustom.js');
 
+const RABBITMQ_URL = "amqp://lightdata:QQyfVBKRbw6fBb@158.69.131.226:5672";
+const QUEUE_ESTADOS = "srvshipmltosrvstates";
+const BACKUP_ENDPOINT = "https://serverestado.lightdata.app/estados";
 
-
-const { logRed, logGreen } = require('./logsCustom.js');
-const { formatFechaUTC3 } = require('./formatFechaUTC3.js');
-
-
-
-const RABBITMQ_URL = "amqp://lightdata:QQyfVBKRbw6fBb@158.69.131.226:5672"
-const QUEUE_ESTADOS = "srvshipmltosrvstates"
 function getFechaUTC3() {
     const fecha = new Date();
-    fecha.setHours(fecha.getHours() - 3); // Añade 3 horas
-    return fecha.toISOString(); // Devuelve la fecha en formato ISO
+    fecha.setHours(fecha.getHours() - 3); // Ajuste a UTC-3
+    return fecha.toISOString();
 }
 
-async function sendToShipmentStateMicroService(companyId, userId, shipmentId,estado) {
+async function sendToShipmentStateMicroService(companyId, userId, shipmentId, estado) {
+    const message = {
+        didempresa: companyId,
+        didenvio: shipmentId,
+        estado: estado,
+        subestado: null,
+        estadoML: null,
+        fecha: getFechaUTC3(),
+        quien: userId,
+        operacion: "Altamasiva"
+    };
+
     try {
         const connection = await connect(RABBITMQ_URL);
         const channel = await connection.createChannel();
         await channel.assertQueue(QUEUE_ESTADOS, { durable: true });
-console.log(companyId, userId, shipmentId,estado,"cosas");
 
-        const message = {
-            didempresa: companyId,
-            didenvio: shipmentId,
-            estado: estado,
-            subestado: null,
-            estadoML: null,
-            fecha: getFechaUTC3(),
-            quien: userId,
-            operacion: "Altamasiva"
-        };
+        const sent = channel.sendToQueue(
+            QUEUE_ESTADOS,
+            Buffer.from(JSON.stringify(message)),
+            { persistent: true }
+        );
 
-        channel.sendToQueue(QUEUE_ESTADOS, Buffer.from(JSON.stringify(message)), { persistent: true }, (err, ok) => {
-            if (err) {
-                logRed('❌ Error al enviar el mensaje:', err);
-                console.log("llegue aca1");
-            } else {
-                logGreen('✅ Mensaje enviado correctamente al microservicio de estados');
-                console.log("llegue aca2");
-                
-                
-            }
-            connection.close();
-        });
+        if (sent) {
+            logGreen('✅ Mensaje enviado correctamente al microservicio de estados');
+        } else {
+            logYellow('⚠️ Mensaje no pudo encolarse (buffer lleno)');
+            throw new Error('Buffer lleno en RabbitMQ');
+        }
+
+        await channel.close();
+        await connection.close();
     } catch (error) {
-        logRed(`Error en sendToShipmentStateMicroService: ${error.stack}`);
-        throw error;
+        logRed(`❌ Falló RabbitMQ, intentando enviar por HTTP: ${error.message}`);
+
+        try {
+            const response = await axios.post(BACKUP_ENDPOINT, message);
+            logGreen(`✅ Enviado por HTTP con status ${response.status}`);
+        } catch (httpError) {
+            logRed(`❌ Falló el envío por HTTP también: ${httpError.message}`);
+            throw httpError;
+        }
     }
-};
+}
 
 module.exports = sendToShipmentStateMicroService;
