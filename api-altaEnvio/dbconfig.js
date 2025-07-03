@@ -152,6 +152,7 @@ async function getCompanyById(companyId) {
 
                 company = companiesList[companyId];
             } catch (error) {
+
                 logRed(`Error al cargar compañías desde Redis: ${error.stack}`);
                 throw error;
             }

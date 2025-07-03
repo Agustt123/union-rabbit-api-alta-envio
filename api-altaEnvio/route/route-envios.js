@@ -24,31 +24,51 @@ const camposRequeridos = [
 router.post("/cargardatos", async (req, res) => {
   const data = req.body;
 
-  const company = await getCompanyById(data.data.idEmpresa);
-  const connection = await getConnection(company.did);
   try {
-    let result = await AltaEnvio(company, connection, data);
+    const company = await getCompanyById(data.data.idEmpresa);
 
-    if (!result || result.success === false) {
-      logRed("Error al cargar los datos:", result);
-      return res.status(500).json({
-        message: "Error al cargar los datos.",
+    if (!company || !company.did) {
+      return res.status(400).json({
+        message: "Empresa no encontrada o inválida.",
         success: false,
-        error: result,
       });
     }
-    res.status(200).json({ message: "Datos cargados exitosamente." });
-  } catch (error) {
-    console.error(error);
 
-    // En caso de error, responder con un mensaje de error
-    res
-      .status(500)
-      .json({ message: "Error al cargar los datos.", succes: false });
-  } finally {
-    connection.end();
+    const connection = await getConnection(company.did);
+
+    try {
+      const result = await AltaEnvio(company, connection, data);
+
+      if (!result || result.success === false) {
+        logRed("Error al cargar los datos:", result);
+        return res.status(500).json({
+          message: "Error al cargar los datos.",
+          success: false,
+          error: result,
+        });
+      }
+
+      res.status(200).json({ message: "Datos cargados exitosamente." });
+    } catch (error) {
+      console.error("Error en AltaEnvio:", error);
+      res.status(500).json({
+        message: "Error al cargar los datos.",
+        success: false,
+        error: error.message || error,
+      });
+    } finally {
+      connection.end();
+    }
+  } catch (error) {
+    console.error("Error obteniendo la empresa o la conexión:", error);
+    res.status(500).json({
+      message: "Error interno al procesar la solicitud.",
+      success: false,
+      error: error.message || error,
+    });
   }
 });
+
 router.post("/cargamasivanoflex", async (req, res) => {
   const envios = JSON.parse(req.body.envios); // Array de envíos en el nuevo formato
   const empresa = envios[0].idEmpresa;
