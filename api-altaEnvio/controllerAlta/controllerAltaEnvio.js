@@ -19,22 +19,22 @@ const { json } = require("stream/consumers");
 
 async function AltaEnvio(company, connection, data) {
     try {
-        if (!data.data || !data.data.enviosDireccionesDestino || 
-            !data.data.enviosDireccionesDestino.calle || 
-         
-            !data.data.enviosDireccionesDestino.cp 
-         ) {
-            
-           return false
-            }
-        
-            
-        
+        if (!data.data || !data.data.enviosDireccionesDestino ||
+            !data.data.enviosDireccionesDestino.calle ||
+
+            !data.data.enviosDireccionesDestino.cp
+        ) {
+
+            return false
+        }
+
+
+
 
         const email = data.data.destination_receiver_email;
         delete data.data.destination_receiver_email;
         console.log("Todos los campos son válidos.");
-        
+
         if (email) {
             data.data.destination_receiver_email = email;
         }
@@ -53,7 +53,7 @@ async function AltaEnvio(company, connection, data) {
                     data.data.elim,
                     company.did,
                     connection,
-                    data.data.estado_envio || 0 ,
+                    data.data.estado_envio || 0,
                 );
 
                 const resultado = await envioflex.insert();
@@ -78,7 +78,7 @@ async function AltaEnvio(company, connection, data) {
                         idEmpresa: company.did,
                         connection: connection
                     });
-              
+
                     logYellow(`${JSON.stringify(orden)} insertando orden`);
                     const resultadoOrden = await orden.insert();
                 }
@@ -92,10 +92,10 @@ async function AltaEnvio(company, connection, data) {
                 const resultado = await envio.insert();
                 insertId = resultado.did;
                 console.log(envio, "envio");
-                console.log(data.data, "data"); 
-                
-                
-     
+                console.log(data.data, "data");
+
+
+
                 logGreen(`Registro insertado con did: ${insertId}`);
 
                 // Validación y creación de EnviosCobranza
@@ -127,7 +127,7 @@ async function AltaEnvio(company, connection, data) {
 
                 // Validación y creación de EnviosObservaciones
                 if (data.data.enviosObservaciones) {
-                    const observacionDefault = data.data.enviosObservaciones || "";
+                    const observacionDefault = data.data.enviosObservaciones.observaciones || "";
 
                     const observaciones = new EnviosObservaciones(
                         insertId,
@@ -210,20 +210,21 @@ async function AltaEnvio(company, connection, data) {
                     await enviosItems.insert(); // Asegúrate de que `insert()` esté definido en EnviosItems
                 }
 
-           let respuesta= await sendToShipmentStateMicroService(company.did, data.data.quien, insertId,data.data.estado);
-           console.log(respuesta,"respuesta");
-           
+                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado);
+                console.log(respuesta, "respuesta");
+
                 logPurple("FINAL");
                 return {
                     success: true,
-                    insertId: insertId}
+                    insertId: insertId
+                }
             }
 
-         
+
         } catch (error) {
-            
+
             console.error("Error durante la inserción:", error);
-          return false
+            return false
         }
     } catch (error) {
         console.error("Error en la función principal:", error);
