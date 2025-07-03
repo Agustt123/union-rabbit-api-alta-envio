@@ -25,7 +25,11 @@ async function AltaEnvio(company, connection, data) {
             !data.data.enviosDireccionesDestino.cp
         ) {
 
-            return false
+            return {
+                success: false,
+                error: -1,
+                message: "Datos de envío inválidos.",
+            };
         }
 
 
