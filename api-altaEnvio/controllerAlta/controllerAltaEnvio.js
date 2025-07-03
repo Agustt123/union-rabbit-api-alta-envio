@@ -224,11 +224,19 @@ async function AltaEnvio(company, connection, data) {
         } catch (error) {
 
             console.error("Error durante la inserción:", error);
-            return false
+            return {
+                success: false,
+                error: -1,
+                message: error
+            }
         }
     } catch (error) {
         console.error("Error en la función principal:", error);
-        return false
+        return {
+            success: false,
+            error: -1,
+            message: error.message || "Error desconocido"
+        };
     }
 }
 

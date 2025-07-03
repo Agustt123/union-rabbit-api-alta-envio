@@ -29,7 +29,14 @@ router.post("/cargardatos", async (req, res) => {
   try {
     let result = await AltaEnvio(company, connection, data);
 
-    // Responder al cliente después de procesar la solicitud
+    if (!result || result.success === false) {
+      logRed("Error al cargar los datos:", result);
+      return res.status(500).json({
+        message: "Error al cargar los datos.",
+        success: false,
+        error: result,
+      });
+    }
     res.status(200).json({ message: "Datos cargados exitosamente." });
   } catch (error) {
     console.error(error);
