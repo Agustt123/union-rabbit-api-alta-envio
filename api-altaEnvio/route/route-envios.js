@@ -44,7 +44,7 @@ router.post("/cargardatos", async (req, res) => {
         return res.status(500).json({
           message: "Error al cargar los datos.",
           success: false,
-          error: result,
+          error: result.message,
         });
       }
 
