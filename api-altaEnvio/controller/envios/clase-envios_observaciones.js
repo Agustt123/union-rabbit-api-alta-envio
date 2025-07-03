@@ -84,7 +84,7 @@ class EnviosObservaciones {
 
             const resultId = insertResult.insertId;
 
-            queryUpdateDid = 'UPDATE envios_observaciones SET did = ? WHERE id = ?';
+            const queryUpdateDid = 'UPDATE envios_observaciones SET did = ? WHERE id = ?';
             await executeQuery(connection, queryUpdateDid, [resultId, resultId]);
 
             return { insertId: insertResult.insertId };
