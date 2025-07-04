@@ -106,7 +106,7 @@ async function AltaEnvio(company, connection, data) {
                 if (data.data.envioscobranza) {
                     const cobranza = new EnviosCobranza(
                         insertId,
-                        data.data.envioscobranza.didCampoCobranza || 0,
+                        data.data.envioscobranza.didCampoCobranza || 4,
                         data.data.envioscobranza.valor,
                         data.data.envioscobranza.quien || 0,
                         0,
@@ -120,7 +120,7 @@ async function AltaEnvio(company, connection, data) {
                 if (data.data.enviosLogisticaInversa) {
                     const logisticaInversa = new EnviosLogisticaInversa(
                         insertId,
-                        data.data.enviosLogisticaInversa.didCampoLogistica || 0,
+                        data.data.enviosLogisticaInversa.didCampoLogistica || 1,
                         data.data.enviosLogisticaInversa.valor || 0,
                         data.data.enviosLogisticaInversa.quien || 0,
                         company,
