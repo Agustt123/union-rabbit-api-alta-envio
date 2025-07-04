@@ -106,9 +106,9 @@ async function AltaEnvio(company, connection, data) {
                 if (data.data.envioscobranza) {
                     const cobranza = new EnviosCobranza(
                         insertId,
-                        data.data.envioscobranza.didCampoCobranza,
+                        data.data.envioscobranza.didCampoCobranza || 0,
                         data.data.envioscobranza.valor,
-                        data.data.envioscobranza.quien,
+                        data.data.envioscobranza.quien || 0,
                         0,
                         company,
                         connection
@@ -120,9 +120,9 @@ async function AltaEnvio(company, connection, data) {
                 if (data.data.enviosLogisticaInversa) {
                     const logisticaInversa = new EnviosLogisticaInversa(
                         insertId,
-                        data.data.enviosLogisticaInversa.didCampoLogistica,
-                        data.data.enviosLogisticaInversa.valor,
-                        data.data.enviosLogisticaInversa.quien,
+                        data.data.enviosLogisticaInversa.didCampoLogistica || 0,
+                        data.data.enviosLogisticaInversa.valor || 0,
+                        data.data.enviosLogisticaInversa.quien || 0,
                         company,
                         connection
                     );
@@ -136,8 +136,8 @@ async function AltaEnvio(company, connection, data) {
                     const observaciones = new EnviosObservaciones(
                         insertId,
                         observacionDefault,
-                        data.data.enviosObservaciones.quien,
-                        data.data.enviosObservaciones.desde,
+                        data.data.enviosObservaciones.quien || 0,
+                        data.data.enviosObservaciones.desde || "",
                         company,
                         connection
                     );
@@ -149,22 +149,22 @@ async function AltaEnvio(company, connection, data) {
                     const direccionDestino = new EnviosDireccionesDestino(
                         data.data.enviosDireccionesDestino.did,
                         insertId,
-                        data.data.enviosDireccionesDestino.calle,
-                        data.data.enviosDireccionesDestino.numero,
-                        data.data.enviosDireccionesDestino.address_line || `${data.data.enviosDireccionesDestino.calle} ${data.data.enviosDireccionesDestino.numero}`,
-                        data.data.enviosDireccionesDestino.cp,
-                        data.data.enviosDireccionesDestino.ciudad,
-                        data.data.enviosDireccionesDestino.localidad,
-                        data.data.enviosDireccionesDestino.provincia,
+                        data.data.enviosDireccionesDestino.calle || "",
+                        data.data.enviosDireccionesDestino.numero || "",
+                        data.data.enviosDireccionesDestino.address_line || `${data.data.enviosDireccionesDestino.calle} ${data.data.enviosDireccionesDestino.numero}` || "",
+                        data.data.enviosDireccionesDestino.cp || "",
+                        data.data.enviosDireccionesDestino.ciudad || "",
+                        data.data.enviosDireccionesDestino.localidad || "",
+                        data.data.enviosDireccionesDestino.provincia || "",
                         data.data.enviosDireccionesDestino.pais || "Argentina",
-                        data.data.enviosDireccionesDestino.latitud,
-                        data.data.enviosDireccionesDestino.longitud,
-                        data.data.enviosDireccionesDestino.quien,
+                        data.data.enviosDireccionesDestino.latitud || 0,
+                        data.data.enviosDireccionesDestino.longitud || 0,
+                        data.data.enviosDireccionesDestino.quien || 0,
                         company,
-                        data.data.enviosDireccionesDestino.destination_comments,
-                        data.data.enviosDireccionesDestino.delivery_preference,
-                        data.data.enviosDireccionesDestino.conHorario,
-                        data.data.enviosDireccionesDestino.prioridad,
+                        data.data.enviosDireccionesDestino.destination_comments || "",
+                        data.data.enviosDireccionesDestino.delivery_preference || "",
+                        data.data.enviosDireccionesDestino.conHorario || "",
+                        data.data.enviosDireccionesDestino.prioridad || 0,
                         connection
                     );
                     await direccionDestino.insert();

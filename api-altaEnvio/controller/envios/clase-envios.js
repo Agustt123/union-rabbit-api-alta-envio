@@ -31,12 +31,22 @@ class Envios {
       tracking_method = "",
       tracking_number = "",
       fecha_venta = "",
-      destination_receiver_name = " ",
+      destination_receiver_name = "",
       destination_receiver_phone = "",
       destination_receiver_email = "",
       destination_comments = "   ",
+
+      destination_latitude = 0,
+      destination_longitude = 0,
       delivery_preference = " ",
-      quien,
+      destination_shipping_street_name = " ",
+      destination_shipping_street_number = "",
+      destination_shipping_address_line = "",
+      destination_city_name = "",
+      destination_shipping_zip_code = "",
+      destination_state_name = "",
+      obs = "",
+      quien = 0,
       elim = 0, // Cambiado a 0 para ser modificado más adelante
     } = data;
 
@@ -72,9 +82,18 @@ class Envios {
     this.fecha_venta = fecha_venta;
     this.destination_receiver_name = destination_receiver_name;
     this.destination_receiver_phone = destination_receiver_phone;
+    this.destination_shipping_street_name = destination_shipping_street_name;
+    this.destination_shipping_street_number = destination_shipping_street_number;
+    this.destination_shipping_address_line = destination_shipping_address_line;
+    this.destination_city_name = destination_city_name;
+    this.destination_shipping_zip_code = destination_shipping_zip_code;
+    this.destination_state_name = destination_state_name;
     this.destination_receiver_email = destination_receiver_email;
     this.destination_comments = destination_comments;
+    this.destination_latitude = destination_latitude;
+    this.destination_longitude = destination_longitude;
     this.delivery_preference = delivery_preference;
+    this.obs = obs;
     this.quien = quien;
     this.elim = elim; // Asignar aquí
     this.company = company;
