@@ -42,18 +42,18 @@ router.post("/cargardatos", async (req, res) => {
       if (!result || result.success === false) {
         logRed("Error al cargar los datos:", result);
         return res.status(500).json({
-          message: "Error al cargar los datos.",
-          success: false,
+          mensaje: "Error al insertar.",
+          estado: false,
           error: result.message,
         });
       }
 
-      res.status(200).json({ estado: true, message: result.insertId, qr: result.dataqr });
+      res.status(200).json({ estado: true, mensaje: result.insertId, qr: result.dataqr });
     } catch (error) {
       console.error("Error en AltaEnvio:", error);
       res.status(500).json({
-        message: "Error al cargar los datos.",
-        success: false,
+        mensaje: "Error al insertar.",
+        estado: false,
         error: error.message || error,
       });
     } finally {
