@@ -48,7 +48,7 @@ router.post("/cargardatos", async (req, res) => {
         });
       }
 
-      res.status(200).json({ estado: true, message: result.dataqr });
+      res.status(200).json({ estado: true, message: result.insertId, qr: result.dataqr });
     } catch (error) {
       console.error("Error en AltaEnvio:", error);
       res.status(500).json({

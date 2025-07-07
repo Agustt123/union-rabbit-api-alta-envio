@@ -220,6 +220,7 @@ async function AltaEnvio(company, connection, data) {
                 logPurple("FINAL");
                 return {
                     success: true,
+                    insertId: insertId,
                     dataqr: qr
                 }
             }
