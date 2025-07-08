@@ -24,6 +24,8 @@ const camposRequeridos = [
 
 router.post("/cargardatos", async (req, res) => {
   const data = req.body;
+  console.log(data, "data cargardatos");
+
 
   try {
     const company = await getCompanyById(data.data.idEmpresa);
