@@ -5,7 +5,7 @@ async function checkToken(token, connection) {
         return null; // o podés lanzar un error
     }
 
-    const query = 'SELECT did FROM clientes WHERE token_api_ext = ?';
+    const query = 'SELECT did FROM clientes WHERE token_api_ext = ? AND superado = 0 and elim = 0';
     const result = await executeQuery(connection, query, [token]);
 
     if (result.length > 0) {
