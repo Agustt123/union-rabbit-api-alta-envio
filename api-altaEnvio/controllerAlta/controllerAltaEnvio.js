@@ -36,11 +36,12 @@ async function AltaEnvio(company, connection, data) {
         const tokenData = await checkToken(data.data.token, connection);
         console.log("Token Data:", tokenData);
 
-        if (!tokenData) {
+        if (tokenData) {
             data.data.didCliente = tokenData.didCliente;
             data.data.didCuenta = tokenData.didCuenta;
 
         }
+        console.log(data.data.didCliente, "didCliente");
 
 
         const email = data.data.destination_receiver_email;
