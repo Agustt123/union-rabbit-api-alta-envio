@@ -10,6 +10,7 @@ const validateData = require("../middleware/middleware");
 const validarCamposRequeridos = require("../middleware/json");
 const { AltaEnvio } = require("../controllerAlta/controllerAltaEnvio");
 const { logRed } = require("../fuctions/logsCustom");
+const { checkToken } = require("../fuctions/checkTokenCliente");
 
 const camposRequeridos = [
   "data",
@@ -35,6 +36,8 @@ router.post("/cargardatos", async (req, res) => {
     }
 
     const connection = await getConnection(company.did);
+
+
 
     try {
       const result = await AltaEnvio(company, connection, data);

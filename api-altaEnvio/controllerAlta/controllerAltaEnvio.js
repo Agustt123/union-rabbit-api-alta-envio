@@ -12,6 +12,7 @@ const { logYellow, logGreen, logPurple, logBlue } = require("../fuctions/logsCus
 const { error } = require("console");
 const sendToShipmentStateMicroService = require("../fuctions/sendToshipmentStateMicroservice");
 const { json } = require("stream/consumers");
+const { checkToken } = require("../fuctions/checkTokenCliente");
 
 
 
@@ -32,7 +33,12 @@ async function AltaEnvio(company, connection, data) {
             };
         }
 
+        const tokenData = await checkToken(data.data.token, company.did);
+        if (!tokenData) {
+            data.data.didCliente = tokenData.didCliente;
+            data.data.didCuenta = tokenData.didCuenta;
 
+        }
 
 
         const email = data.data.destination_receiver_email;
