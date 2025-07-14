@@ -2,12 +2,19 @@ const { getConnection, getFromRedis, executeQuery } = require('../../dbconfig');
 const { logYellow, logBlue } = require('../../fuctions/logsCustom');
 
 // Crear la clase
-class CamposExtras {
-    constructor(didEnvio = "", didCampo = "", valor = "", quien = "", company = null, connection = null) {
-        this.didEnvio = didEnvio;
-        this.didCampo = didCampo || ""; // Valor por defecto si didCampo es null
-        this.valor = valor || ""; // Valor por defecto si valor es null
+class CostoEnvio {
+    constructor(didEnvio = "", chofer = "", cliente = "", date_chofer = "", date_cliente = "",
+        nameZonaCostoChofer = "", nameZonaCostoCliente = "",
+        company = null, connection = null) {
         this.quien = quien || 0; // Valor por defecto para quien
+        this.didEnvio = didEnvio;
+        this.chofer = chofer || ""; // Valor por defecto si chofer es null
+        this.cliente = cliente || ""; // Valor por defecto si cliente es null
+        this.date_chofer = date_chofer || ""; // Valor por defecto si date_chofer es null
+        this.date_cliente = date_cliente || ""; // Valor por defecto si date_cliente es null
+        this.nameZonaCostoChofer = nameZonaCostoChofer || ""; // Valor por defecto
+        this.nameZonaCostoCliente = nameZonaCostoCliente || ""; // Valor por defecto si nameZonaCostoCliente es null
+
         this.company = company;
         this.connection = connection
         // Asegurarse de que idEmpresa sea siempre un string
@@ -44,12 +51,12 @@ class CamposExtras {
 
     async checkAndUpdateDidEnvio(connection) {
         try {
-            const checkDidEnvioQuery = 'SELECT id FROM envios_campos_extras WHERE didEnvio = ?';
+            const checkDidEnvioQuery = 'SELECT id FROM costos_envios WHERE didEnvio = ?';
             const results = await executeQuery(connection, checkDidEnvioQuery, [this.didEnvio]);
 
             if (results.length > 0) {
                 // Si `didEnvio` ya existe, actualizarlo
-                const updateQuery = 'UPDATE envios_campos_extras SET superado = 1 WHERE didEnvio = ?';
+                const updateQuery = 'UPDATE costos_envios SET superado = 1 WHERE didEnvio = ?';
                 await executeQuery(connection, updateQuery, [this.didEnvio]);
 
                 // Crear un nuevo registro con el mismo `didEnvio`
@@ -65,14 +72,14 @@ class CamposExtras {
 
     async createNewRecord(connection) {
         try {
-            const columnsQuery = 'DESCRIBE envios_campos_extras';
+            const columnsQuery = 'DESCRIBE costos_envios';
             const results = await executeQuery(connection, columnsQuery, []);
 
             const tableColumns = results.map((column) => column.Field);
             const filteredColumns = tableColumns.filter((column) => this[column] !== undefined);
 
             const values = filteredColumns.map((column) => this[column]);
-            const insertQuery = `INSERT INTO envios_campos_extras (${filteredColumns.join(', ')}) VALUES (${filteredColumns.map(() => '?').join(', ')})`;
+            const insertQuery = `INSERT INTO costos_envios (${filteredColumns.join(', ')}) VALUES (${filteredColumns.map(() => '?').join(', ')})`;
 
 
 
@@ -93,4 +100,4 @@ class CamposExtras {
 
 }
 
-module.exports = CamposExtras;
+module.exports = CostoEnvio;
