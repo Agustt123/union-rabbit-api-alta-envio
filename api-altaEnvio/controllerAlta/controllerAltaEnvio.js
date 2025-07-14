@@ -236,7 +236,7 @@ async function AltaEnvio(company, connection, data) {
                 }
 
 
-                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado);
+                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado || 7);
                 console.log(respuesta, "respuesta");
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
                 logPurple("FINAL");
