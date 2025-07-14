@@ -6,7 +6,7 @@ class CostoEnvio {
     constructor(didEnvio = "", chofer = "", cliente = "", date_chofer = "", date_cliente = "",
         nameZonaCostoChofer = "", nameZonaCostoCliente = "",
         company = null, connection = null) {
-        this.quien = quien || 0; // Valor por defecto para quien
+
         this.didEnvio = didEnvio;
         this.chofer = chofer || ""; // Valor por defecto si chofer es null
         this.cliente = cliente || ""; // Valor por defecto si cliente es null

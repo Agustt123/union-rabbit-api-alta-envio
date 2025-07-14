@@ -263,7 +263,7 @@ async function AltaEnvio2(company, connection, data) {
                 if (data.data.costoEnvio) {
                     const costoEnvio = new CostoEnvio(
                         data.data.costoEnvio.didEnvio || insertId,
-                        data.data.costoEnvio.didZona || "",
+
                         data.data.costoEnvio.chofer || "",
                         data.data.costoEnvio.cliente || "",
                         data.data.costoEnvio.date_chofer || "",
