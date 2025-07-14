@@ -106,8 +106,8 @@ async function AltaEnvio2(company, connection, data) {
                 const envio = new Envios(data.data, company, connection);
                 const resultado = await envio.insert();
                 insertId = resultado.did;
-                console.log(envio, "envio");
-                console.log(data.data, "data");
+                /* console.log(envio, "envio");
+                 console.log(data.data, "data");*/
 
 
                 if (
@@ -130,7 +130,7 @@ async function AltaEnvio2(company, connection, data) {
                     for (const item of data.data.envioscobranza) {
                         const cobranza = new EnviosCobranza(
                             insertId,
-                            item.didCampoCobranza || 4,
+                            item.campo || 4,
                             item.valor,
                             item.quien || 0,
                             0,
@@ -145,7 +145,8 @@ async function AltaEnvio2(company, connection, data) {
                     const item = data.data.envioscobranza;
                     const cobranza = new EnviosCobranza(
                         insertId,
-                        item.didCampoCobranza || 4,
+                        item.campo || 4,
+
                         item.valor,
                         item.quien || 0,
                         0,
@@ -160,7 +161,7 @@ async function AltaEnvio2(company, connection, data) {
                     for (const item of data.data.enviosLogisticaInversa) {
                         const logisticaInversa = new EnviosLogisticaInversa(
                             insertId,
-                            item.didCampoLogistica || 1,
+                            item.campo || 1,
                             item.valor || 0,
                             item.quien || 0,
                             company,
@@ -173,7 +174,7 @@ async function AltaEnvio2(company, connection, data) {
                     const item = data.data.enviosLogisticaInversa;
                     const logisticaInversa = new EnviosLogisticaInversa(
                         insertId,
-                        item.didCampoLogistica || 1,
+                        item.campo || 1,
                         item.valor || 0,
                         item.quien || 0,
                         company,
