@@ -308,7 +308,7 @@ async function AltaEnvio2(company, connection, data) {
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
                 logPurple("FINAL");
                 return {
-                    success: true,
+                    estado: true,
                     insertId: insertId,
                     dataqr: qr
                 }
