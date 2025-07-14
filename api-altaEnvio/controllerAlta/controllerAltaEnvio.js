@@ -223,6 +223,11 @@ async function AltaEnvio(company, connection, data) {
                     await enviosItems.insert(); // Asegúrate de que `insert()` esté definido en EnviosItems
                 }
 
+                if (data.data.did = !0 && data.data.did !== "0" && data.data.did !== null && data.data.did !== undefined && data.data.did !== "") {
+
+                    insertId = data.data.did;
+                }
+
                 let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado);
                 console.log(respuesta, "respuesta");
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }

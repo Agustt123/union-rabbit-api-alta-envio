@@ -193,7 +193,9 @@ class Envios {
       const insertId = result.insertId;
       if (did === 0 || did === "0") {
         const updateQuery = "UPDATE envios SET did = ? WHERE id = ?";
+
         await executeQuery(connection, updateQuery, [insertId, insertId]);
+
         return { insertId, did: insertId };
       } else {
         return { insertId, did };
