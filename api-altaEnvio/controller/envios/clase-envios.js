@@ -49,6 +49,7 @@ class Envios {
       destination_state_name = "",
       estimated_delivery_time_date = "",
       costo_envio_ml = 0,
+      costoActualizado = 0,
       fecha_carga = "",
       obs = "",
       quien = 0,
@@ -110,6 +111,7 @@ class Envios {
     this.destination_longitude = destination_longitude;
     this.delivery_preference = delivery_preference;
     this.obs = obs;
+    this.costoActualizado = costoActualizado || 0; // Asignar valor por defecto si costoActualizado es null
     this.quien = quien;
     this.elim = elim; // Asignar aquí
     this.company = company;
