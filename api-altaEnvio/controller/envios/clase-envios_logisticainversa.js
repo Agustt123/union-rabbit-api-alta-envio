@@ -88,8 +88,6 @@ class EnviosLogisticaInversa {
 
             const resultId = insertResult.insertId;
 
-            const queryUpdateDid = 'UPDATE envios_logisticainversa SET did = ? WHERE id = ?';
-            await executeQuery(connection, queryUpdateDid, [resultId, resultId]);
             return { insertId: insertResult.insertId };
         } catch (error) {
             throw error;
