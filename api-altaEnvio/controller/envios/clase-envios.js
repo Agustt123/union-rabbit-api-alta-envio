@@ -13,7 +13,7 @@ class Envios {
 
       fecha_inicio = new Date(),
       fechaunix = this.generateFechaUnix(),
-      lote = "",
+      lote = "altaEnvioM",
       ml_shipment_id = "",
       ml_vendedor_id = "",
       ml_venta_id = "",
@@ -37,6 +37,7 @@ class Envios {
       destination_comments = "   ",
       tamaño = 0,
       fecha_despacho = "",
+      deadline = "",
 
       destination_latitude = 0,
       destination_longitude = 0,
@@ -74,9 +75,14 @@ class Envios {
 
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
-    this.estimated_delivery_time_date = estimated_delivery_time_date;
-    this.fecha_carga = fecha_carga;
+    this.estimated_delivery_time_date = deadline;
+    let fechaCargaDate = fecha_carga ? new Date(fecha_carga) : new Date();
+    fechaCargaDate.setHours(fechaCargaDate.getHours() - 3);
+    this.fecha_carga = fechaCargaDate.toISOString().split('T')[0];
+
+
     this.fecha_despacho = fecha_despacho;
+
 
     this.fechaunix = fechaunix;
     this.lote = lote;
@@ -128,6 +134,7 @@ class Envios {
 
   async insert() {
     try {
+      this.fecha_despacho = await calcularFechaDespacho(this.didCliente, this.connection);
       // Establecer elim en 52 si es necesario
       if (this.elim === "") {
         this.elim = 52; // Cambiar a 52 si elim está vacío
@@ -166,6 +173,9 @@ class Envios {
 
   async createNewRecordWithIdUpdate(connection) {
     try {
+
+
+
       const describeQuery = "DESCRIBE envios";
       const results = await executeQuery(connection, describeQuery, []);
 
@@ -222,6 +232,54 @@ class Envios {
       throw error;
     }
   }
+
 }
 
+async function calcularFechaDespacho(didCliente, connection) {
+  let hora;
+
+  // 1. Intentar obtener hora de cierre personalizada del cliente
+  const queryCliente = `
+  SELECT hora 
+  FROM clientes_cierre_ingreso 
+  WHERE superado = 0 AND elim = 0 AND didCliente = ?
+`;
+  const resultCliente = await executeQuery(connection, queryCliente, [didCliente]);
+
+  if (resultCliente.length > 0) {
+    hora = resultCliente[0].hora;
+  } else {
+    // 2. Si no hay, usar configuración global del sistema
+    const queryConfig = `
+    SELECT config 
+    FROM sistema_config 
+    WHERE superado = 0 AND elim = 0
+  `;
+    const resultConfig = await executeQuery(connection, queryConfig, []);
+    const config = JSON.parse(resultConfig[0].config);
+    hora = config.hora_cierre;
+  }
+
+  // 3. Calcular fecha despacho ajustando zona horaria (UTC-3)
+  const ahora = new Date();
+  ahora.setHours(ahora.getHours() - 3);
+
+  const horaActual = ahora.getHours();
+  const horaCierre = parseInt(hora);
+
+  if (isNaN(horaCierre)) {
+    throw new Error("Hora de cierre inválida");
+  }
+
+  const fechaDespacho = new Date(ahora);
+  if (horaActual >= horaCierre) {
+    fechaDespacho.setDate(fechaDespacho.getDate() + 1); // Sumar un día si ya pasó el corte
+  }
+
+  const year = fechaDespacho.getFullYear();
+  const month = String(fechaDespacho.getMonth() + 1).padStart(2, "0");
+  const day = String(fechaDespacho.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 module.exports = Envios;
