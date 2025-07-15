@@ -11,7 +11,16 @@ class CostoEnvio {
         this.chofer = chofer || ""; // Valor por defecto si chofer es null
         this.cliente = cliente || ""; // Valor por defecto si cliente es null
         this.date_chofer = date_chofer || ""; // Valor por defecto si date_chofer es null
-        this.date_cliente = date_cliente || ""; // Valor por defecto si date_cliente es null
+        if (!date_cliente) {
+            const ahora = new Date();
+            ahora.setHours(ahora.getHours() - 3);
+            this.date_cliente = ahora.toISOString();
+        } else {
+            this.date_cliente = date_cliente;
+        }
+
+
+        // Valor por defecto si date_cliente es null
         this.nameZonaCostoChofer = nameZonaCostoChofer || ""; // Valor por defecto
         this.nameZonaCostoCliente = nameZonaCostoCliente || ""; // Valor por defecto si nameZonaCostoCliente es null
 
