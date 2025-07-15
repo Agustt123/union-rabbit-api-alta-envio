@@ -132,7 +132,7 @@ async function AltaEnvio2(company, connection, data) {
                             insertId,
                             item.campo || 4,
                             item.valor,
-                            item.quien || 0,
+                            data.data.quien || 0,
                             0,
                             company,
                             connection
@@ -148,7 +148,7 @@ async function AltaEnvio2(company, connection, data) {
                         item.campo || 4,
 
                         item.valor,
-                        item.quien || 0,
+                        data.data.quien || 0,
                         0,
                         company,
                         connection
@@ -163,7 +163,7 @@ async function AltaEnvio2(company, connection, data) {
                             insertId,
                             item.campo || 1,
                             item.valor || 0,
-                            item.quien || 0,
+                            data.data.quien || 0,
                             company,
                             connection
                         );
@@ -176,7 +176,7 @@ async function AltaEnvio2(company, connection, data) {
                         insertId,
                         item.campo || 1,
                         item.valor || 0,
-                        item.quien || 0,
+                        data.data.quien || 0,
                         company,
                         connection
                     );
@@ -191,7 +191,7 @@ async function AltaEnvio2(company, connection, data) {
                     const observaciones = new EnviosObservaciones(
                         insertId,
                         observacionDefault,
-                        data.data.enviosObservaciones.quien || 0,
+                        data.data.quien || 0,
                         data.data.enviosObservaciones.desde || "",
                         company,
                         connection
@@ -214,7 +214,7 @@ async function AltaEnvio2(company, connection, data) {
                         data.data.enviosDireccionesDestino.pais || "Argentina",
                         data.data.enviosDireccionesDestino.latitud || 0,
                         data.data.enviosDireccionesDestino.longitud || 0,
-                        data.data.enviosDireccionesDestino.quien || 0,
+                        data.data.quien || 0,
                         company,
                         data.data.enviosDireccionesDestino.destination_comments || "",
                         data.data.enviosDireccionesDestino.delivery_preference || "",
@@ -240,7 +240,7 @@ async function AltaEnvio2(company, connection, data) {
                         data.data.enviosDireccionesRemitente.latitud,
                         data.data.enviosDireccionesRemitente.longitud,
                         data.data.enviosDireccionesRemitente.obs || 'observaciones light data',
-                        data.data.enviosDireccionesRemitente.quien,
+                        data.data.quien,
                         company,
                         connection
                     );
@@ -251,7 +251,7 @@ async function AltaEnvio2(company, connection, data) {
                     for (const item of data.data.camposExtras) {
                         const camposExtras = new CamposExtras(
                             insertId,
-                            item.didCampo || "",
+                            item.campo || "",
                             item.valor || "",
                             data.data.quien || 0,
                             company,

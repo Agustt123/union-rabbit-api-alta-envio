@@ -3,7 +3,7 @@ const { logYellow, logBlue } = require('../../fuctions/logsCustom');
 
 // Crear la clase
 class EnviosLogisticaInversa {
-    constructor(didEnvio = null, didCampoLogistica = "", valor = "", quien = "", company = null,connection = null) {
+    constructor(didEnvio = null, didCampoLogistica = "", valor = "", quien = "", company = null, connection = null) {
         this.didEnvio = didEnvio;
         this.didCampoLogistica = didCampoLogistica;
         this.valor = valor;
@@ -22,7 +22,7 @@ class EnviosLogisticaInversa {
     async insert() {
         const redisKey = 'empresasData';
         console.log("Buscando clave de Redis:", redisKey);
-    
+
         try {
             if (this.didEnvio === null) {
                 // Si `didEnvio` es null, crear un nuevo registro
@@ -33,7 +33,7 @@ class EnviosLogisticaInversa {
             }
         } catch (error) {
             console.error("Error en el método insert:", error.message);
-    
+
             // Lanzar un error con el formato estándar
             throw {
                 status: 500,
@@ -44,18 +44,18 @@ class EnviosLogisticaInversa {
             };
         }
     }
-    
+
     // Verificar si existe un registro con didEnvio y actualizarlo si es necesario
     async checkAndUpdateDidEnvio(connection) {
         try {
             const checkDidEnvioQuery = 'SELECT id FROM envios_logisticainversa WHERE didEnvio = ?';
             const results = await executeQuery(connection, checkDidEnvioQuery, [this.didEnvio]);
-    
+
             if (results.length > 0) {
                 // Si `didEnvio` ya existe, actualizarlo
                 const updateQuery = 'UPDATE envios_logisticainversa SET superado = 1 WHERE didEnvio = ?';
                 await executeQuery(connection, updateQuery, [this.didEnvio]);
-    
+
                 // Crear un nuevo registro con el mismo `didEnvio`
                 return this.createNewRecord(connection);
             } else {
@@ -66,29 +66,36 @@ class EnviosLogisticaInversa {
             throw error;
         }
     }
-    
+
     // Método para crear un nuevo registro en la base de datos
     async createNewRecord(connection) {
         try {
             const columnsQuery = 'DESCRIBE envios_logisticainversa';
             const results = await executeQuery(connection, columnsQuery, []);
-    
+
             const tableColumns = results.map((column) => column.Field);
             const filteredColumns = tableColumns.filter((column) => this[column] !== undefined);
-    
+
             const values = filteredColumns.map((column) => this[column]);
             const insertQuery = `INSERT INTO envios_logisticainversa (${filteredColumns.join(', ')}) VALUES (${filteredColumns.map(() => '?').join(', ')})`;
-    
+
             logYellow("Insert Query", insertQuery);
             logBlue("Values:", values);
-    
+
             const insertResult = await executeQuery(connection, insertQuery, values);
+
+
+
+            const resultId = insertResult.insertId;
+
+            const queryUpdateDid = 'UPDATE envios_logisticainversa SET did = ? WHERE id = ?';
+            await executeQuery(connection, queryUpdateDid, [resultId, resultId]);
             return { insertId: insertResult.insertId };
         } catch (error) {
             throw error;
         }
     }
-    
+
 }
 
 
