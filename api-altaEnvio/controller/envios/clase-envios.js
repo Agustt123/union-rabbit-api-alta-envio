@@ -50,7 +50,7 @@ class Envios {
       destination_state_name = "",
       estimated_delivery_time_date = "",
       costo_envio_ml = 0,
-      costoActualizado = 0,
+      costoActualizado = costo_envio_ml ? 1 : 0,
       fecha_carga = "",
       obs = "",
       quien = 0,
