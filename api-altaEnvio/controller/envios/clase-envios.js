@@ -75,7 +75,10 @@ class Envios {
 
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
-    this.estimated_delivery_time_date = deadline;
+    // Convertir deadline "dd/mm/yyyy" => "yyyy-mm-dd"
+    let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR"); // fallback a hoy
+    let partesFecha = fechaDeadlineRaw.split("/");
+    this.estimated_delivery_time_date = `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}`;
     let fechaCargaDate = fecha_carga ? new Date(fecha_carga) : new Date();
     fechaCargaDate.setHours(fechaCargaDate.getHours() - 3);
     this.fecha_carga = fechaCargaDate.toISOString().split('T')[0];
