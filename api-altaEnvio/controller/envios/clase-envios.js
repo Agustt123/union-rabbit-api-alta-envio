@@ -35,6 +35,8 @@ class Envios {
       destination_receiver_phone = "",
       destination_receiver_email = "",
       destination_comments = "   ",
+      tamaño = 0,
+      fecha_despacho = "",
 
       destination_latitude = 0,
       destination_longitude = 0,
@@ -45,6 +47,9 @@ class Envios {
       destination_city_name = "",
       destination_shipping_zip_code = "",
       destination_state_name = "",
+      estimated_delivery_time_date = "",
+      costo_envio_ml = 0,
+      fecha_carga = "",
       obs = "",
       quien = 0,
       elim = 0, // Cambiado a 0 para ser modificado más adelante
@@ -60,6 +65,11 @@ class Envios {
     this.exterior = exterior;
     fecha_inicio.setHours(fecha_inicio.getHours() - 3);
     this.fecha_inicio = fecha_inicio.toISOString();
+    this.tamaño = tamaño;
+    this.costo_envio_ml = costo_envio_ml;
+    this.estimated_delivery_time_date = estimated_delivery_time_date;
+    this.fecha_carga = fecha_carga;
+    this.fecha_despacho = fecha_despacho;
 
     this.fechaunix = fechaunix;
     this.lote = lote;
