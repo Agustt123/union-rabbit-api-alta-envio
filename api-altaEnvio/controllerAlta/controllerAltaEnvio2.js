@@ -261,16 +261,16 @@ async function AltaEnvio2(company, connection, data) {
                     }
                 }
 
-                if (data.data.costos_envios) {
+                if (data.data.costoEnvio) {
                     const costoEnvio = new CostoEnvio(
                         data.data.costoEnvio.didEnvio || insertId,
 
-                        data.data.costos_envios.chofer || "",
-                        data.data.costos_envios.valor || "",
-                        data.data.costos_envios.date_chofer || "",
-                        data.data.costos_envios.date_cliente || "",
-                        data.data.costos_envios.nameZonaCostoChofer || "",
-                        data.data.costos_envios.nameZonaCostoCliente || "",
+                        data.data.costoEnvio.chofer || "",
+                        data.data.costoEnvio.valor || "",
+                        data.data.costoEnvio.date_chofer || "",
+                        data.data.costoEnvio.date_cliente || "",
+                        data.data.costoEnvio.nameZonaCostoChofer || "",
+                        data.data.costoEnvio.nameZonaCostoCliente || "",
                         company,
                         connection
                     );
