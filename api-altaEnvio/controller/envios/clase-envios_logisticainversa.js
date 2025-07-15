@@ -48,20 +48,9 @@ class EnviosLogisticaInversa {
     // Verificar si existe un registro con didEnvio y actualizarlo si es necesario
     async checkAndUpdateDidEnvio(connection) {
         try {
-            const checkDidEnvioQuery = 'SELECT id FROM envios_logisticainversa WHERE didEnvio = ?';
-            const results = await executeQuery(connection, checkDidEnvioQuery, [this.didEnvio]);
 
-            if (results.length > 0) {
-                // Si `didEnvio` ya existe, actualizarlo
-                const updateQuery = 'UPDATE envios_logisticainversa SET superado = 1 WHERE didEnvio = ?';
-                await executeQuery(connection, updateQuery, [this.didEnvio]);
+            return this.createNewRecord(connection);
 
-                // Crear un nuevo registro con el mismo `didEnvio`
-                return this.createNewRecord(connection);
-            } else {
-                // Si `didEnvio` no existe, crear un nuevo registro directamente
-                return this.createNewRecord(connection);
-            }
         } catch (error) {
             throw error;
         }
