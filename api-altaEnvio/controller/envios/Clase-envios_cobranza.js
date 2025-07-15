@@ -75,8 +75,6 @@ class EnviosCobranza {
 
             const resultId = insertResult.insertId;
 
-            const queryUpdateDid = 'UPDATE envios_cobranzas SET did = ? WHERE id = ?';
-            await executeQuery(connection, queryUpdateDid, [resultId, resultId]);
 
 
             return { insertId: insertResult.insertId };
