@@ -63,8 +63,14 @@ class Envios {
     this.flex = flex;
     this.turbo = turbo;
     this.exterior = exterior;
-    fecha_inicio.setHours(fecha_inicio.getHours() - 3);
-    this.fecha_inicio = fecha_inicio.toISOString();
+    let fechaInicioParsed = new Date(fecha_inicio);
+    if (fechaInicioParsed instanceof Date && !isNaN(fechaInicioParsed)) {
+      fechaInicioParsed.setHours(fechaInicioParsed.getHours() - 3);
+      this.fecha_inicio = fechaInicioParsed.toISOString();
+    } else {
+      this.fecha_inicio = new Date().toISOString(); // fallback si viene mal
+    }
+
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
     this.estimated_delivery_time_date = estimated_delivery_time_date;
