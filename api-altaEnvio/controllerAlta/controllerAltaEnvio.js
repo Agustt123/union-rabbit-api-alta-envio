@@ -124,7 +124,7 @@ async function AltaEnvio(company, connection, data) {
                 }
 
 
-                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado || 7);
+                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
                 console.log(respuesta, "respuesta");
                 // Validación y creación de EnviosCobranza
                 if (data.data.envioscobranza) {
