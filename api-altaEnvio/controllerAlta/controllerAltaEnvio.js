@@ -111,6 +111,21 @@ async function AltaEnvio(company, connection, data) {
 
                 logGreen(`Registro insertado con did: ${insertId}`);
 
+                if (
+                    data.data.did &&
+                    data.data.did !== "0" &&
+                    data.data.did !== 0 &&
+                    data.data.did !== null &&
+                    data.data.did !== undefined &&
+                    data.data.did !== ""
+                ) {
+                    console.log(data.data.did, "data.data.did");
+                    insertId = data.data.did;
+                }
+
+
+                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado || 7);
+                console.log(respuesta, "respuesta");
                 // Validación y creación de EnviosCobranza
                 if (data.data.envioscobranza) {
                     const cobranza = new EnviosCobranza(
@@ -223,21 +238,6 @@ async function AltaEnvio(company, connection, data) {
                     await enviosItems.insert(); // Asegúrate de que `insert()` esté definido en EnviosItems
                 }
 
-                if (
-                    data.data.did &&
-                    data.data.did !== "0" &&
-                    data.data.did !== 0 &&
-                    data.data.did !== null &&
-                    data.data.did !== undefined &&
-                    data.data.did !== ""
-                ) {
-                    console.log(data.data.did, "data.data.did");
-                    insertId = data.data.did;
-                }
-
-
-                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien, insertId, data.data.estado || 7);
-                console.log(respuesta, "respuesta");
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
                 logPurple("FINAL");
                 return {
