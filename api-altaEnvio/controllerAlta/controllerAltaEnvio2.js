@@ -291,7 +291,7 @@ async function AltaEnvio2(company, connection, data) {
                         data.data.enviosItems.variacion || "",
                         data.data.enviosItems.seller_sku || "",
                         data.data.enviosItems.descargado || "",
-                        data.data.detallesProducto || "",
+                        data.data.enviosItems.detallesProducto || "",
 
                         data.data.enviosItems.superado || "",
                         data.data.enviosItems.elim || "",
