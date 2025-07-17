@@ -92,8 +92,7 @@ class EnviosItems {
 
             const resultId = insertResult.insertId;
 
-            const queryUpdateDid = 'UPDATE envios_items SET did = ? WHERE id = ?';
-            await executeQuery(connection, queryUpdateDid, [resultId, resultId]);
+
             return { insertId: insertResult.insertId };
         } catch (error) {
             throw error;
