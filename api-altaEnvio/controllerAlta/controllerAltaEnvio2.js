@@ -282,19 +282,19 @@ async function AltaEnvio2(company, connection, data) {
                 if (data.data.enviosItems) {
                     const enviosItems = new EnviosItems(
                         insertId,
-                        data.data.enviosItems.codigo,
-                        data.data.enviosItems.imagen,
-                        data.data.enviosItems.descripcion,
-                        data.data.enviosItems.ml_id,
-                        data.data.enviosItems.dimensions,
-                        data.data.enviosItems.cantidad,
-                        data.data.enviosItems.variacion,
-                        data.data.enviosItems.seller_sku,
-                        data.data.enviosItems.descargado,
+                        data.data.enviosItems.codigo || "",
+                        data.data.enviosItems.imagen || "",
+                        data.data.enviosItems.descripcion || "",
+                        data.data.enviosItems.ml_id || "",
+                        data.data.enviosItems.dimensions || "",
+                        data.data.enviosItems.cantidad || "",
+                        data.data.enviosItems.variacion || "",
+                        data.data.enviosItems.seller_sku || "",
+                        data.data.enviosItems.descargado || "",
                         data.data.detallesProducto || "",
-                        data.data.enviosItems.autofecha,
-                        data.data.enviosItems.superado,
-                        data.data.enviosItems.elim,
+
+                        data.data.enviosItems.superado || "",
+                        data.data.enviosItems.elim || "",
                         company,
                         connection
                     );

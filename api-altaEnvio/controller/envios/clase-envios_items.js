@@ -15,7 +15,7 @@ class EnviosItems {
         this.variacion = variacion;
         this.seller_sku = seller_sku;
         this.descargado = descargado;
-        this.detallesProducto = detallesProducto;
+        this.descripcion = detallesProducto;
         // this.autofecha = new Date().toISOString();
         this.superado = superado;
 
