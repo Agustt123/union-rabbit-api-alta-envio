@@ -3,7 +3,7 @@ const { logYellow, logBlue } = require('../../fuctions/logsCustom');
 
 class EnviosItems {
     constructor(didEnvio = "", codigo = "", imagen = "", descripcion = "", ml_id = "", dimensions = "", cantidad = "",
-        variacion = "", seller_sku = "", descargado = "", superado = "", elim = null, company = null, connection = null) {
+        variacion = "", seller_sku = "", descargado = "", detallesProducto = "", superado = "", elim = null, company = null, connection = null) {
 
         this.didEnvio = didEnvio;
         this.codigo = codigo;
@@ -15,6 +15,7 @@ class EnviosItems {
         this.variacion = variacion;
         this.seller_sku = seller_sku;
         this.descargado = descargado;
+        this.detallesProducto = detallesProducto;
         // this.autofecha = new Date().toISOString();
         this.superado = superado;
 
