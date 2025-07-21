@@ -35,6 +35,12 @@ async function AltaEnvio2(company, connection, data) {
             };
         }
 
+        if (data.data.perfil = 2) {
+            data.data.estado = 7
+        }
+        else {
+            data.data.estado = 1
+        }
         const tokenData = await checkToken(data.data.token, connection);
         console.log("Token Data:", tokenData);
 
