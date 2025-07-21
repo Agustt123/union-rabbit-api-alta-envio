@@ -38,6 +38,13 @@ class Envios {
       tamaño = 0,
       fecha_despacho = "",
       deadline = "",
+      prioridad = 0,
+      conHorario = "00:00:00",
+      hora_desde = "00:00:00",
+      hora_hasta = "00:00:00",
+
+
+
 
       destination_latitude = 0,
       destination_longitude = 0,
@@ -120,7 +127,12 @@ class Envios {
     this.destination_longitude = destination_longitude;
     this.delivery_preference = delivery_preference;
     this.obs = obs;
-    this.costoActualizado = costoActualizado || 0; // Asignar valor por defecto si costoActualizado es null
+    this.costoActualizado = costoActualizado || 0;
+    this.prioridad = prioridad;
+    this.conHorario = conHorario;
+    this.hora_desde = hora_desde;
+    this.hora_hasta = hora_hasta;
+    // Asignar valor por defecto si costoActualizado es null
     this.quien = quien;
     this.elim = elim; // Asignar aquí
     this.company = company;
