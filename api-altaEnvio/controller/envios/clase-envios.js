@@ -278,7 +278,7 @@ async function calcularFechaDespacho(didCliente, connection) {
   // 3. Calcular fecha despacho ajustando zona horaria (UTC-3)
   //servidor toma hora bien aca
   const ahora = new Date();
-  ahora.setHours(ahora.getHours());
+
 
   const horaActual = ahora.getHours();
   const horaCierre = parseInt(hora);
