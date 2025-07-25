@@ -165,6 +165,7 @@ router.post("/cargamasivanoflex", async (req, res) => {
         estado: envio.estado, // Valor por defecto
         enviosDireccionesDestino: envio.direcciones_destino,
         enviosObservaciones: envio.observaciones["observaciones"],
+        enviosCamposExtra: envio.camposExtras
       };
       console.log(data, "datadsaddasdsadsadssdadsadsasdsasd");
 
@@ -175,7 +176,7 @@ router.post("/cargamasivanoflex", async (req, res) => {
 
     // Llama a AltaEnvio para cada envío transformado
     const resultado = await Promise.all(
-      enviosTransformados.map((envio) => AltaEnvio(company, connection, envio))
+      enviosTransformados.map((envio) => AltaEnvio2(company, connection, envio))
     );
     console.log(resultado, "resultado");
 
