@@ -165,7 +165,7 @@ router.post("/cargamasivanoflex", async (req, res) => {
         estado: envio.estado, // Valor por defecto
         enviosDireccionesDestino: envio.direcciones_destino,
         enviosObservaciones: envio.observaciones["observaciones"],
-        enviosCamposExtra: envio.camposExtras
+        camposExtras: envio.camposExtras
       };
       console.log(data, "datadsaddasdsadsadssdadsadsasdsasd");
 
