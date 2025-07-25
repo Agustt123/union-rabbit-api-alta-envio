@@ -287,8 +287,14 @@ async function calcularFechaDespacho(didCliente, connection) {
   }
 
   const fechaDespacho = new Date(ahora);
+
+  console.log("horaactual", horaActual, "horacierre", horaCierre);
   if (horaActual >= horaCierre) {
-    fechaDespacho.setDate(fechaDespacho.getDate() + 1); // Sumar un día si ya pasó el corte
+    console.log("entreeeee");
+
+    fechaDespacho.setDate(fechaDespacho.getDate() + 1);
+    console.log("fecha despacho", fechaDespacho);
+    // Sumar un día si ya pasó el corte
   }
 
   const year = fechaDespacho.getFullYear();
