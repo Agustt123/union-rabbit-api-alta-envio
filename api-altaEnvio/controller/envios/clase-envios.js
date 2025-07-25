@@ -288,13 +288,13 @@ async function calcularFechaDespacho(didCliente, connection) {
   }
   // aca toma 3 horas adelantado 
   const fechaDespacho = new Date();
+  console.log("fecha despacho", fechaDespacho);
 
   console.log("horaactual", horaActual, "horacierre", horaCierre);
   if (horaActual >= horaCierre) {
     console.log("entreeeee");
 
     fechaDespacho.setDate(fechaDespacho.getDate() + 1);
-    console.log("fecha despacho", fechaDespacho);
     // Sumar un día si ya pasó el corte
   }
 
