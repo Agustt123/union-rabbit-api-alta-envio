@@ -261,6 +261,10 @@ async function calcularFechaDespacho(didCliente, connection) {
 `;
   const resultCliente = await executeQuery(connection, queryCliente, [didCliente]);
 
+
+  console.log("horaaaaaa", resultCliente[0].hora);
+
+
   if (resultCliente.length > 0) {
     hora = resultCliente[0].hora;
   } else {
