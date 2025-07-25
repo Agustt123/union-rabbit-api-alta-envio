@@ -164,7 +164,7 @@ router.post("/cargamasivanoflex", async (req, res) => {
         ml_qr_seguridad: envio.ml_qr_seguridad || undefined,
         estado: envio.estado, // Valor por defecto
         enviosDireccionesDestino: envio.direcciones_destino,
-        enviosObservaciones: envio.observaciones["observaciones"],
+        enviosObservaciones: envio.observaciones,
         camposExtras: envio.camposExtras,
         //logisticainversa: envio.logisticainversa
       };
