@@ -22,19 +22,19 @@ const CostoEnvio = require("../controller/envios/clase-costo-envio");
 
 async function AltaEnvio2(company, connection, data) {
     try {
-        if (!data.data || !data.data.enviosDireccionesDestino ||
-            !data.data.enviosDireccionesDestino.calle ||
-
-            !data.data.enviosDireccionesDestino.cp
-        ) {
-
-            return {
-                success: false,
-                error: -1,
-                message: "Datos de envío inválidos.",
-            };
-        }
-
+        /*  if (!data.data || !data.data.enviosDireccionesDestino ||
+              !data.data.enviosDireccionesDestino.calle ||
+  
+              !data.data.enviosDireccionesDestino.cp
+          ) {
+  
+              return {
+                  success: false,
+                  error: -1,
+                  message: "Datos de envío inválidos.",
+              };
+          }
+  */
         if (data.data.perfil == 2) {
             data.data.estado = 7
         }
