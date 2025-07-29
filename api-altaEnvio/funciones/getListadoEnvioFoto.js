@@ -34,7 +34,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
         ${choferFilter}
     `;
     const countParams = [desdeStr, hastaStr, ...choferesArray];
-    const [countResult] = await executeQuery(connection, countQuery, countParams, true);
+    const [countResult] = await executeQuery(connection, countQuery, countParams);
     const total = countResult.total;
 
     const dataQuery = `
@@ -63,7 +63,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
       LIMIT ? OFFSET ?
     `;
     const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
-    const resultados = await executeQuery(connection, dataQuery, dataParams, true);
+    const resultados = await executeQuery(connection, dataQuery, dataParams);
 
     return {
       total,
