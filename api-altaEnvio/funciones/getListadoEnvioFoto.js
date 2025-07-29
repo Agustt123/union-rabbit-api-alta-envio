@@ -48,7 +48,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
             LEFT JOIN envios_fotos AS ef
                 ON ef.didEnvio = e.did AND ef.elim = 0
             WHERE e.elim = 69 
-                AND e.lote = 'envioFoto'
+                AND e.lote = 'envioFot'
                 AND e.fechaCreacion BETWEEN ? AND ?
                 ${choferFilter}
             GROUP BY e.did

@@ -15,6 +15,7 @@ const { AltaEnvio2 } = require("../controllerAlta/controllerAltaEnvio2");
 const { eliminarEnvio } = require("../funciones/eliminarEnvio");
 const { getHIstorialEnvioFoto } = require("../funciones/getHistorialEnvioFoto");
 const { getEnvioFotoByDid } = require("../funciones/getByidEnvioFoto");
+const { getListadoEnvioFoto } = require("../funciones/getListadoEnvioFoto");
 
 const camposRequeridos = [
   "data",
@@ -229,7 +230,7 @@ router.post("/getListadoFotoEnvio", async (req, res) => {
   const connection = await getConnection(data.idEmpresa);
 
   try {
-    const result = await getListadoFotoEnvio(connection, data);
+    const result = await getListadoEnvioFoto(connection, data);
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
