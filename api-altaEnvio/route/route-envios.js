@@ -12,6 +12,9 @@ const { AltaEnvio } = require("../controllerAlta/controllerAltaEnvio");
 const { logRed } = require("../fuctions/logsCustom");
 const { checkToken } = require("../fuctions/checkTokenCliente");
 const { AltaEnvio2 } = require("../controllerAlta/controllerAltaEnvio2");
+const { eliminarEnvio } = require("../funciones/eliminarEnvio");
+const { getHIstorialEnvioFoto } = require("../funciones/getHistorialEnvioFoto");
+const { getEnvioFotoByDid } = require("../funciones/getByidEnvioFoto");
 
 const camposRequeridos = [
   "data",
@@ -205,6 +208,66 @@ router.post("/cargamasivanoflex", async (req, res) => {
     connection.end();
   }
 });
+
+router.post("/getHistorial", async (req, res) => {
+  const data = req.body;
+  const did = data.did
+  const connection = await getConnection(data.idEmpresa);
+
+  try {
+    const result = await getHIstorialEnvioFoto(connection);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
+  }
+});
+router.post("/getListadoFotoEnvio", async (req, res) => {
+  const data = req.body;
+  const connection = await getConnection(data.idEmpresa);
+
+  try {
+    const result = await getListadoFotoEnvio(connection, data);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
+  }
+});
+router.post("/getEnvioFotoByDid", async (req, res) => {
+  const data = req.body;
+  const did = data.did
+  const connection = await getConnection(data.idEmpresa);
+
+  try {
+    const result = await getEnvioFotoByDid(connection, did);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
+  }
+});
+
+router.post("/deleteEnvio", async (req, res) => {
+  const data = req.body;
+  const did = data.did
+  const connection = await getConnection(data.idEmpresa);
+  try {
+    const result = await eliminarEnvio(connection, did);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
+  }
+})
 
 router.post("/enviosMLredis", async (req, res) => {
   const data = req.body;
