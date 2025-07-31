@@ -4,6 +4,7 @@ const { logYellow, logBlue } = require('../fuctions/logsCustom');
 async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina = 1, cantidad = 10, choferes }) {
   try {
     const hoy = new Date();
+    Number(cantidad);
     const unaSemanaAntes = new Date(hoy);
     unaSemanaAntes.setDate(hoy.getDate() - 7);
 
