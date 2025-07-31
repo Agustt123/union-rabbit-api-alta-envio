@@ -4,7 +4,8 @@ const { logYellow, logBlue } = require('../fuctions/logsCustom');
 async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina = 1, cantidad = 10, choferes }) {
   try {
     const hoy = new Date();
-    const cantidadInt = parseInt(cantidad, 10);
+    cantidad = parseInt(cantidad);
+    pagina = parseInt(pagina);
 
     const unaSemanaAntes = new Date(hoy);
     unaSemanaAntes.setDate(hoy.getDate() - 7);
@@ -70,7 +71,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
   LIMIT ? OFFSET ?
 `;
 
-    const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidadInt, offset];
+    const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
     const data = await executeQuery(connection, dataQuery, dataParams);
     const direcciones = data.some(row => row.direccion === 1);
 
