@@ -228,6 +228,8 @@ router.post("/getHistorial", async (req, res) => {
 router.post("/getListadoFotoEnvio", async (req, res) => {
   const data = req.body;
   const connection = await getConnection(data.idEmpresa);
+  console.log(data, "data getListadoFotoEnvio");
+
 
   try {
     const result = await getListadoEnvioFoto(connection, data);
