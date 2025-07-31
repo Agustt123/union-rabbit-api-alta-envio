@@ -39,24 +39,30 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
 
     const dataQuery = `
   SELECT 
-      e.did, 
-      e.choferAsignado,
-      su.usuario AS nombreChofer,
-      edd.calle ,
-      edd.numero ,
-      edd.localidad,
-      ef.nombre AS nombreFoto
+    e.did, 
+    e.choferAsignado,
+    su.usuario AS nombreChofer,
+    edd.calle,
+    edd.numero,
+    edd.localidad,
+    ef.nombre AS nombreFoto,
+    (CASE 
+      WHEN edd.calle IS NOT NULL AND edd.calle <> '' THEN 1
+      WHEN edd.numero IS NOT NULL AND edd.numero <> '' THEN 1
+      WHEN edd.localidad IS NOT NULL AND edd.localidad <> '' THEN 1
+      ELSE 0
+    END) AS tieneDireccion
   FROM envios AS e
   LEFT JOIN envios_direcciones_destino AS edd
-      ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
+    ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
   LEFT JOIN sistema_usuarios AS su
-      ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
+    ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
   LEFT JOIN envios_fotos AS ef
-      ON ef.didEnvio = e.did AND ef.elim = 0
+    ON ef.didEnvio = e.did AND ef.elim = 0
   WHERE e.elim = 69 
-      AND e.lote = 'envioFot'
-      AND e.autoFecha BETWEEN ? AND ?
-      ${choferFilter}
+    AND e.lote = 'envioFot'
+    AND e.autoFecha BETWEEN ? AND ?
+    ${choferFilter}
   GROUP BY e.did
   ORDER BY e.did DESC
   LIMIT ? OFFSET ?
@@ -64,13 +70,15 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
 
     const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
     const data = await executeQuery(connection, dataQuery, dataParams);
+    const direcciones = data.some(row => row.tieneDireccion === 1);
 
     return {
+      estado: true,
+      direcciones,
       total,
       pagina,
       cantidad,
       data,
-      estado: true
     };
 
   } catch (error) {
