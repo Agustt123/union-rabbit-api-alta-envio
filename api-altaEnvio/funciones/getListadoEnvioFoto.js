@@ -38,7 +38,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     `;
     const countParams = [desdeStr, hastaStr, ...choferesArray];
     const [countResult] = await executeQuery(connection, countQuery, countParams);
-    const total = countResult.total;
+    const registros = countResult.total;
 
     const dataQuery = `
   SELECT 
@@ -78,8 +78,9 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     return {
       estado: true,
       direcciones,
-      total,
+      registros,
       pagina,
+      totalPaginas: Math.ceil(registros / cantidad),
       cantidad,
       data,
     };
