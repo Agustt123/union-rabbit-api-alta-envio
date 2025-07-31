@@ -38,38 +38,39 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     const total = countResult.total;
 
     const dataQuery = `
-      SELECT 
-          e.did, 
-          e.choferAsignado,
-          su.usuario AS nombreChofer,
-          CASE 
-              WHEN edd.address_line IS NOT NULL AND TRIM(edd.address_line) <> '' THEN 1 
-              ELSE 0 
-          END AS tieneDireccion,
-          ef.nombre AS nombreFoto
-      FROM envios AS e
-      LEFT JOIN envios_direcciones_destino AS edd
-          ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
-      LEFT JOIN sistema_usuarios AS su
-          ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
-      LEFT JOIN envios_fotos AS ef
-          ON ef.didEnvio = e.did AND ef.elim = 0
-      WHERE e.elim = 69 
-          AND e.lote = 'envioFot'
-          AND e.autoFecha BETWEEN ? AND ?
-          ${choferFilter}
-      GROUP BY e.did
-      ORDER BY e.did DESC
-      LIMIT ? OFFSET ?
-    `;
+  SELECT 
+      e.did, 
+      e.choferAsignado,
+      su.usuario AS nombreChofer,
+      edd.calle ,
+      edd.numero ,
+      edd.localidad,
+      ef.nombre AS nombreFoto
+  FROM envios AS e
+  LEFT JOIN envios_direcciones_destino AS edd
+      ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
+  LEFT JOIN sistema_usuarios AS su
+      ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
+  LEFT JOIN envios_fotos AS ef
+      ON ef.didEnvio = e.did AND ef.elim = 0
+  WHERE e.elim = 69 
+      AND e.lote = 'envioFot'
+      AND e.autoFecha BETWEEN ? AND ?
+      ${choferFilter}
+  GROUP BY e.did
+  ORDER BY e.did DESC
+  LIMIT ? OFFSET ?
+`;
+
     const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
-    const resultados = await executeQuery(connection, dataQuery, dataParams);
+    const data = await executeQuery(connection, dataQuery, dataParams);
 
     return {
       total,
       pagina,
       cantidad,
-      resultados
+      data,
+      estado: true
     };
 
   } catch (error) {
