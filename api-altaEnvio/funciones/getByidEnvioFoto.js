@@ -23,7 +23,7 @@ async function getEnvioFotoByDid(connection, did) {
             LIMIT 1
         `;
         const [result] = await executeQuery(connection, query, [did]);
-        return result || null;
+        return { estado: true, data: result } || { estado: false, data: null };
     } catch (error) {
         throw error;
     }
