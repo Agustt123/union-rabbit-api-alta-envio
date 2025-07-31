@@ -45,8 +45,8 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     e.did, 
     e.choferAsignado,
    
-    
-    CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer
+
+    CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer,
     edd.calle,
     edd.numero,
     edd.localidad,
