@@ -44,7 +44,9 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
   SELECT 
     e.did, 
     e.choferAsignado,
-    su.usuario AS nombreChofer,
+   
+    
+    CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer
     edd.calle,
     edd.numero,
     edd.localidad,
@@ -77,7 +79,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
 
     return {
       estado: true,
-      direcciones,
+
       registros,
       pagina,
       totalPaginas: Math.ceil(registros / cantidad),
