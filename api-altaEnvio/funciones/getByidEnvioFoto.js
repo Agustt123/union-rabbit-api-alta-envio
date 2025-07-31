@@ -5,6 +5,7 @@ async function getEnvioFotoByDid(connection, did) {
         const query = `
             SELECT 
                 e.did,
+                e.lote,
                 e.choferAsignado,
                 su.nombre AS nombreChofer,
                 edd.localidad,
