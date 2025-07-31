@@ -51,7 +51,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
       WHEN edd.numero IS NOT NULL AND edd.numero <> '' THEN 1
       WHEN edd.localidad IS NOT NULL AND edd.localidad <> '' THEN 1
       ELSE 0
-    END) AS tieneDireccion
+    END) AS direccion
   FROM envios AS e
   LEFT JOIN envios_direcciones_destino AS edd
     ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
@@ -70,7 +70,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
 
     const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
     const data = await executeQuery(connection, dataQuery, dataParams);
-    const direcciones = data.some(row => row.tieneDireccion === 1);
+    const direcciones = data.some(row => row.direccion === 1);
 
     return {
       estado: true,
