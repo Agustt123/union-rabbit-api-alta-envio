@@ -63,7 +63,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
   LEFT JOIN sistema_usuarios AS su
     ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
   LEFT JOIN envios_fotos AS ef
-    ON ef.didEnvio = e.did AND ef.elim = 0
+    ON ef.didEnvio = e.did AND ef.elim = 69
   WHERE e.elim = 69 
     AND e.lote = 'envioFot'
     AND e.autoFecha BETWEEN ? AND ?
