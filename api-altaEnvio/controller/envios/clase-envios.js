@@ -75,13 +75,9 @@ class Envios {
 
 
     this.exterior = exterior;
-    let fechaInicioParsed = new Date(fecha_inicio);
-    if (fechaInicioParsed instanceof Date && !isNaN(fechaInicioParsed)) {
-      fechaInicioParsed.setHours(fechaInicioParsed.getHours() - 3);
-      this.fecha_inicio = fechaInicioParsed.toISOString();
-    } else {
-      this.fecha_inicio = new Date().toISOString(); // fallback si viene mal
-    }
+    this.fecha_inicio = data.fecha_inicio
+      ? new Date(data.fecha_inicio).toISOString()
+      : new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
 
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
