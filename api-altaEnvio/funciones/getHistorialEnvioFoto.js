@@ -61,8 +61,9 @@ async function getHIstorialEnvioFoto(connection, { fechaDesde, fechaHasta, pagin
   LEFT JOIN sistema_usuarios AS su
     ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
   LEFT JOIN envios_fotos AS ef
-    ON ef.didEnvio = e.did AND ef.elim = 0
-  WHERE e.elim = 69 
+    ON ef.didEnvio = e.did AND ef.elim = 69
+  WHERE e.elim = 0  AND
+  e.superado = 0
     AND e.lote = 'envioFot'
     AND e.autoFecha BETWEEN ? AND ?
     ${choferFilter}
