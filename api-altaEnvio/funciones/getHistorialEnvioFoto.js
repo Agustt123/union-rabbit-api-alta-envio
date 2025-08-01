@@ -4,6 +4,9 @@ const { logYellow, logBlue } = require('../fuctions/logsCustom');
 async function getHIstorialEnvioFoto(connection, { fechaDesde, fechaHasta, pagina = 1, cantidad = 10, choferes }) {
     try {
         const hoy = new Date();
+        cantidad = parseInt(cantidad);
+        pagina = parseInt(pagina);
+
         const unaSemanaAntes = new Date(hoy);
         unaSemanaAntes.setDate(hoy.getDate() - 7);
 
@@ -28,54 +31,66 @@ async function getHIstorialEnvioFoto(connection, { fechaDesde, fechaHasta, pagin
       FROM envios AS e
       LEFT JOIN envios_direcciones_destino AS edd
         ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
-      WHERE e.elim = 0 
+      WHERE e.elim = 69 
         AND e.lote = 'envioFot'
         AND e.autoFecha BETWEEN ? AND ?
         ${choferFilter}
     `;
         const countParams = [desdeStr, hastaStr, ...choferesArray];
         const [countResult] = await executeQuery(connection, countQuery, countParams);
-        const total = countResult.total;
+        const registros = countResult.total;
 
         const dataQuery = `
   SELECT 
-      e.did, 
-      e.choferAsignado,
-      su.usuario AS nombreChofer,
-      edd.calle ,
-      edd.numero ,
-      edd.localidad,
-      ef.nombre AS nombreFoto
+    e.did, 
+    e.choferAsignado,
+   
+
+    CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer,
+
+    ef.nombre AS nombreFoto,
+    (CASE 
+      WHEN edd.calle IS NOT NULL AND edd.calle <> '' THEN 1
+      WHEN edd.numero IS NOT NULL AND edd.numero <> '' THEN 1
+      WHEN edd.localidad IS NOT NULL AND edd.localidad <> '' THEN 1
+      ELSE 0
+    END) AS direccion
   FROM envios AS e
   LEFT JOIN envios_direcciones_destino AS edd
-      ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
+    ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
   LEFT JOIN sistema_usuarios AS su
-      ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
+    ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
   LEFT JOIN envios_fotos AS ef
-      ON ef.didEnvio = e.did AND ef.elim = 0
+    ON ef.didEnvio = e.did AND ef.elim = 0
   WHERE e.elim = 69 
-      AND e.lote = 'envioFot'
-      AND e.autoFecha BETWEEN ? AND ?
-      ${choferFilter}
+    AND e.lote = 'envioFot'
+    AND e.autoFecha BETWEEN ? AND ?
+    ${choferFilter}
   GROUP BY e.did
   ORDER BY e.did DESC
   LIMIT ? OFFSET ?
 `;
 
         const dataParams = [desdeStr, hastaStr, ...choferesArray, cantidad, offset];
-        const resultados = await executeQuery(connection, dataQuery, dataParams);
+        const data = await executeQuery(connection, dataQuery, dataParams);
+        const direcciones = data.some(row => row.direccion === 1);
 
         return {
-            total,
+            estado: true,
+
+            registros,
             pagina,
+            totalPaginas: Math.ceil(registros / cantidad),
             cantidad,
-            resultados
+            data,
         };
 
     } catch (error) {
         throw error;
     }
 }
+
+
 
 
 module.exports = {
