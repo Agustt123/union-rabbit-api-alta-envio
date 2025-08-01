@@ -28,6 +28,7 @@ class Envios {
       bultos = 1,
       valor_declarado = "",
       monto_total_a_cobrar = "",
+      choferAsignado = 0,
       tracking_method = "",
       tracking_number = "",
       fecha_venta = "",
@@ -106,6 +107,7 @@ class Envios {
     this.didServicio = didServicio;
     this.didSucursalDistribucion = didSucursalDistribucion;
     this.peso = peso;
+    this.choferAsignado = choferAsignado;
     this.volumen = volumen;
     this.bultos = bultos;
     this.valor_declarado = valor_declarado;
