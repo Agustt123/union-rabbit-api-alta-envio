@@ -267,7 +267,7 @@ router.post("/deleteEnvio", async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ estado: false, message: error.message });
   } finally {
     connection.end();
   }
