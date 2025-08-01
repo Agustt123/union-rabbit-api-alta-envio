@@ -72,6 +72,8 @@ class Envios {
     this.gtoken = gtoken;
     this.flex = flex;
     this.turbo = turbo;
+
+
     this.exterior = exterior;
     let fechaInicioParsed = new Date(fecha_inicio);
     if (fechaInicioParsed instanceof Date && !isNaN(fechaInicioParsed)) {
