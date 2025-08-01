@@ -7,7 +7,7 @@ async function getEnvioFotoByDid(connection, did) {
                 e.did,
                 e.lote,
                 e.choferAsignado,
-                e.fehca_inicio,
+                e.fecha_inicio,
                 su.nombre AS nombreChofer,
                 edd.localidad,
                 edd.calle,
