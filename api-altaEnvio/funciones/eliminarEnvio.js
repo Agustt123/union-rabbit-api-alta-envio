@@ -5,7 +5,7 @@ async function eliminarEnvio(connection, did) {
     try {
         const query = `UPDATE envios SET elim = 1 WHERE did = ?`;
         const result = await executeQuery(connection, query, [did]);
-        return result;
+        return { success: true, message: 'El envio se ha eliminado correctamente' } || result;
     } catch (error) {
         throw error;
     }
