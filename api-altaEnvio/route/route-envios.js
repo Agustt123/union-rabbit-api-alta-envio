@@ -210,13 +210,14 @@ router.post("/cargamasivanoflex", async (req, res) => {
   }
 });
 
-router.post("/getHistorial", async (req, res) => {
+router.post("/getHistorialFotoEnvio", async (req, res) => {
   const data = req.body;
-  const did = data.did
   const connection = await getConnection(data.idEmpresa);
+  console.log(data, "data getListadoFotoEnvio");
+
 
   try {
-    const result = await getHIstorialEnvioFoto(connection);
+    const result = await getHIstorialEnvioFoto(connection, data);
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
