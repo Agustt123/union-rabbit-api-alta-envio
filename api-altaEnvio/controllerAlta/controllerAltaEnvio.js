@@ -43,7 +43,7 @@ async function AltaEnvio(company, connection, data) {
         }
         console.log(data.data.didCliente, "didCliente");
 
-
+        data.data.destination_shipping_zip_code = data.data.enviosDireccionesDestino.cp;
         const email = data.data.destination_receiver_email;
         delete data.data.destination_receiver_email;
         console.log("Todos los campos son válidos.");

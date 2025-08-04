@@ -229,7 +229,7 @@ class Envios {
       const insertQuery = `INSERT INTO envios (${filteredColumns.join(
         ", "
       )}) VALUES (${filteredColumns.map(() => "?").join(", ")})`;
-      const result = await executeQuery(connection, insertQuery, values, true);
+      const result = await executeQuery(connection, insertQuery, values);
       logYellow(`Insert Query: ${JSON.stringify(insertQuery)}`);
       logBlue(`Values: ${JSON.stringify(values)}`);
 
@@ -288,11 +288,8 @@ async function calcularFechaDespacho(didCliente, connection) {
   }
   // aca toma 3 horas adelantado 
   const fechaDespacho = new Date();
-  console.log("fecha despacho", fechaDespacho);
 
-  console.log("horaactual", horaActual, "horacierre", horaCierre);
   if (horaActual >= horaCierre) {
-    console.log("entreeeee");
 
     fechaDespacho.setDate(fechaDespacho.getDate() + 1);
     // Sumar un día si ya pasó el corte
