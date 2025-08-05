@@ -13,7 +13,8 @@ async function getEnvioFotoByDid(connection, did) {
         edd.calle,
         edd.numero,
         edd.address_line,
-        ef.nombre AS nombreFoto
+        ef.nombre AS nombreFoto,
+        DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto
     FROM envios AS e
     LEFT JOIN envios_direcciones_destino AS edd
         ON edd.didEnvio = e.did AND edd.elim = 0 AND edd.superado = 0
