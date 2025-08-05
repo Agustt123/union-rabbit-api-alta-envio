@@ -16,6 +16,7 @@ const { eliminarEnvio } = require("../funciones/eliminarEnvio");
 const { getHIstorialEnvioFoto } = require("../funciones/getHistorialEnvioFoto");
 const { getEnvioFotoByDid } = require("../funciones/getByidEnvioFoto");
 const { getListadoEnvioFoto } = require("../funciones/getListadoEnvioFoto");
+const { descargarFoto } = require("../funciones/descargarFoto");
 
 const camposRequeridos = [
   "data",
@@ -272,6 +273,11 @@ router.post("/deleteEnvio", async (req, res) => {
     connection.end();
   }
 })
+router.post('/descargarFoto', async (req, res) => {
+  const { idEmpresa, did, nombreFoto } = req.body;
+  await descargarFoto({ idEmpresa, did, nombreFoto }, res);
+});
+
 
 router.post("/enviosMLredis", async (req, res) => {
   const data = req.body;
@@ -385,11 +391,13 @@ router.post("/enviosMLredis", async (req, res) => {
     connection.end();
   }
 });
+
 router.get("/", async (req, res) => {
   res.status(200).json({
     estado: true,
     mesanje: "Hola chris",
   });
 });
+
 
 module.exports = router;
