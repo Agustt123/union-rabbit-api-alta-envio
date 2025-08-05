@@ -50,7 +50,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     edd.calle,
     edd.numero,
     edd.localidad,
-      DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto
+      DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto,
     ef.nombre AS nombreFoto,
     (CASE 
       WHEN edd.calle IS NOT NULL AND edd.calle <> '' THEN 1
