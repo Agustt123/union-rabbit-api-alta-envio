@@ -12,11 +12,11 @@ const { AltaEnvio } = require("../controllerAlta/controllerAltaEnvio");
 const { logRed } = require("../fuctions/logsCustom");
 const { checkToken } = require("../fuctions/checkTokenCliente");
 const { AltaEnvio2 } = require("../controllerAlta/controllerAltaEnvio2");
-const { eliminarEnvio } = require("../funciones/eliminarEnvio");
-const { getHIstorialEnvioFoto } = require("../funciones/getHistorialEnvioFoto");
-const { getEnvioFotoByDid } = require("../funciones/getByidEnvioFoto");
-const { getListadoEnvioFoto } = require("../funciones/getListadoEnvioFoto");
-const { descargarFoto } = require("../funciones/descargarFoto");
+const { eliminarEnvio } = require("../funciones/fotoEnvio/eliminarEnvio");
+const { getHIstorialEnvioFoto } = require("../funciones/fotoEnvio/getHistorialEnvioFoto");
+const { getEnvioFotoByDid } = require("../funciones/fotoEnvio/getByidEnvioFoto");
+const { getListadoEnvioFoto } = require("../funciones/fotoEnvio/getListadoEnvioFoto");
+const { descargarFoto } = require("../funciones/fotoEnvio/descargarFoto");
 
 const camposRequeridos = [
   "data",

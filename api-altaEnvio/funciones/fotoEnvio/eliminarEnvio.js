@@ -1,5 +1,5 @@
-const { getConnection, getFromRedis, executeQuery } = require('../dbconfig');
-const { logYellow, logBlue } = require('../fuctions/logsCustom');
+const { getConnection, getFromRedis, executeQuery } = require('../../dbconfig');
+const { logYellow, logBlue } = require('../../fuctions/logsCustom');
 
 async function eliminarEnvio(connection, did) {
     try {

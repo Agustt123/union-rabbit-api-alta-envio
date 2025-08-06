@@ -1,7 +1,7 @@
-const { getConnection, getFromRedis, executeQuery } = require('../dbconfig');
-const { logYellow, logBlue } = require('../fuctions/logsCustom');
+const { getConnection, getFromRedis, executeQuery } = require('../../dbconfig');
+const { logYellow, logBlue } = require('../../fuctions/logsCustom');
 
-async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina = 1, cantidad = 10, choferes }) {
+async function getHIstorialEnvioFoto(connection, { fechaDesde, fechaHasta, pagina = 1, cantidad = 10, choferes }) {
   try {
     const hoy = new Date();
     cantidad = parseInt(cantidad);
@@ -31,7 +31,7 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
       FROM envios AS e
       LEFT JOIN envios_direcciones_destino AS edd
         ON e.did = edd.didEnvio AND edd.elim = 0 AND edd.superado = 0
-      WHERE e.elim = 69 AND e.superado = 0
+      WHERE e.elim = 0 AND e.superado =  0 
         AND e.lote = 'envioFot'
         AND e.autoFecha BETWEEN ? AND ?
         ${choferFilter}
@@ -47,11 +47,9 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
    
 
     CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer,
-    edd.calle,
-    edd.numero,
-    edd.localidad,
-      DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto,
+
     ef.nombre AS nombreFoto,
+    DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto
     (CASE 
       WHEN edd.calle IS NOT NULL AND edd.calle <> '' THEN 1
       WHEN edd.numero IS NOT NULL AND edd.numero <> '' THEN 1
@@ -65,7 +63,8 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
     ON su.did = e.choferAsignado AND su.elim = 0 AND su.superado = 0
   LEFT JOIN envios_fotos AS ef
     ON ef.didEnvio = e.did AND ef.elim = 69
-  WHERE e.elim = 69 AND e.superado = 0
+  WHERE e.elim = 0  AND
+  e.superado = 0
     AND e.lote = 'envioFot'
     AND e.autoFecha BETWEEN ? AND ?
     ${choferFilter}
@@ -97,6 +96,6 @@ async function getListadoEnvioFoto(connection, { fechaDesde, fechaHasta, pagina 
 
 
 module.exports = {
-  getListadoEnvioFoto
+  getHIstorialEnvioFoto
 }
 

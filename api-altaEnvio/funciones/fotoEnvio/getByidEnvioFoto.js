@@ -1,4 +1,4 @@
-const { executeQuery } = require('../dbconfig');
+const { executeQuery } = require('../../dbconfig');
 
 async function getEnvioFotoByDid(connection, did) {
     try {
