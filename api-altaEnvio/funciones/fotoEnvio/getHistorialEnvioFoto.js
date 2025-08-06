@@ -49,7 +49,7 @@ async function getHIstorialEnvioFoto(connection, { fechaDesde, fechaHasta, pagin
     CONCAT(su.nombre, ' ', su.apellido) AS nombreChofer,
 
     ef.nombre AS nombreFoto,
-    DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto
+    DATE_SUB(ef.autofecha, INTERVAL 3 HOUR) AS fechaFoto,
     (CASE 
       WHEN edd.calle IS NOT NULL AND edd.calle <> '' THEN 1
       WHEN edd.numero IS NOT NULL AND edd.numero <> '' THEN 1
