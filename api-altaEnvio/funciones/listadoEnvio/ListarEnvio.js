@@ -79,35 +79,35 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
 
         const results = await executeQuery(connection, query, [...params, cantidad, offset], true);
 
-        const listado = results.map(row => ({
-            codigo: row.codigo,
-            cp: row.cp || '',
-            did: row.did,
-            didCliente: row.didCliente,
-            didCadete: row.choferAsignado,
-            elimClie: row.elimClie,
-            estado_envio: row.estado_envio,
-            estadoml: row.estado,
-            estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
-            fechagestionar: row.fecha_inicio_formateada,
-            fecha_venta: row.fecha_venta,
-            flexname: row.flex,
-            lead_time_shipping_method_name: row.lead_time_shipping_method_name,
-            localidad: row.localidad || '',
-            ml_vendedor_id: row.ml_vendedor_id,
-            namecadete: row.usuario,
-            nombre: row.nombre_fantasia || '',
-            nombre_fantasia: row.nombre_fantasia,
-            ml_qr_seguridad: row.ml_qr_seguridad,
-            tracking: row.tracking_number,
-            valor_declarado: row.valor_declarado,
-            autoFecha: row.autoFecha,
-            zonacosto: row.nameZonaCostoCliente,
-        }));
-
+        /* const listado = results.map(row => ({
+             codigo: row.codigo,
+             cp: row.cp || '',
+             did: row.did,
+             didCliente: row.didCliente,
+             didCadete: row.choferAsignado,
+             elimClie: row.elimClie,
+             estado_envio: row.estado_envio,
+             estadoml: row.estado,
+             estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
+             fechagestionar: row.fecha_inicio_formateada,
+             fecha_venta: row.fecha_venta,
+             flexname: row.flex,
+             lead_time_shipping_method_name: row.lead_time_shipping_method_name,
+             localidad: row.localidad || '',
+             ml_vendedor_id: row.ml_vendedor_id,
+             namecadete: row.usuario,
+             nombre: row.nombre_fantasia || '',
+             nombre_fantasia: row.nombre_fantasia,
+             ml_qr_seguridad: row.ml_qr_seguridad,
+             tracking: row.tracking_number,
+             valor_declarado: row.valor_declarado,
+             autoFecha: row.autoFecha,
+             zonacosto: row.nameZonaCostoCliente,
+         }));
+ */
         return {
             estado: true,
-            data: listado,
+            data: results,
             total: listado.length, // evita usar COUNT(*)
             pagina,
             cantidad,
