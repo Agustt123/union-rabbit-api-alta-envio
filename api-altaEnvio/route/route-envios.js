@@ -17,6 +17,7 @@ const { getHIstorialEnvioFoto } = require("../funciones/fotoEnvio/getHistorialEn
 const { getEnvioFotoByDid } = require("../funciones/fotoEnvio/getByidEnvioFoto");
 const { getListadoEnvioFoto } = require("../funciones/fotoEnvio/getListadoEnvioFoto");
 const { descargarFoto } = require("../funciones/fotoEnvio/descargarFoto");
+const { ListarEnvio } = require("../funciones/listadoEnvio/ListarEnvio");
 
 const camposRequeridos = [
   "data",
@@ -128,6 +129,20 @@ router.post("/altaEnvio", async (req, res) => {
       success: false,
       error: error.message || error,
     });
+  }
+});
+router.post("/getListadoEnvios", async (req, res) => {
+  const data = req.body;
+  console.log(data, "data getListadoEnvios");
+  const connection = await getConnection(data.idEmpresa);
+  try {
+    const result = await ListarEnvio(connection);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
   }
 });
 
