@@ -1,5 +1,15 @@
 const { executeQuery } = require("../../dbconfig");
 
+function formatDatetimeStart(dateStr) {
+    return `${dateStr} 00:00:00`;
+}
+
+function formatDatetimeEnd(dateStr) {
+    const date = new Date(dateStr);
+    date.setDate(date.getDate() + 1); // suma 1 día
+    return `${date.toISOString().split('T')[0]} 00:00:00`;
+}
+
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
@@ -8,11 +18,10 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
     try {
         const offset = (pagina - 1) * cantidad;
 
-        // Condiciones dinámicas
         const condiciones = [`e.elim = 0`, `e.superado = 0`];
         const params = [];
 
-        // Por defecto: hoy y hace 7 días
+        // Fecha por defecto: últimos 7 días
         const hoy = new Date();
         const hace7Dias = new Date();
         hace7Dias.setDate(hoy.getDate() - 7);
@@ -20,10 +29,13 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         const fechaDesde = data.fechaDesde || formatDate(hace7Dias);
         const fechaHasta = data.fechaHasta || formatDate(hoy);
 
-        condiciones.push(`DATE(e.autoFecha) BETWEEN ? AND ?`);
-        params.push(fechaDesde, fechaHasta);
+        const fechaDesdeSQL = formatDatetimeStart(fechaDesde);
+        const fechaHastaSQL = formatDatetimeEnd(fechaHasta);
 
-        // Filtro por tracking_number si se envía
+        condiciones.push(`e.autoFecha >= ? AND e.autoFecha < ?`);
+        params.push(fechaDesdeSQL, fechaHastaSQL);
+
+        // Filtro por tracking
         if (data.tracking) {
             condiciones.push(`e.tracking_number = ?`);
             params.push(data.tracking);
