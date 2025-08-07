@@ -44,13 +44,13 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         const whereClause = `WHERE ${condiciones.join(' AND ')}`;
 
         // Consulta total
-        const totalQuery = `
-            SELECT COUNT(*) AS total
-            FROM envios e
-            ${whereClause}
-        `;
-        const [totalResult] = await executeQuery(connection, totalQuery, params);
-        const total = totalResult.total;
+        /*    const totalQuery = `
+                SELECT COUNT(*) AS total
+                FROM envios e
+                ${whereClause}
+            `;*/
+        //    const [totalResult] = await executeQuery(connection, totalQuery, params);
+        const total = 0;
 
         // Consulta paginada
         const query = `
