@@ -1,29 +1,35 @@
 const { executeQuery } = require("../../dbconfig");
 
-async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
+function formatDate(date) {
+    return date.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantidad = 10) {
     try {
         const offset = (pagina - 1) * cantidad;
 
-        // Armamos condiciones dinámicas
+        // Condiciones dinámicas
         const condiciones = [`e.elim = 0`, `e.superado = 0`];
         const params = [];
 
-        // Fecha desde/hasta (por autoFecha)
-        const hoy = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+        // Por defecto: hoy y hace 7 días
+        const hoy = new Date();
+        const hace7Dias = new Date();
+        hace7Dias.setDate(hoy.getDate() - 7);
 
-        const fechaDesde = data.fechaDesde || hoy;
-        const fechaHasta = data.fechaHasta || hoy;
+        const fechaDesde = data.fechaDesde || formatDate(hace7Dias);
+        const fechaHasta = data.fechaHasta || formatDate(hoy);
 
         condiciones.push(`DATE(e.autoFecha) BETWEEN ? AND ?`);
         params.push(fechaDesde, fechaHasta);
 
-        // Filtro por tracking_number
+        // Filtro por tracking_number si se envía
         if (data.tracking) {
             condiciones.push(`e.tracking_number = ?`);
             params.push(data.tracking);
         }
 
-        const whereClause = condiciones.length > 0 ? `WHERE ${condiciones.join(' AND ')}` : '';
+        const whereClause = `WHERE ${condiciones.join(' AND ')}`;
 
         // Consulta total
         const totalQuery = `
@@ -102,7 +108,8 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             data: listado,
             total,
             pagina,
-            cantidad
+            cantidad,
+            filtros: { fechaDesde, fechaHasta, tracking: data.tracking || null }
         };
     } catch (error) {
         throw error;
