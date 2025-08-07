@@ -75,7 +75,7 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         `;
 
         // Ejecutamos SIN limit ni offset
-        const results = await executeQuery(connection, query, params, true);
+        const results = await executeQuery(connection, query, params);
 
         const total = results.length;
 
