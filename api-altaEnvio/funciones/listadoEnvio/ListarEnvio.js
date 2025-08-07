@@ -1,16 +1,37 @@
 const { executeQuery } = require("../../dbconfig");
 
-async function ListarEnvio(connection, pagina = 1, cantidad = 10) {
+async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
     try {
         const offset = (pagina - 1) * cantidad;
+
+        // Armamos condiciones dinámicas
+        const condiciones = [`e.elim = 0`, `e.superado = 0`];
+        const params = [];
+
+        // Fecha desde/hasta (por autoFecha)
+        const hoy = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+
+        const fechaDesde = data.fechaDesde || hoy;
+        const fechaHasta = data.fechaHasta || hoy;
+
+        condiciones.push(`DATE(e.autoFecha) BETWEEN ? AND ?`);
+        params.push(fechaDesde, fechaHasta);
+
+        // Filtro por tracking_number
+        if (data.tracking) {
+            condiciones.push(`e.tracking_number = ?`);
+            params.push(data.tracking);
+        }
+
+        const whereClause = condiciones.length > 0 ? `WHERE ${condiciones.join(' AND ')}` : '';
 
         // Consulta total
         const totalQuery = `
             SELECT COUNT(*) AS total
             FROM envios e
-            WHERE e.elim = 0 AND e.superado = 0
+            ${whereClause}
         `;
-        const [totalResult] = await executeQuery(connection, totalQuery, []);
+        const [totalResult] = await executeQuery(connection, totalQuery, params);
         const total = totalResult.total;
 
         // Consulta paginada
@@ -43,12 +64,12 @@ async function ListarEnvio(connection, pagina = 1, cantidad = 10) {
             LEFT JOIN sistema_usuarios su ON e.choferAsignado = su.did AND su.elim = 0 AND su.superado = 0
             LEFT JOIN costos_envios ce ON e.did = ce.didEnvio AND ce.elim = 0 AND ce.superado = 0
             LEFT JOIN clientes c ON e.didCliente = c.did AND c.elim = 0 AND c.superado = 0
-            WHERE e.elim = 0 AND e.superado = 0
+            ${whereClause}
             ORDER BY e.id DESC
             LIMIT ? OFFSET ?
         `;
 
-        const results = await executeQuery(connection, query, [cantidad, offset]);
+        const results = await executeQuery(connection, query, [...params, cantidad, offset]);
 
         const listado = results.map(row => ({
             codigo: row.codigo,
