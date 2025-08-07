@@ -21,7 +21,7 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         const condiciones = [`e.elim = 0`, `e.superado = 0`];
         const params = [];
 
-        // Fecha por defecto: últimos 7 días
+        // Fechas por defecto: últimos 7 días
         const hoy = new Date();
         const hace7Dias = new Date();
         hace7Dias.setDate(hoy.getDate() - 7);
@@ -35,24 +35,14 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         condiciones.push(`e.autoFecha >= ? AND e.autoFecha < ?`);
         params.push(fechaDesdeSQL, fechaHastaSQL);
 
-        // Filtro por tracking
+        // Filtro por tracking si viene
         if (data.tracking) {
             condiciones.push(`e.tracking_number = ?`);
             params.push(data.tracking);
         }
 
-        const whereClause = `WHERE ${condiciones.join(' AND ')}`;
+        const whereClause = `WHERE ${condiciones.join(" AND ")}`;
 
-        // Consulta total
-        /*    const totalQuery = `
-                SELECT COUNT(*) AS total
-                FROM envios e
-                ${whereClause}
-            `;*/
-        //    const [totalResult] = await executeQuery(connection, totalQuery, params);
-        const total = 0;
-
-        // Consulta paginada
         const query = `
             SELECT 
                 e.did,
@@ -89,41 +79,46 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
 
         const results = await executeQuery(connection, query, [...params, cantidad, offset], true);
 
-        /*     const listado = results.map(row => ({
-                 codigo: row.codigo,
-                 cp: row.cp || '',
-                 did: row.did,
-                 didCliente: row.didCliente,
-                 didCadete: row.choferAsignado,
-                 elimClie: row.elimClie,
-                 estado_envio: row.estado_envio,
-                 estadoml: row.estado,
-                 estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
-                 fechagestionar: row.fecha_inicio_formateada,
-                 fecha_venta: row.fecha_venta,
-                 flexname: row.flex,
-                 lead_time_shipping_method_name: row.lead_time_shipping_method_name,
-                 localidad: row.localidad || '',
-                 ml_vendedor_id: row.ml_vendedor_id,
-                 namecadete: row.usuario,
-                 nombre: row.nombre_fantasia || '',
-                 nombre_fantasia: row.nombre_fantasia,
-                 ml_qr_seguridad: row.ml_qr_seguridad,
-                 tracking: row.tracking_number,
-                 valor_declarado: row.valor_declarado,
-                 autoFecha: row.autoFecha,
-                 zonacosto: row.nameZonaCostoCliente,
-             }));
-     */
+        const listado = results.map(row => ({
+            codigo: row.codigo,
+            cp: row.cp || '',
+            did: row.did,
+            didCliente: row.didCliente,
+            didCadete: row.choferAsignado,
+            elimClie: row.elimClie,
+            estado_envio: row.estado_envio,
+            estadoml: row.estado,
+            estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
+            fechagestionar: row.fecha_inicio_formateada,
+            fecha_venta: row.fecha_venta,
+            flexname: row.flex,
+            lead_time_shipping_method_name: row.lead_time_shipping_method_name,
+            localidad: row.localidad || '',
+            ml_vendedor_id: row.ml_vendedor_id,
+            namecadete: row.usuario,
+            nombre: row.nombre_fantasia || '',
+            nombre_fantasia: row.nombre_fantasia,
+            ml_qr_seguridad: row.ml_qr_seguridad,
+            tracking: row.tracking_number,
+            valor_declarado: row.valor_declarado,
+            autoFecha: row.autoFecha,
+            zonacosto: row.nameZonaCostoCliente,
+        }));
+
         return {
             estado: true,
-            data: results,
-            total,
+            data: listado,
+            total: listado.length, // evita usar COUNT(*)
             pagina,
             cantidad,
-            filtros: { fechaDesde, fechaHasta, tracking: data.tracking || null }
+            filtros: {
+                fechaDesde,
+                fechaHasta,
+                tracking: data.tracking || null
+            }
         };
     } catch (error) {
+        console.error("❌ Error en ListarEnvio:", error);
         throw error;
     }
 }
