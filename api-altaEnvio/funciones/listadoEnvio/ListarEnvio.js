@@ -108,7 +108,7 @@ async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantid
         return {
             estado: true,
             data: results,
-            total: listado.length, // evita usar COUNT(*)
+            total: results.length, // evita usar COUNT(*)
             pagina,
             cantidad,
             filtros: {
