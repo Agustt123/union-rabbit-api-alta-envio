@@ -19,13 +19,26 @@ const { checkToken } = require("../fuctions/checkTokenCliente");
 
 async function AltaEnvio(company, data) {
   const connection = await getConnection(company.did);
-  const tokenData = await checkToken(data.data.token, connection);
-  if (!tokenData) {
-    throw new Error("Token inválido");
+
+  // 🔹 Validar token o didCliente/didCuenta
+  let tokenData = null;
+  if (data.data.token) {
+    tokenData = await checkToken(data.data.token, connection);
+    if (!tokenData) {
+      throw new Error("Token inválido");
+    }
+    data.data.didCliente = tokenData.didCliente;
+    data.data.didCuenta = tokenData.didCuenta;
+  } else if (data.data.didCliente && data.data.didCuenta) {
+    // Si ya vienen proporcionados, se usan tal cual
+    tokenData = {
+      didCliente: data.data.didCliente,
+      didCuenta: data.data.didCuenta
+    };
+  } else {
+    throw new Error("Token o cliente no proporcionado");
   }
 
-  data.data.didCliente = tokenData.didCliente;
-  data.data.didCuenta = tokenData.didCuenta;
   data.data.status_order = "paid";
 
   try {
@@ -66,7 +79,7 @@ async function AltaEnvio(company, data) {
 
     await processRelatedData(data, insertId, company, connection);
 
-    return true;
+    return { estado: true, id: insertId };
   } catch (error) {
     console.error("Error en la función principal:", error);
     return {
@@ -78,6 +91,7 @@ async function AltaEnvio(company, data) {
     connection.end();
   }
 }
+
 
 
 async function checkExistingShipment(data, connection) {

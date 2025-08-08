@@ -37,8 +37,8 @@ POST https://altaenvios.lightdata.com.ar/api/cargardatos
       "destination_comments": "Piso 3, Depto A", //opcional
       "delivery_preference": "" //opcional R o C
     },
-    "envioscobranza": { "valor": 1500 },
-    "enviosLogisticaInversa": { "valor": 1 },
+    "envioscobranza": {{ "valor": 1500 }},
+    "enviosLogisticaInversa": {{ "valor": 1 }},
     "enviosObservaciones": { "observaciones": "Cliente pide franja horaria 9-12" }
   }
 }

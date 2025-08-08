@@ -19,7 +19,7 @@ FF.post("/altaEnvioFF", async (req, res) => {
         }
 
         // Validación de campos obligatorios raíz
-        const camposObligatorios = ['token', 'didDeposito', 'didEmpresa', 'didServicio', 'ff'];
+        const camposObligatorios = ['didDeposito', 'didEmpresa', 'didServicio', 'ff'];
         for (const campo of camposObligatorios) {
             if (dataEnvio[campo] === undefined || dataEnvio[campo] === null) {
                 return res.status(500).json({
@@ -85,7 +85,7 @@ FF.post("/altaEnvioFF", async (req, res) => {
                 return res.status(500).json(result);
             }
 
-            return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente." });
+            return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente.", didEnvio: result.didEnvio });
         } else {
             console.log(`idEmpresa ${idEmpresa} recibida pero no procesada.`);
             return res.status(200).json({ mensaje: "Mensaje recibido pero no procesado." });

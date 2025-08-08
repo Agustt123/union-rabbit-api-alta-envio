@@ -4,7 +4,7 @@
 ## Endpoint
 
 ```
-POST https://altaenvios.lightdata.com.ar/api/cargardatos
+POST https://altaenvios.lightdata.com.ar/api/altaenvio
 ```
 
 
@@ -17,7 +17,8 @@ POST https://altaenvios.lightdata.com.ar/api/cargardatos
     "idEmpresa": 123,
     "ml_shipment_id": "1234567890", //opcional
     "ml_venta_id": "1234567890", //opcional,
-    "didCliente": 99, //opcional
+    "didCliente": 99, 
+    "flex" :1 //default 0
     "didCuenta": 3,
     "destination_receiver_email": "cliente@email.com", //opcional
     "destination_receiver_name": "Juan Pérez",
@@ -39,8 +40,8 @@ POST https://altaenvios.lightdata.com.ar/api/cargardatos
       "destination_comments": "Piso 3, Depto A", //opcional
       "delivery_preference": "" //opcional R o C
     },
-    "envioscobranza": { "valor": 1500 },
-    "enviosLogisticaInversa": { "valor": 1 },
+    "envioscobranza": [{ "valor": 1500 }],
+    "enviosLogisticaInversa": [{ "valor": 1 }],
     "enviosObservaciones": { "observaciones": "Cliente pide franja horaria 9-12" }
   }
 }
