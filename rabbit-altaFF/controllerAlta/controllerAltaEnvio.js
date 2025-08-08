@@ -79,7 +79,7 @@ async function AltaEnvio(company, data) {
 
     await processRelatedData(data, insertId, company, connection);
 
-    return { estado: true, id: insertId };
+    return { estado: true, didEnvio: insertId };
   } catch (error) {
     console.error("Error en la función principal:", error);
     return {
