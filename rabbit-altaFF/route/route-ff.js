@@ -75,21 +75,18 @@ FF.post("/altaEnvioFF", async (req, res) => {
         }
 
         // Procesamiento solo si es empresa 82
-        if (idEmpresa === 82) {
-            console.log("Procesando mensaje para idEmpresa :", data);
 
-            const company = await getCompanyById(idEmpresa);
-            const result = await AltaEnvio(company, data);
+        console.log("Procesando mensaje para idEmpresa :", data);
 
-            if (result.estado === false) {
-                return res.status(500).json(result);
-            }
+        const company = await getCompanyById(idEmpresa);
+        const result = await AltaEnvio(company, data);
 
-            return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente.", didEnvio: result.didEnvio });
-        } else {
-            console.log(`idEmpresa ${idEmpresa} recibida pero no procesada.`);
-            return res.status(200).json({ mensaje: "Mensaje recibido pero no procesado." });
+        if (result.estado === false) {
+            return res.status(500).json(result);
         }
+
+        return res.status(200).json({ estado: true, mensaje: "Insercion realizada correctamente.", didEnvio: result.didEnvio });
+
 
     } catch (error) {
         console.error("Error en /altaEnvioFF:", error);
