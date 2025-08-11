@@ -56,7 +56,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 e.tracking_number,
                 e.autoFecha,
                 su.usuario,
-                ce.nameZonaCostoCliente
+                ce.nameZonaCostoCliente,
                 c.nombre_fantasia,
                 c.elim AS elimClie,
                 COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp
