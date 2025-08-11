@@ -39,6 +39,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         }
 
         const whereClause = `WHERE ${condiciones.join(" AND ")}`;
+
         const offset = (pagina - 1) * cantidad;
 
         const queryListado = `
@@ -64,12 +65,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 c.nombre_fantasia,
                 c.elim AS elimClie,
                 COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp,
-                COALESCE(ed.localidad, e.destination_city_name) AS localidad,
-                (
-                    SELECT COUNT(*)
-                    FROM envios e2
-                    ${whereClause}
-                ) AS total
+                COALESCE(ed.localidad, e.destination_city_name) AS localidad
             FROM envios e
             LEFT JOIN envios_direcciones_destino ed 
                 ON e.did = ed.didEnvio AND ed.elim = 0 AND ed.superado = 0
@@ -84,8 +80,16 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             LIMIT ? OFFSET ?
         `;
 
-        const listadoRows = await executeQuery(connection, queryListado, [...params, cantidad, offset]);
-        const total = listadoRows.length > 0 ? listadoRows[0].total : 0;
+        const queryTotal = `
+            SELECT COUNT(*) AS total
+            FROM envios e
+            ${whereClause}
+        `;
+
+        const [listadoRows, totalRows] = await Promise.all([
+            executeQuery(connection, queryListado, [...params, cantidad, offset]),
+            executeQuery(connection, queryTotal, params)
+        ]);
 
         return {
             estado: true,
@@ -114,7 +118,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 autoFecha: row.autoFecha,
                 zonacosto: row.nameZonaCostoCliente,
             })),
-            total,
+            total: totalRows[0]?.total || 0,
             pagina,
             cantidad,
             filtros: {
