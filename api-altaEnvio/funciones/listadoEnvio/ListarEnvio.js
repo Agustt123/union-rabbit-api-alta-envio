@@ -16,7 +16,7 @@ function formatDate(date) {
 
 async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
     try {
-        const condiciones = [`e.elim = 0`, `e.superado = 0`];
+        const condiciones = [`e.elim = 0`, `e.superado = 0`, `e.estado_envio in (0,1,2,3,7,6,13,10,11,12)`];
         const params = [];
 
         // Fechas por defecto: últimos 7 días
