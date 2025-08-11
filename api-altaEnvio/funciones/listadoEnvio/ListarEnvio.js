@@ -22,7 +22,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         // Fechas por defecto: últimos 7 días
         const hoy = new Date();
         const hace7Dias = new Date();
-        hace7Dias.setDate(hoy.getDate() - 7);
+        hace7Dias.setDate(hoy.getDate() - 14);
 
         const fechaDesde = data.fechaDesde || formatDate(hace7Dias);
         const fechaHasta = data.fechaHasta || formatDate(hoy);
