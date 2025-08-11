@@ -18,7 +18,7 @@ POST https://altaenvios.lightdata.com.ar/api/altaenvio
     "ml_shipment_id": "1234567890", //opcional
     "ml_venta_id": "1234567890", //opcional,
     "didCliente": 99, 
-    "flex" :1 //default 0
+    "flex" :1, //default
     "didCuenta": 3,
     "destination_receiver_email": "cliente@email.com", //opcional
     "destination_receiver_name": "Juan Pérez",

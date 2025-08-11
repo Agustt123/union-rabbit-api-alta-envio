@@ -65,6 +65,8 @@ async function AltaEnvio2(company, connection, data) {
             let insertId;
 
             if (data.data.flex === 1) {
+                console.log("Procesando como Fleeeex");
+
                 const envioflex = new EnviosFlex(
                     data.data.did,
                     data.data.ml_shipment_id,
@@ -72,6 +74,7 @@ async function AltaEnvio2(company, connection, data) {
                     data.data.ml_qr_seguridad,
                     data.data.didCliente,
                     data.data.didCuenta,
+                    data.data.lote || "INGFL",
                     data.data.elim,
                     company.did,
                     connection,
@@ -81,6 +84,7 @@ async function AltaEnvio2(company, connection, data) {
                 const resultado = await envioflex.insert();
                 insertId = resultado.did;
                 console.log("Registro insertado con ID:", insertId);
+                return { estado: true, didEnvio: insertId };
             } else {
                 // Solo insertar en ordenes si fulfillment es 0
                 if (data.data.fullfillment === 1) {

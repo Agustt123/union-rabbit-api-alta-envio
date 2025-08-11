@@ -136,7 +136,7 @@ router.post("/getListadoEnvios", async (req, res) => {
   console.log(data, "data getListadoEnvios");
   const connection = await getConnection(data.idEmpresa);
   try {
-    const result = await ListarEnvio(connection);
+    const result = await ListarEnvio(connection, data);
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
@@ -225,6 +225,60 @@ router.post("/cargamasivanoflex", async (req, res) => {
     connection.end();
   }
 });
+router.post("/altaEnvioFlex", async (req, res) => {
+  const data = req.body;
+  console.log(data, "data cargardatos");
+
+
+  try {
+    const company = await getCompanyById(data.data.idEmpresa);
+
+    if (!company || !company.did) {
+      return res.status(400).json({
+        message: "Empresa no encontrada o inválida.",
+        success: false,
+      });
+    }
+
+    const connection = await getConnection(company.did);
+
+
+
+    try {
+      const result = await AltaEnvio2(company, connection, data);
+
+      if (!result || result.success === false) {
+        logRed("Error al cargar los datos:", result);
+        return res.status(500).json({
+          mensaje: "Error al insertar.",
+          estado: false,
+          error: result.message,
+        });
+      }
+
+      res.status(200).json({ estado: true, did: result.didEnvio, qr: result.dataqr });
+    } catch (error) {
+      console.error("Error en AltaEnvio:", error);
+      res.status(500).json({
+        mensaje: "Error al insertar.",
+        estado: false,
+        error: error.message || error,
+      });
+    } finally {
+      connection.end();
+    }
+  } catch (error) {
+    console.error("Error obteniendo la empresa o la conexión:", error);
+    res.status(500).json({
+      message: "Error interno al procesar la solicitud.",
+      success: false,
+      error: error.message || error,
+    });
+  }
+});
+
+
+
 
 router.post("/getHistorialFotoEnvio", async (req, res) => {
   const data = req.body;

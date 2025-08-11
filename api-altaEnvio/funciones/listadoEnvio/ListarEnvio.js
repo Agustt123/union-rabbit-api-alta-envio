@@ -14,7 +14,7 @@ function formatDate(date) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
 
-async function ListarEnvio(connection, didEmpresa, data = {}, pagina = 1, cantidad = 10) {
+async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
     try {
         const condiciones = [`e.elim = 0`, `e.superado = 0`];
         const params = [];
