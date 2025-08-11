@@ -10,6 +10,7 @@ function formatDatetimeEnd(dateStr) {
     return `${date.toISOString().split('T')[0]} 00:00:00`;
 }
 
+
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
@@ -19,7 +20,6 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         const condiciones = [`e.elim = 0`, `e.superado = 0`];
         const params = [];
 
-        // Fechas por defecto: últimos 7 días
         const hoy = new Date();
         const hace7Dias = new Date();
         hace7Dias.setDate(hoy.getDate() - 7);
@@ -33,7 +33,6 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         condiciones.push(`e.autoFecha >= ? AND e.autoFecha < ?`);
         params.push(fechaDesdeSQL, fechaHastaSQL);
 
-        // Filtro por tracking si viene
         if (data.tracking) {
             condiciones.push(`e.tracking_number = ?`);
             params.push(data.tracking);
@@ -41,7 +40,9 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
 
         const whereClause = `WHERE ${condiciones.join(" AND ")}`;
 
-        const query = `
+        const offset = (pagina - 1) * cantidad;
+
+        const queryListado = `
             SELECT 
                 e.did,
                 e.didCliente,
@@ -66,53 +67,58 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp,
                 COALESCE(ed.localidad, e.destination_city_name) AS localidad
             FROM envios e
-            LEFT JOIN envios_direcciones_destino ed ON e.did = ed.didEnvio AND ed.elim = 0 AND ed.superado = 0
-            LEFT JOIN sistema_usuarios su ON e.choferAsignado = su.did AND su.elim = 0 AND su.superado = 0
-            LEFT JOIN costos_envios ce ON e.did = ce.didEnvio AND ce.elim = 0 AND ce.superado = 0
-            LEFT JOIN clientes c ON e.didCliente = c.did AND c.elim = 0 AND c.superado = 0
+            LEFT JOIN envios_direcciones_destino ed 
+                ON e.did = ed.didEnvio AND ed.elim = 0 AND ed.superado = 0
+            LEFT JOIN sistema_usuarios su 
+                ON e.choferAsignado = su.did AND su.elim = 0 AND su.superado = 0
+            LEFT JOIN costos_envios ce 
+                ON e.did = ce.didEnvio AND ce.elim = 0 AND ce.superado = 0
+            LEFT JOIN clientes c 
+                ON e.didCliente = c.did AND c.elim = 0 AND c.superado = 0
             ${whereClause}
             ORDER BY e.id DESC
+            LIMIT ? OFFSET ?
         `;
 
-        // Ejecutamos SIN limit ni offset
-        const results = await executeQuery(connection, query, params);
+        const queryTotal = `
+            SELECT COUNT(*) AS total
+            FROM envios e
+            ${whereClause}
+        `;
 
-        const total = results.length;
-
-        const desde = (pagina - 1) * cantidad;
-        const hasta = desde + cantidad;
-        const paginados = results.slice(desde, hasta);
-
-        const listado = paginados.map(row => ({
-            codigo: row.codigo,
-            cp: row.cp || '',
-            did: row.did,
-            didCliente: row.didCliente,
-            didCadete: row.choferAsignado,
-            elimClie: row.elimClie,
-            estado_envio: row.estado_envio,
-            estadoml: row.estado,
-            estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
-            fechagestionar: row.fecha_inicio_formateada,
-            fecha_venta: row.fecha_venta,
-            flexname: row.flex,
-            lead_time_shipping_method_name: row.lead_time_shipping_method_name,
-            localidad: row.localidad || '',
-            ml_vendedor_id: row.ml_vendedor_id,
-            namecadete: row.usuario,
-            nombre: row.nombre_fantasia || '',
-            nombre_fantasia: row.nombre_fantasia,
-            ml_qr_seguridad: row.ml_qr_seguridad,
-            tracking: row.tracking_number,
-            valor_declarado: row.valor_declarado,
-            autoFecha: row.autoFecha,
-            zonacosto: row.nameZonaCostoCliente,
-        }));
+        const [listadoRows, totalRows] = await Promise.all([
+            executeQuery(connection, queryListado, [...params, cantidad, offset]),
+            executeQuery(connection, queryTotal, params)
+        ]);
 
         return {
             estado: true,
-            data: listado,
-            total,
+            data: listadoRows.map(row => ({
+                codigo: row.codigo,
+                cp: row.cp || '',
+                did: row.did,
+                didCliente: row.didCliente,
+                didCadete: row.choferAsignado,
+                elimClie: row.elimClie,
+                estado_envio: row.estado_envio,
+                estadoml: row.estado,
+                estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
+                fechagestionar: row.fecha_inicio_formateada,
+                fecha_venta: row.fecha_venta,
+                flexname: row.flex,
+                lead_time_shipping_method_name: row.lead_time_shipping_method_name,
+                localidad: row.localidad || '',
+                ml_vendedor_id: row.ml_vendedor_id,
+                namecadete: row.usuario,
+                nombre: row.nombre_fantasia || '',
+                nombre_fantasia: row.nombre_fantasia,
+                ml_qr_seguridad: row.ml_qr_seguridad,
+                tracking: row.tracking_number,
+                valor_declarado: row.valor_declarado,
+                autoFecha: row.autoFecha,
+                zonacosto: row.nameZonaCostoCliente,
+            })),
+            total: totalRows[0]?.total || 0,
             pagina,
             cantidad,
             filtros: {
@@ -126,6 +132,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         throw error;
     }
 }
+
 
 module.exports = {
     ListarEnvio
