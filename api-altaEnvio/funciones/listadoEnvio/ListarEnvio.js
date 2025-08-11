@@ -45,26 +45,21 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             SELECT 
                 e.did,
                 e.didCliente,
-                e.choferAsignado,
                 e.estado_envio,
                 e.estado,
-                e.estimated_delivery_time_date_72,
                 e.fecha_venta,
                 DATE_FORMAT(e.fecha_inicio, '%d/%m/%Y %H:%i') AS fecha_inicio_formateada,
                 e.flex,
-                e.lead_time_shipping_method_name,
+    
                 e.ml_vendedor_id,
                 e.ml_qr_seguridad,
                 e.tracking_number,
-                e.valor_declarado,
                 e.autoFecha,
                 su.usuario,
-                ce.nameZonaCostoCliente,
-                c.codigo,
+                ce.nameZonaCostoCliente
                 c.nombre_fantasia,
                 c.elim AS elimClie,
                 COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp,
-                COALESCE(ed.localidad, e.destination_city_name) AS localidad
             FROM envios e
             LEFT JOIN envios_direcciones_destino ed ON e.did = ed.didEnvio AND ed.elim = 0 AND ed.superado = 0
             LEFT JOIN sistema_usuarios su ON e.choferAsignado = su.did AND su.elim = 0 AND su.superado = 0
