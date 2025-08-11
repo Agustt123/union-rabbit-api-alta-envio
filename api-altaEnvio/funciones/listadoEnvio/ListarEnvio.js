@@ -10,7 +10,6 @@ function formatDatetimeEnd(dateStr) {
     return `${date.toISOString().split('T')[0]} 00:00:00`;
 }
 
-
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
