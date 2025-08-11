@@ -59,7 +59,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 ce.nameZonaCostoCliente
                 c.nombre_fantasia,
                 c.elim AS elimClie,
-                COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp,
+                COALESCE(ed.cp, e.destination_shipping_zip_code) AS cp
             FROM envios e
             LEFT JOIN envios_direcciones_destino ed ON e.did = ed.didEnvio AND ed.elim = 0 AND ed.superado = 0
             LEFT JOIN sistema_usuarios su ON e.choferAsignado = su.did AND su.elim = 0 AND su.superado = 0
