@@ -1,6 +1,5 @@
 const { getConnection, getFromRedis, executeQuery } = require("../../dbconfig");
 const { logYellow, logBlue } = require("../../fuctions/logsCustom");
-const { DateTime } = require("luxon");
 
 class Envios {
   constructor(data, company = null, connection = null) {
@@ -12,7 +11,7 @@ class Envios {
       turbo = 0,
       exterior = 0,
 
-      fecha_inicio = null,
+      fecha_inicio = new Date(),
       fechaunix = this.generateFechaUnix(),
       lote = "altaEnvioM",
       ml_shipment_id = "",
@@ -45,6 +44,9 @@ class Envios {
       hora_desde = "00:00:00",
       hora_hasta = "00:00:00",
 
+
+
+
       destination_latitude = 0,
       destination_longitude = 0,
       delivery_preference = " ",
@@ -57,42 +59,40 @@ class Envios {
       estimated_delivery_time_date = "",
       costo_envio_ml = 0,
       costoActualizado = costo_envio_ml ? 1 : 0,
-      fecha_carga = null,
+      fecha_carga = "",
       obs = "",
       quien = 0,
-      elim = 0,
-
-      pais = null,
+      elim = 0, // Cambiado a 0 para ser modificado más adelante
     } = data;
 
-    if (fecha_inicio) {
-      this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone }).toISO();
-    } else {
-      this.fecha_inicio = DateTime.now().setZone(zone).toISO();
-    }
+    // Asignar valores
 
-    if (fecha_carga) {
-      this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone }).toISODate();
-    } else {
-      this.fecha_carga = DateTime.now().setZone(zone).toISODate();
-    }
-
-    // resto asignaciones igual
     this.did = did;
     this.didDeposito = didDeposito;
     this.gtoken = gtoken;
     this.flex = flex;
     this.turbo = turbo;
+
+
     this.exterior = exterior;
+    this.fecha_inicio = data.fecha_inicio
+      ? new Date(data.fecha_inicio).toISOString()
+      : new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
+
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
-
-    // deadline "dd/mm/yyyy" a "yyyy-mm-dd"
-    let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR");
+    // Convertir deadline "dd/mm/yyyy" => "yyyy-mm-dd"
+    let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR"); // fallback a hoy
     let partesFecha = fechaDeadlineRaw.split("/");
     this.estimated_delivery_time_date = `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}`;
+    let fechaCargaDate = fecha_carga ? new Date(fecha_carga) : new Date();
+    fechaCargaDate.setHours(fechaCargaDate.getHours() - 3);
+    this.fecha_carga = fechaCargaDate.toISOString().split('T')[0];
+
 
     this.fecha_despacho = fecha_despacho;
+
+
     this.fechaunix = fechaunix;
     this.lote = lote;
     this.ml_shipment_id = ml_shipment_id;
@@ -132,8 +132,9 @@ class Envios {
     this.conHorario = conHorario;
     this.hora_desde = hora_desde;
     this.hora_hasta = hora_hasta;
+    // Asignar valor por defecto si costoActualizado es null
     this.quien = quien;
-    this.elim = elim;
+    this.elim = elim; // Asignar aquí
     this.company = company;
     this.connection = connection;
   }
@@ -145,6 +146,7 @@ class Envios {
   generateFechaUnix() {
     return Math.floor(Date.now() / 1000);
   }
+
   async insert() {
     try {
       this.fecha_despacho = await calcularFechaDespacho(this.didCliente, this.connection);
