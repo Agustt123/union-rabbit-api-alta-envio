@@ -76,7 +76,7 @@ class Envios {
     if (pais == 2) {
       // Argentina: -4 horas
       fechaInicioBase = new Date(fechaInicioBase.getTime() - 4 * 60 * 60 * 1000);
-    } else if (pais == 5 || pais == 7) {
+    } else if (pais == 5 || pais == 7 || pais == 8) {
       // Colombia: -5 horas
       fechaInicioBase = new Date(fechaInicioBase.getTime() - 5 * 60 * 60 * 1000);
     } else {
