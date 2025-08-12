@@ -43,6 +43,7 @@ class Envios {
       conHorario = "00:00:00",
       hora_desde = "00:00:00",
       hora_hasta = "00:00:00",
+      pais = null,
 
 
 
@@ -75,10 +76,15 @@ class Envios {
 
 
     this.exterior = exterior;
-    this.fecha_inicio = data.fecha_inicio
-      ? new Date(data.fecha_inicio).toISOString()
-      : new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
+    let fechaInicioBase = fecha_inicio
+      ? new Date(fecha_inicio)
+      : new Date(Date.now() - 3 * 60 * 60 * 1000);
 
+    if (pais === 2) {
+      fechaInicioBase = new Date(fechaInicioBase.getTime() - 1 * 60 * 60 * 1000);
+    }
+
+    this.fecha_inicio = fechaInicioBase.toISOString();
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
     // Convertir deadline "dd/mm/yyyy" => "yyyy-mm-dd"
