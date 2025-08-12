@@ -86,7 +86,7 @@ class Envios {
       // Otros paises, sumo 3 horas usando Date normal
       if (fecha_inicio) {
         let fInicio = new Date(fecha_inicio);
-        fInicio.setHours(fInicio.getHours() + 3);
+        fInicio.setHours(fInicio.getHours() - 3);
         this.fecha_inicio = fInicio.toISOString();
       } else {
         let fNow = new Date();
