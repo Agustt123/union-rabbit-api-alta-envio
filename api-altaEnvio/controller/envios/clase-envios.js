@@ -88,7 +88,7 @@ class Envios {
     fechaInicioBase = new Date(fechaInicioBase.getTime() - 3 * 60 * 60 * 1000);
 
     // Y si es país 2, restamos 1 hora más (total 4 horas)
-    if (data.pais === 2) {
+    if (data.pais == 2) {
       fechaInicioBase = new Date(fechaInicioBase.getTime() - 1 * 60 * 60 * 1000);
     }
 

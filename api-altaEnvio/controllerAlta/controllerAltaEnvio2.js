@@ -37,6 +37,8 @@ async function AltaEnvio2(company, connection, data) {
   */
 
         data.data.pais = company.pais
+        console.log("Datos de envío:", data.data);
+
         if (data.data.perfil == 2) {
             data.data.estado = 7
         }
