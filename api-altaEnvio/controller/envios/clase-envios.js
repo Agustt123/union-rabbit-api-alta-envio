@@ -65,32 +65,16 @@ class Envios {
       pais = null,
     } = data;
 
-    if (pais == 2) {
-      // Chile, zona America/Santiago, sin modificar horas
-      if (fecha_inicio) {
-        this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" }).toISO();
-      } else {
-        this.fecha_inicio = DateTime.now().setZone("America/Santiago").toISO();
-      }
-
-      if (fecha_carga) {
-        this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" }).toISODate();
-      } else {
-        this.fecha_carga = DateTime.now().setZone("America/Santiago").toISODate();
-      }
+    if (fecha_inicio) {
+      this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone }).toISO();
     } else {
-      // Otros países, usar fecha tal cual (ISO string)
-      if (fecha_inicio) {
-        this.fecha_inicio = new Date(fecha_inicio).toISOString();
-      } else {
-        this.fecha_inicio = new Date().toISOString();
-      }
+      this.fecha_inicio = DateTime.now().setZone(zone).toISO();
+    }
 
-      if (fecha_carga) {
-        this.fecha_carga = new Date(fecha_carga).toISOString().split("T")[0];
-      } else {
-        this.fecha_carga = new Date().toISOString().split("T")[0];
-      }
+    if (fecha_carga) {
+      this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone }).toISODate();
+    } else {
+      this.fecha_carga = DateTime.now().setZone(zone).toISODate();
     }
 
     // resto asignaciones igual
