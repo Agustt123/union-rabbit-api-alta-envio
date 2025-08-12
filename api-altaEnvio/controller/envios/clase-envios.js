@@ -43,6 +43,7 @@ class Envios {
       conHorario = "00:00:00",
       hora_desde = "00:00:00",
       hora_hasta = "00:00:00",
+      pais = null,
 
 
 
@@ -75,9 +76,24 @@ class Envios {
 
 
     this.exterior = exterior;
-    this.fecha_inicio = data.fecha_inicio
-      ? new Date(data.fecha_inicio).toISOString()
-      : new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
+    let fechaInicioBase;
+
+    if (data.fecha_inicio) {
+      fechaInicioBase = new Date(data.fecha_inicio);
+    } else {
+      fechaInicioBase = new Date();
+    }
+
+    // Siempre restamos 3 horas para todos
+    fechaInicioBase = new Date(fechaInicioBase.getTime() - 3 * 60 * 60 * 1000);
+
+    // Y si es país 2, restamos 1 hora más (total 4 horas)
+    if (data.pais === 2) {
+      fechaInicioBase = new Date(fechaInicioBase.getTime() - 1 * 60 * 60 * 1000);
+    }
+
+    this.fecha_inicio = fechaInicioBase.toISOString();
+
 
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
