@@ -45,9 +45,6 @@ class Envios {
       hora_hasta = "00:00:00",
       pais = null,
 
-
-
-
       destination_latitude = 0,
       destination_longitude = 0,
       delivery_preference = " ",
@@ -63,51 +60,44 @@ class Envios {
       fecha_carga = "",
       obs = "",
       quien = 0,
-      elim = 0, // Cambiado a 0 para ser modificado más adelante
+      elim = 0,
     } = data;
-
-    // Asignar valores
 
     this.did = did;
     this.didDeposito = didDeposito;
     this.gtoken = gtoken;
     this.flex = flex;
     this.turbo = turbo;
-
-
     this.exterior = exterior;
-    let fechaInicioBase;
 
-    if (data.fecha_inicio) {
-      fechaInicioBase = new Date(data.fecha_inicio);
+    let fechaInicioBase = data.fecha_inicio ? new Date(data.fecha_inicio) : new Date();
+
+    // Resta horas según país
+    if (pais == 2) {
+      // Argentina: -4 horas
+      fechaInicioBase = new Date(fechaInicioBase.getTime() - 4 * 60 * 60 * 1000);
+    } else if (pais == 5) {
+      // Colombia: -5 horas
+      fechaInicioBase = new Date(fechaInicioBase.getTime() - 5 * 60 * 60 * 1000);
     } else {
-      fechaInicioBase = new Date();
-    }
-
-    // Siempre restamos 3 horas para todos
-    fechaInicioBase = new Date(fechaInicioBase.getTime() - 3 * 60 * 60 * 1000);
-
-    // Y si es país 2, restamos 1 hora más (total 4 horas)
-    if (data.pais == 2) {
-      fechaInicioBase = new Date(fechaInicioBase.getTime() - 1 * 60 * 60 * 1000);
+      // Otros países: -3 horas
+      fechaInicioBase = new Date(fechaInicioBase.getTime() - 3 * 60 * 60 * 1000);
     }
 
     this.fecha_inicio = fechaInicioBase.toISOString();
 
-
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
-    // Convertir deadline "dd/mm/yyyy" => "yyyy-mm-dd"
-    let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR"); // fallback a hoy
+
+    let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR");
     let partesFecha = fechaDeadlineRaw.split("/");
     this.estimated_delivery_time_date = `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}`;
+
     let fechaCargaDate = fecha_carga ? new Date(fecha_carga) : new Date();
     fechaCargaDate.setHours(fechaCargaDate.getHours() - 3);
-    this.fecha_carga = fechaCargaDate.toISOString().split('T')[0];
-
+    this.fecha_carga = fechaCargaDate.toISOString().split("T")[0];
 
     this.fecha_despacho = fecha_despacho;
-
 
     this.fechaunix = fechaunix;
     this.lote = lote;
@@ -148,9 +138,8 @@ class Envios {
     this.conHorario = conHorario;
     this.hora_desde = hora_desde;
     this.hora_hasta = hora_hasta;
-    // Asignar valor por defecto si costoActualizado es null
     this.quien = quien;
-    this.elim = elim; // Asignar aquí
+    this.elim = elim;
     this.company = company;
     this.connection = connection;
   }
