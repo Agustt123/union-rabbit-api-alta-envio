@@ -66,24 +66,24 @@ class Envios {
     } = data;
 
     if (pais == 2) {
-      // Chile con zona America/Santiago y sumo 3 horas
+      // Chile, zona America/Santiago, RESTAR 3 horas
       if (fecha_inicio) {
         this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" })
-          .plus({ hours: 3 })
+          .minus({ hours: 3 })
           .toISO();
       } else {
-        this.fecha_inicio = DateTime.now().setZone("America/Santiago").plus({ hours: 3 }).toISO();
+        this.fecha_inicio = DateTime.now().setZone("America/Santiago").minus({ hours: 3 }).toISO();
       }
 
       if (fecha_carga) {
         this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" })
-          .plus({ hours: 3 })
+          .minus({ hours: 3 })
           .toISODate();
       } else {
-        this.fecha_carga = DateTime.now().setZone("America/Santiago").plus({ hours: 3 }).toISODate();
+        this.fecha_carga = DateTime.now().setZone("America/Santiago").minus({ hours: 3 }).toISODate();
       }
     } else {
-      // Otros paises, sumo 3 horas usando Date normal
+      // Otros países, RESTAR 3 horas con Date
       if (fecha_inicio) {
         let fInicio = new Date(fecha_inicio);
         fInicio.setHours(fInicio.getHours() - 3);
@@ -103,6 +103,7 @@ class Envios {
         fNowCarga.setHours(fNowCarga.getHours() - 3);
         this.fecha_carga = fNowCarga.toISOString().split("T")[0];
       }
+
     }
 
     // resto asignaciones igual
