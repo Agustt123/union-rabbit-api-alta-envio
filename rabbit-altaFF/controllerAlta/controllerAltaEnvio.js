@@ -55,7 +55,7 @@ async function AltaEnvio(company, data) {
     if (data.data.flex === 1 && data.data.mlIa == 88) {
       insertId = await insertEnvioFlex(data, company, connection);
     } else {
-      validateEnvioData(data);
+
 
       const email = data.data.destination_receiver_email;
       delete data.data.destination_receiver_email;
