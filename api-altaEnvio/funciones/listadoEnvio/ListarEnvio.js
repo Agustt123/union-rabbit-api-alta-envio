@@ -35,9 +35,33 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
 
         // Filtro por tracking si viene
         if (data.tracking) {
-            condiciones.push(`e.tracking_number = ?`);
+            condiciones.push(`e.tracking_number LIKE ?`);
             params.push(data.tracking);
         }
+        if (data.nombreFantasia) {
+            condiciones.push(`c.nombre_fantasia LIKE ?`);
+            params.push(data.nombreFantasia);
+        }
+        if (data.IDML) {
+            condiciones.push(`e.ml_venta_id LIKE ? OR e.ml_pack_id LIKE ?`);
+            params.push(data.IDML, data.IDML);
+        }
+        if (data.zonaCosto) {
+            condiciones.push(`ce.nameZonaCostoCliente LIKE ?`);
+            params.push(data.zonaCosto);
+        }
+
+        if (data.chofer) {
+            condiciones.push(`e.choferAsignado = ?`);
+            params.push(data.didCadete);
+        }
+        if (data.asignado) {
+            condiciones.push(`e.choferAsignado IS NOT NULL`);
+        }
+        if (data.turbo) {
+            condiciones.push(`e.turbo = 1`);
+        }
+
 
         const whereClause = `WHERE ${condiciones.join(" AND ")}`;
 
@@ -50,7 +74,6 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 e.fecha_venta,
                 DATE_FORMAT(e.fecha_inicio, '%d/%m/%Y %H:%i') AS fecha_inicio_formateada,
                 e.flex,
-    
                 e.ml_vendedor_id,
                 e.ml_qr_seguridad,
                 e.tracking_number,

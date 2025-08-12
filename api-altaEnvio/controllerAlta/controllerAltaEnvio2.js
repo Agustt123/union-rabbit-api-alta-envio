@@ -35,6 +35,8 @@ async function AltaEnvio2(company, connection, data) {
               };
           }
   */
+
+        data.data.pais = company.pais
         if (data.data.perfil == 2) {
             data.data.estado = 7
         }
