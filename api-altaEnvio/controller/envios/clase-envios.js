@@ -96,11 +96,11 @@ class Envios {
 
       if (fecha_carga) {
         let fCarga = new Date(fecha_carga);
-        fCarga.setHours(fCarga.getHours() + 3);
+        fCarga.setHours(fCarga.getHours() - 3);
         this.fecha_carga = fCarga.toISOString().split("T")[0];
       } else {
         let fNowCarga = new Date();
-        fNowCarga.setHours(fNowCarga.getHours() + 3);
+        fNowCarga.setHours(fNowCarga.getHours() - 3);
         this.fecha_carga = fNowCarga.toISOString().split("T")[0];
       }
     }
