@@ -66,44 +66,31 @@ class Envios {
     } = data;
 
     if (pais == 2) {
-      // Chile, zona America/Santiago, RESTAR 3 horas
+      // Chile, zona America/Santiago, sin modificar horas
       if (fecha_inicio) {
-        this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" })
-          .minus({ hours: 3 })
-          .toISO();
+        this.fecha_inicio = DateTime.fromFormat(fecha_inicio, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" }).toISO();
       } else {
-        this.fecha_inicio = DateTime.now().setZone("America/Santiago").minus({ hours: 3 }).toISO();
+        this.fecha_inicio = DateTime.now().setZone("America/Santiago").toISO();
       }
 
       if (fecha_carga) {
-        this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" })
-          .minus({ hours: 3 })
-          .toISODate();
+        this.fecha_carga = DateTime.fromFormat(fecha_carga, "yyyy-MM-dd HH:mm:ss", { zone: "America/Santiago" }).toISODate();
       } else {
-        this.fecha_carga = DateTime.now().setZone("America/Santiago").minus({ hours: 3 }).toISODate();
+        this.fecha_carga = DateTime.now().setZone("America/Santiago").toISODate();
       }
     } else {
-      // Otros países, RESTAR 3 horas con Date
+      // Otros países, usar fecha tal cual (ISO string)
       if (fecha_inicio) {
-        let fInicio = new Date(fecha_inicio);
-        fInicio.setHours(fInicio.getHours() - 3);
-        this.fecha_inicio = fInicio.toISOString();
+        this.fecha_inicio = new Date(fecha_inicio).toISOString();
       } else {
-        let fNow = new Date();
-        fNow.setHours(fNow.getHours() - 3);
-        this.fecha_inicio = fNow.toISOString();
+        this.fecha_inicio = new Date().toISOString();
       }
 
       if (fecha_carga) {
-        let fCarga = new Date(fecha_carga);
-        fCarga.setHours(fCarga.getHours() - 3);
-        this.fecha_carga = fCarga.toISOString().split("T")[0];
+        this.fecha_carga = new Date(fecha_carga).toISOString().split("T")[0];
       } else {
-        let fNowCarga = new Date();
-        fNowCarga.setHours(fNowCarga.getHours() - 3);
-        this.fecha_carga = fNowCarga.toISOString().split("T")[0];
+        this.fecha_carga = new Date().toISOString().split("T")[0];
       }
-
     }
 
     // resto asignaciones igual
