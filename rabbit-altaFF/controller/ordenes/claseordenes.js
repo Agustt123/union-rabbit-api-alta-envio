@@ -74,29 +74,28 @@ class Ordenes {
   async checkAndUpdateDid(connection) {
     try {
       const checkDidQuery =
-        "SELECT number, status, flex, did, didEnvio FROM ordenes WHERE number = ? AND didCliente = ? AND superado = 0 AND elim = 0";
+        "SELECT number, status, flex, did,didEnvio FROM ordenes WHERE number = ? and superado = 0 and elim = 0";
       const results = await executeQuery(connection, checkDidQuery, [
         this.number,
-        this.didCliente
       ]);
 
       if (results.length > 0) {
-        this.didEnvio = results[0].didEnvio; // ← corregido a asignación
-
+        this.didEnvio == results[0].didEnvio;
         if (
           results[0].status != this.status &&
           results[0].flex == this.flex &&
           results[0].number == this.number
         ) {
-          const updateQuery =
-            "UPDATE ordenes SET superado = 1 WHERE number = ?";
-          await executeQuery(connection, updateQuery, [this.number]);
+          {
+            const updateQuery =
+              "UPDATE ordenes SET superado = 1 WHERE number =?  ";
+            await executeQuery(connection, updateQuery, [this.number]);
 
-          return this.createNewRecord(connection, results[0].did);
+            return this.createNewRecord(connection, results[0].did);
+          }
         }
-
         return {
-          insertId: results[0].did,
+          insertId: results[0].number,
           did: results[0].number,
           message: "Registro no actualizado",
         };
@@ -129,9 +128,9 @@ class Ordenes {
         connection,
         insertQuery,
         values
-      );
 
-      if (!did) {
+      );
+      if (did == undefined || did == null || did == "" || did == 0) {
         logYellow("Insert Result", insertResult);
 
         const updateQuery = "UPDATE ordenes SET did = ? WHERE id = ?";
@@ -141,13 +140,14 @@ class Ordenes {
         ]);
 
         return {
-          insertId: insertResult.insertId,
-          did: insertResult.insertId,
-          message: "Registro insertado correctamente",
+          insertId: insertResult.insertId
+          , did: insertResult.insertId, message: "Registro insertado correctamente"
         };
-      } else {
+      }
+      else {
         console.log("did", did, "insertResult", insertResult);
 
+        // Si se proporciona un `did`, actualiza el registro existente
         const updateQuery = "UPDATE ordenes SET did = ? WHERE id = ?";
         await executeQuery(connection, updateQuery, [did, insertResult.insertId]);
 
@@ -156,12 +156,14 @@ class Ordenes {
           did: did,
           message: "Registro insertado y actualizado correctamente",
         };
+
       }
+
+
     } catch (error) {
       throw error;
     }
   }
 }
-
 
 module.exports = Ordenes;

@@ -37,7 +37,6 @@ class OrdenesItems {
   async insert() {
     try {
 
-      // Si `didEnvio` es null, crear un nuevo registro
       return this.createNewRecord(this.connection);
 
     } catch (error) {
@@ -54,7 +53,31 @@ class OrdenesItems {
     }
   }
 
+  async checkAndUpdateDidEnvio(connection) {
+    try {
+      const checkDidEnvioQuery =
+        "SELECT id,didOrden FROM ordenes_items WHERE didOrden = ?";
+      const results = await executeQuery(connection, checkDidEnvioQuery, [
+        this.didOrden,
+      ], true);
+      console.log(results, "dsa");
 
+      if (results.length > 0) {
+        // Si `didEnvio` ya existe, actualizarlo
+        const updateQuery =
+          "UPDATE ordenes_items SET superado = 1 WHERE didOrden = ?";
+        await executeQuery(connection, updateQuery, [results[0].didOrden]);
+
+        // Crear un nuevo registro con el mismo `didEnvio`
+        return this.createNewRecord(connection, results[0].didOrden);
+      } else {
+        // Si `didEnvio` no existe, crear un nuevo registro directamente
+        return this.createNewRecord(connection, this.didOrden);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async createNewRecord(connection, didOrden) {
     try {
@@ -73,14 +96,10 @@ class OrdenesItems {
 
 
 
-      const insertResult = await executeQuery(connection, insertQuery, values);
+      const insertResult = await executeQuery(connection, insertQuery, values, true);
 
 
-      const updateQuery = "UPDATE ordenes_items SET didOrden= ? WHERE  id = ?";
-      await executeQuery(connection, updateQuery, [
-        didOrden,
-        insertResult.insertId,
-      ]);
+
       return { insertId: insertResult.insertId };
     } catch (error) {
       throw error;

@@ -413,10 +413,13 @@ async function insertOrders(data, insertId, company, connection) {
     // Usar el insertId si did es 0, de lo contrario usar did
     didOrden = resultadoOrden.insertId
 
-    for (const ordenData of data.data.items) {
 
-      await insertOrderItems(data.data.items, didOrden, connection);
-    }
+
+    console.log("didOrden", didOrden);
+
+
+    await insertOrderItems(data.data.items, didOrden, connection);
+
   }
 }
 
