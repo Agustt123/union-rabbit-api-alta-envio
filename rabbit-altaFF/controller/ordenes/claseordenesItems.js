@@ -64,25 +64,10 @@ class OrdenesItems {
 
   async checkAndUpdateDidEnvio(connection) {
     try {
-      const checkDidEnvioQuery =
-        "SELECT id,didOrden FROM ordenes_items WHERE didOrden = ?";
-      const results = await executeQuery(connection, checkDidEnvioQuery, [
-        this.didOrden,
-      ], true);
-      console.log(results, "dsa");
 
-      if (results.length > 0) {
-        // Si `didEnvio` ya existe, actualizarlo
-        const updateQuery =
-          "UPDATE ordenes_items SET superado = 1 WHERE didOrden = ?";
-        await executeQuery(connection, updateQuery, [results[0].didOrden]);
+      // Crear un nuevo registro con el mismo `didEnvio`
+      return this.createNewRecord(connection, results[0].didOrden);
 
-        // Crear un nuevo registro con el mismo `didEnvio`
-        return this.createNewRecord(connection, results[0].didOrden);
-      } else {
-        // Si `didEnvio` no existe, crear un nuevo registro directamente
-        return this.createNewRecord(connection, this.didOrden);
-      }
     } catch (error) {
       throw error;
     }
