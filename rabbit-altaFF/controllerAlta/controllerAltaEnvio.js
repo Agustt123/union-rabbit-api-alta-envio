@@ -194,6 +194,7 @@ async function handleFulfillment(data, connection, company) {
   ;
   const envio = new Envios(data.data, company, connection);
   await envio.insert();
+
   return {
     status: true,
     insertId: result[0].did, // Retornar el ID existente
@@ -394,7 +395,7 @@ async function insertOrders(data, insertId, company, connection) {
         status: data.data.status_order || "paid",
         flex: data.data.flex,
         fecha_venta: ordenData.fecha_venta || data.data.fecha_venta || "",
-        number: ordenData.number || "",
+        number: ordenData.number || data.data.number || "",
         observaciones:
           ordenData.enviosObservaciones?.observacion ||
           data.data.enviosObservaciones?.observacion ||
