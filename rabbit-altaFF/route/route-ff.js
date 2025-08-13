@@ -30,18 +30,7 @@ FF.post("/altaEnvioFF", async (req, res) => {
             }
         }
 
-        // Validación de dirección destino
-        const direccion = dataEnvio.enviosDireccionesDestino;
-        const camposDireccion = ['calle', 'numero', 'cp', 'localidad'];
-        for (const campo of camposDireccion) {
-            if (!direccion?.[campo]) {
-                return res.status(500).json({
-                    estado: false,
-                    error: -1,
-                    message: `Error en /altaEnvioFF: falta campo obligatorio en dirección '${campo}'`
-                });
-            }
-        }
+
 
         // Validación de items
         const items = dataEnvio.items;

@@ -16,15 +16,19 @@ function formatDate(date) {
 
 async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
     try {
-        const condiciones = [`e.elim = 0`, `e.superado = 0`, `e.estado_envio in (0,1,2,3,7,6,13,10,11,12)`];
+        const condiciones = [
+            `e.elim = 0`,
+            `e.superado = 0`,
+            `e.estado_envio in (0,1,2,3,7,6,13,10,11,12)`
+        ];
         const params = [];
 
-        // Fechas por defecto: últimos 7 días
+        // Fechas por defecto: últimos 14 días
         const hoy = new Date();
-        const hace7Dias = new Date();
-        hace7Dias.setDate(hoy.getDate() - 14);
+        const hace14Dias = new Date();
+        hace14Dias.setDate(hoy.getDate() - 14);
 
-        const fechaDesde = data.fechaDesde || formatDate(hace7Dias);
+        const fechaDesde = data.fechaDesde || formatDate(hace14Dias);
         const fechaHasta = data.fechaHasta || formatDate(hoy);
 
         const fechaDesdeSQL = formatDatetimeStart(fechaDesde);
@@ -33,7 +37,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         condiciones.push(`e.autoFecha >= ? AND e.autoFecha < ?`);
         params.push(fechaDesdeSQL, fechaHastaSQL);
 
-        // Filtro por tracking si viene
+        // Filtros opcionales
         if (data.tracking) {
             condiciones.push(`e.tracking_number LIKE ?`);
             params.push(data.tracking);
@@ -51,17 +55,50 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             params.push(data.zonaCosto);
         }
 
-        if (data.chofer) {
-            condiciones.push(`e.choferAsignado = ?`);
-            params.push(data.didCadete);
-        }
         if (data.asignado) {
             condiciones.push(`e.choferAsignado IS NOT NULL`);
         }
         if (data.turbo) {
             condiciones.push(`e.turbo = 1`);
         }
+        // Filtro por chofer
+        if (data.chofer) {
+            if (data.chofer == 1) {
+                condiciones.push(`e.choferAsignado != 0`);
+                if (data.nombreCadete) {
+                    condiciones.push(`su.usuario LIKE ?`);
+                    params.push(`%${data.nombreCadete}%`);
+                }
+            } else if (data.chofer == 0) {
+                condiciones.push(`e.choferAsignado = 0`);
+            }
+        }
 
+
+        // Filtro por foto
+        if (data.foto) {
+            if (data.foto === "si") {
+                condiciones.push(`EXISTS (SELECT 1 FROM envios_fotos ef WHERE ef.didEnvio = e.did AND ef.elim = 0)`);
+            } else if (data.foto === "no") {
+                condiciones.push(`NOT EXISTS (SELECT 1 FROM envios_fotos ef WHERE ef.didEnvio = e.did AND ef.elim = 0)`);
+            }
+        }
+        if (data.cobranzas !== undefined) {
+            if (data.cobranzas == 1) {
+                condiciones.push(`EXISTS (SELECT 1 FROM envios_cobranza ec WHERE ec.didEnvio = e.did AND ec.elim = 0)`);
+            } else if (data.cobranzas == 0) {
+                condiciones.push(`NOT EXISTS (SELECT 1 FROM envios_cobranza ec WHERE ec.didEnvio = e.did AND ec.elim = 0)`);
+            }
+        }
+
+        // Filtro por logística inversa
+        if (data.logisticaInversa !== undefined) {
+            if (data.logisticaInversa == 1) {
+                condiciones.push(`EXISTS (SELECT 1 FROM envios_logisticainversa eli WHERE eli.didEnvio = e.did AND eli.elim = 0)`);
+            } else if (data.logisticaInversa == 0) {
+                condiciones.push(`NOT EXISTS (SELECT 1 FROM envios_logisticainversa eli WHERE eli.didEnvio = e.did AND eli.elim = 0)`);
+            }
+        }
 
         const whereClause = `WHERE ${condiciones.join(" AND ")}`;
 
@@ -72,6 +109,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
                 e.estado_envio,
                 e.estado,
                 e.fecha_venta,
+                e.choferAsignado,
                 DATE_FORMAT(e.fecha_inicio, '%d/%m/%Y %H:%i') AS fecha_inicio_formateada,
                 e.flex,
                 e.ml_vendedor_id,
@@ -92,7 +130,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             ORDER BY e.id DESC
         `;
 
-        // Ejecutamos SIN limit ni offset
+        // Ejecutamos sin limit ni offset
         const results = await executeQuery(connection, query, params);
 
         const total = results.length;
@@ -110,19 +148,15 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             elimClie: row.elimClie,
             estado_envio: row.estado_envio,
             estadoml: row.estado,
-            estimated_delivery_time_date_72: row.estimated_delivery_time_date_72,
             fechagestionar: row.fecha_inicio_formateada,
             fecha_venta: row.fecha_venta,
             flexname: row.flex,
-            lead_time_shipping_method_name: row.lead_time_shipping_method_name,
-            localidad: row.localidad || '',
             ml_vendedor_id: row.ml_vendedor_id,
             namecadete: row.usuario,
             nombre: row.nombre_fantasia || '',
             nombre_fantasia: row.nombre_fantasia,
             ml_qr_seguridad: row.ml_qr_seguridad,
             tracking: row.tracking_number,
-            valor_declarado: row.valor_declarado,
             autoFecha: row.autoFecha,
             zonacosto: row.nameZonaCostoCliente,
         }));
@@ -136,7 +170,8 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
             filtros: {
                 fechaDesde,
                 fechaHasta,
-                tracking: data.tracking || null
+                tracking: data.tracking || null,
+                foto: data.foto || null
             }
         };
     } catch (error) {
@@ -144,6 +179,7 @@ async function ListarEnvio(connection, data = {}, pagina = 1, cantidad = 10) {
         throw error;
     }
 }
+
 
 module.exports = {
     ListarEnvio
