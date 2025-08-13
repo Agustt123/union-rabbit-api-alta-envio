@@ -386,9 +386,9 @@ async function insertEnviosItems(data, insertId, company, connection) {
 
 async function insertOrders(data, insertId, company, connection) {
   if (data.data.ff === 1) {
-    // 1️⃣ Crear el objeto orden
+    let didOrden = 0;
     const orden = new Ordenes({
-      did: 0,
+      did: 0, // Asignar 0 inicialmente, ya que se insertará una nueva orden
       didEnvio: insertId,
       didCliente: data.data.didCliente,
       didCuenta: data.data.didCuenta,
@@ -396,8 +396,9 @@ async function insertOrders(data, insertId, company, connection) {
       flex: data.data.flex,
       fecha_venta: data.data.fecha_venta || "",
       number: data.data.number || "",
-      observaciones:
-        data.data.enviosObservaciones?.observacion || "Observación por defecto",
+      observaciones: data.observaciones,
+
+
       armado: 0,
       descargado: 0,
       fecha_armado: null,
@@ -406,39 +407,18 @@ async function insertOrders(data, insertId, company, connection) {
       connection: connection,
     });
 
-    logYellow(`Insertando/Verificando orden: ${JSON.stringify(orden)}`);
-    const resultadoOrden = await orden.insert(); // Puede devolver did = 0 si ya existía
+    logYellow(`Insertando orden: ${JSON.stringify(orden)}`);
+    const resultadoOrden = await orden.insert();
 
-    // 2️⃣ Obtener el ID correcto: si insertó, usar insertId; si ya existía, buscar en la DB
-    let orderIdToUse = resultadoOrden.insertId;
-    if (!orderIdToUse || orderIdToUse === 0) {
-      // Buscar el ID real en la tabla ordenes usando number y cliente
-      const checkQuery = `
-        SELECT id, did 
-        FROM ordenes 
-        WHERE number = ? AND didCliente = ? LIMIT 1
-      `;
-      const existing = await executeQuery(connection, checkQuery, [
-        data.data.number,
-        data.data.didCliente,
-      ]);
+    // Usar el insertId si did es 0, de lo contrario usar did
+    didOrden = resultadoOrden.insertId
 
-      if (existing.length > 0) {
-        orderIdToUse = existing[0].did || existing[0].id;
-      } else {
-        throw new Error("No se pudo obtener el ID de la orden existente");
-      }
-    }
+    for (const ordenData of data.data.items) {
 
-    console.log(`Orden insertada/verificada con ID: ${orderIdToUse}`);
-
-    // 3️⃣ Insertar items
-    if (Array.isArray(data.data.items) && data.data.items.length > 0) {
-      await insertOrderItems(data.data.items, orderIdToUse, connection);
+      await insertOrderItems(data.data.items, didOrden, connection);
     }
   }
 }
-
 
 async function insertOrderItems(items, orderId, connection) {
   if (!Array.isArray(items)) {

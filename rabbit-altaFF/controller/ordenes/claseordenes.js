@@ -96,7 +96,7 @@ class Ordenes {
         }
 
         return {
-          insertId: results[0].number,
+          insertId: results[0].did,
           did: results[0].number,
           message: "Registro no actualizado",
         };
