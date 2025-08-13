@@ -386,6 +386,7 @@ async function insertEnviosItems(data, insertId, company, connection) {
 
 async function insertOrders(data, insertId, company, connection) {
   if (data.data.ff === 1) {
+
     for (const ordenData of data.data.items) {
       const orden = new Ordenes({
         did: 0, // Asignar 0 inicialmente, ya que se insertará una nueva orden
@@ -413,6 +414,8 @@ async function insertOrders(data, insertId, company, connection) {
 
       // Usar el insertId si did es 0, de lo contrario usar did
       const orderIdToUse = resultadoOrden.did !== 0 ? resultadoOrden.did : resultadoOrden.insertId;
+      console.log(`Orden insertada con ID: ${orderIdToUse}`);
+
 
       await insertOrderItems(data.data.items, orderIdToUse, connection);
     }
