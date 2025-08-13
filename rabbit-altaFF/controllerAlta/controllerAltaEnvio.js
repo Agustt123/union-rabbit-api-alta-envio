@@ -386,41 +386,46 @@ async function insertEnviosItems(data, insertId, company, connection) {
 
 async function insertOrders(data, insertId, company, connection) {
   if (data.data.ff === 1) {
+    let orderIdToUse = null;
 
-    for (const ordenData of data.data.items) {
-      const orden = new Ordenes({
-        did: 0, // Asignar 0 inicialmente, ya que se insertará una nueva orden
-        didEnvio: insertId,
-        didCliente: data.data.didCliente,
-        didCuenta: data.data.didCuenta,
-        status: data.data.status_order || "paid",
-        flex: data.data.flex,
-        fecha_venta: ordenData.fecha_venta || data.data.fecha_venta || "",
-        number: ordenData.number || data.data.number || "",
-        observaciones:
-          ordenData.enviosObservaciones?.observacion ||
-          data.data.enviosObservaciones?.observacion ||
-          "Observación por defecto",
-        armado: 0,
-        descargado: 0,
-        fecha_armado: null,
-        quien_armado: "0",
-        idEmpresa: company.did,
-        connection: connection,
-      });
+    // 1️⃣ Insertar la orden una sola vez
+    const orden = new Ordenes({
+      did: 0, // Nueva orden
+      didEnvio: insertId,
+      didCliente: data.data.didCliente,
+      didCuenta: data.data.didCuenta,
+      status: data.data.status_order || "paid",
+      flex: data.data.flex,
+      fecha_venta: data.data.fecha_venta || "",
+      number: data.data.number || "",
+      observaciones:
+        data.data.enviosObservaciones?.observacion || "Observación por defecto",
+      armado: 0,
+      descargado: 0,
+      fecha_armado: null,
+      quien_armado: "0",
+      idEmpresa: company.did,
+      connection: connection,
+    });
 
-      logYellow(`Insertando orden: ${JSON.stringify(orden)}`);
-      const resultadoOrden = await orden.insert();
+    logYellow(`Insertando orden: ${JSON.stringify(orden)}`);
+    const resultadoOrden = await orden.insert();
 
-      // Usar el insertId si did es 0, de lo contrario usar did
-      const orderIdToUse = resultadoOrden.did !== 0 ? resultadoOrden.did : resultadoOrden.insertId;
-      console.log(`Orden insertada con ID: ${orderIdToUse}`);
+    // Usar el insertId si did es 0, de lo contrario usar did
+    orderIdToUse =
+      resultadoOrden.did !== 0 ? resultadoOrden.did : resultadoOrden.insertId;
 
+    console.log(`Orden insertada con ID: ${orderIdToUse}`);
 
-      await insertOrderItems(data.data.items, orderIdToUse, connection);
+    // 2️⃣ Insertar todos los items asociados
+    if (Array.isArray(data.data.items) && data.data.items.length > 0) {
+      for (const item of data.data.items) {
+        await insertOrderItems([item], orderIdToUse, connection);
+      }
     }
   }
 }
+
 
 async function insertOrderItems(items, orderId, connection) {
   if (!Array.isArray(items)) {
