@@ -385,7 +385,7 @@ async function insertEnviosItems(data, insertId, company, connection) {
 }
 
 async function insertOrders(data, insertId, company, connection) {
-  if (data.data.ff === 1) {
+  if (data.data.ff == 1) {
     let didOrden = 0;
     const orden = new Ordenes({
       did: 0, // Asignar 0 inicialmente, ya que se insertará una nueva orden

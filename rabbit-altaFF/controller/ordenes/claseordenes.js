@@ -73,35 +73,9 @@ class Ordenes {
 
   async checkAndUpdateDid(connection) {
     try {
-      const checkDidQuery =
-        "SELECT number, status, flex, did,didEnvio FROM ordenes WHERE number = ? and superado = 0 and elim = 0";
-      const results = await executeQuery(connection, checkDidQuery, [
-        this.number,
-      ]);
 
-      if (results.length > 0) {
-        this.didEnvio == results[0].didEnvio;
-        if (
-          results[0].status != this.status &&
-          results[0].flex == this.flex &&
-          results[0].number == this.number
-        ) {
-          {
-            const updateQuery =
-              "UPDATE ordenes SET superado = 1 WHERE number =?  ";
-            await executeQuery(connection, updateQuery, [this.number]);
+      return this.createNewRecord(connection);
 
-            return this.createNewRecord(connection, results[0].did);
-          }
-        }
-        return {
-          insertId: results[0].number,
-          did: results[0].number,
-          message: "Registro no actualizado",
-        };
-      } else {
-        return this.createNewRecord(connection);
-      }
     } catch (error) {
       throw error;
     }
