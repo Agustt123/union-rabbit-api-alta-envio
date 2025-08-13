@@ -36,18 +36,10 @@ class OrdenesItems {
   // Método para insertar en la base de datos
   async insert() {
     try {
-      if (
-        this.didOrden === null ||
-        this.didOrden === undefined ||
-        this.didOrden === "" ||
-        this.didOrden === 0
-      ) {
-        // Si `didEnvio` es null, crear un nuevo registro
-        return this.createNewRecord(this.connection);
-      } else {
-        // Si `didEnvio` no es null, verificar si ya existe y manejarlo
-        return this.checkAndUpdateDidEnvio(this.connection);
-      }
+
+      // Si `didEnvio` es null, crear un nuevo registro
+      return this.createNewRecord(this.connection);
+
     } catch (error) {
       console.error("Error en el método insert:", error.message);
 
@@ -62,16 +54,7 @@ class OrdenesItems {
     }
   }
 
-  async checkAndUpdateDidEnvio(connection) {
-    try {
 
-      // Crear un nuevo registro con el mismo `didEnvio`
-      return this.createNewRecord(connection, results[0].didOrden);
-
-    } catch (error) {
-      throw error;
-    }
-  }
 
   async createNewRecord(connection, didOrden) {
     try {
