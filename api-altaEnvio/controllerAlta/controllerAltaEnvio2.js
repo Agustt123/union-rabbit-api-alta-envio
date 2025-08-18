@@ -43,7 +43,7 @@ async function AltaEnvio2(company, connection, data) {
             data.data.estado = 7
         }
         else {
-            data.data.estado = 1
+            data.data.estado = data.data.estado || 1
         }
         data.data.destination_shipping_zip_code = data.data.enviosDireccionesDestino.cp;
         const tokenData = await checkToken(data.data.token, connection);
