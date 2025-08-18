@@ -178,10 +178,14 @@ class Envios {
   }
 
   async checkAndUpdateDid(connection) {
-    const query = "SELECT id FROM envios WHERE did = ?";
+    const query = "SELECT id,fecha_inicio FROM envios WHERE did = ?";
     try {
       const results = await executeQuery(connection, query, [this.did]);
       if (results.length > 0) {
+
+        this.fecha_inicio = results[0].fecha_inicio;
+
+
         const updateQuery = "UPDATE envios SET superado = 1 WHERE did = ?";
         await executeQuery(connection, updateQuery, [this.did]);
       }
