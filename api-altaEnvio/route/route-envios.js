@@ -18,6 +18,7 @@ const { getEnvioFotoByDid } = require("../funciones/fotoEnvio/getByidEnvioFoto")
 const { getListadoEnvioFoto } = require("../funciones/fotoEnvio/getListadoEnvioFoto");
 const { descargarFoto } = require("../funciones/fotoEnvio/descargarFoto");
 const { ListarEnvio } = require("../funciones/listadoEnvio/ListarEnvio");
+const { envioExterior } = require("../controllerAlta/controllerAltaEnvioExteriores");
 
 const camposRequeridos = [
   "data",
@@ -276,6 +277,25 @@ router.post("/altaEnvioFlex", async (req, res) => {
     });
   }
 });
+router.post("/altaEnviosExteriores", async (req, res) => {
+  const data = req.body;
+  console.log(data, "data cargardatos");
+
+
+  try {
+
+    try {
+      const result = await envioExterior(data);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 
@@ -413,7 +433,9 @@ router.post("/enviosMLredis", async (req, res) => {
         data.didCliente,
         data.didCuenta,
         data.elim,
-        data.idEmpresa
+        data.idEmpresa,
+        connection
+
       );
       await envioflex.insert();
       await connection.commit();

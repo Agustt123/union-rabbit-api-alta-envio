@@ -65,10 +65,12 @@ FF.post("/altaEnvioFF", async (req, res) => {
 
         // Procesamiento solo si es empresa 82
 
-        console.log("Procesando mensaje para idEmpresa :", data);
+
+
 
         const company = await getCompanyById(idEmpresa);
         const result = await AltaEnvio(company, data);
+
 
         if (result.estado === false) {
             return res.status(500).json(result);
