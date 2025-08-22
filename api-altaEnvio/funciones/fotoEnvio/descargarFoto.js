@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function descargarFoto({ idEmpresa, did, nombreFoto }, res) {
-    const url = `https://files.lightdata.app/upload/${idEmpresa}/envios-fotos/${did}/${nombreFoto}`;
+    const url = `https://files.lightdata.app/upload/${idEmpresa}/envios/${did}/${nombreFoto}`;
     console.log(`Descargando foto desde: ${url}`);
 
 
