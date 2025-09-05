@@ -197,7 +197,7 @@ async function AltaEnvio(company, data) {
         if (data.data.enviosObservaciones) {
           const observacionDefault =
             data.data.enviosObservaciones.observacion ||
-            "efectivamente la observacion default de light data";
+            "";
           const observaciones = new EnviosObservaciones(
             insertId,
             observacionDefault,
