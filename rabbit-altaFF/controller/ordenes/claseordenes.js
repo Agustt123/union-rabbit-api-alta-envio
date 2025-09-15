@@ -27,7 +27,7 @@ class Ordenes {
     this.flex = flex;
     this.fecha_venta = fecha_venta;
     this.number = number;
-    this.observaciones = observaciones || "Observación por defecto"; // Valor por defecto
+    this.observaciones = observaciones || ""; // Valor por defecto
     this.armado = armado;
     this.descargado = descargado;
     this.fecha_armado = fecha_armado;

@@ -393,7 +393,7 @@ async function insertOrders(data, insertId, company, connection) {
       didEnvio: insertId,
       didCliente: data.data.didCliente,
       didCuenta: data.data.didCuenta,
-      status: data.data.status_order || "paid",
+      status: data.data.status_order || "",
       flex: data.data.flex,
       fecha_venta: data.data.fecha_venta || "",
       number: data.data.number || "",
