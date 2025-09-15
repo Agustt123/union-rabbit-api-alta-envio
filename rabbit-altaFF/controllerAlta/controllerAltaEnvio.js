@@ -39,7 +39,7 @@ async function AltaEnvio(company, data) {
     throw new Error("Token o cliente no proporcionado");
   }
 
-  data.data.status_order = "paid";
+  //data.data.status_order = "paid";
 
   try {
     const yaExiste = await checkExistingShipment(data, connection);
