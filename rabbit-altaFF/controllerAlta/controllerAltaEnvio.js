@@ -160,13 +160,12 @@ async function handleFulfillment(data, connection, company) {
 
   let estadollega;
   // Establecer estado basado en status_order
-  if (data.data.status_order === "paid") {
+  /*if (data.data.status_order === "paid") {
     estadollega = 1;
   } else if (data.data.status_order === "cancelled") {
     estadollega = 8;
-  } else {
-    throw new Error("status_order no reconocido: " + data.data.status_order);
-  }
+  }*/
+
 
   // Si no se encontraron resultados, retornar un objeto indicando que no se encontró fulfillment
   if (result.length === 0) {
