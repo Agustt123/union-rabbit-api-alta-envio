@@ -24,7 +24,7 @@ class Envios {
       flex: data.flex ?? 0,
       turbo: data.turbo ?? 0,
       exterior: data.exterior ?? 0,
-      lote: data.lote ?? "",
+      lote: data.lote ?? "apiFF",
       ml_shipment_id: data.ml_shipment_id ?? "",
       ml_vendedor_id: data.ml_vendedor_id ?? "",
       ml_venta_id: data.ml_venta_id ?? "",
