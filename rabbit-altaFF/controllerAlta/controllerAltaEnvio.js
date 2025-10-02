@@ -418,12 +418,12 @@ async function insertOrders(data, insertId, company, connection) {
     console.log("didOrden", didOrden);
 
 
-    await insertOrderItems(data.data.items, didOrden, connection);
+    await insertOrderItems(data, data.data.items, didOrden, connection);
 
   }
 }
 
-async function insertOrderItems(items, orderId, connection) {
+async function insertOrderItems(data, items, orderId, connection) {
   if (!Array.isArray(items)) {
     console.warn("No se proporcionaron items válidos para insertar.");
     return; // Salir si no hay items
@@ -441,6 +441,7 @@ async function insertOrderItems(items, orderId, connection) {
       item.cantidad,
       item.variacion,
       item.seller_sku,
+      data.data.lote,
       connection
     );
 

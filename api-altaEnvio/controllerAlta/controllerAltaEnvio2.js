@@ -296,27 +296,36 @@ async function AltaEnvio2(company, connection, data) {
                 }
 
 
-                // Validación y creación de EnviosItems
-                if (data.data.enviosItems) {
-                    const enviosItems = new EnviosItems(
-                        insertId,
-                        data.data.enviosItems.codigo || "",
-                        data.data.enviosItems.imagen || "",
-                        data.data.enviosItems.descripcion || "",
-                        data.data.enviosItems.ml_id || "",
-                        data.data.enviosItems.dimensions || "",
-                        data.data.enviosItems.cantidad || "",
-                        data.data.enviosItems.variacion || "",
-                        data.data.enviosItems.seller_sku || "",
-                        data.data.enviosItems.descargado || "",
-                        data.data.enviosItems.detallesProducto || "",
+                const raw = data?.data?.enviosItems;
 
-                        data.data.enviosItems.superado || "",
-                        data.data.enviosItems.elim || "",
-                        company,
-                        connection
-                    );
-                    await enviosItems.insert(); // Asegúrate de que `insert()` esté definido en EnviosItems
+                if (raw) {
+                    // Normalizamos: si es objeto => [obj], si ya es array => array
+                    const items = Array.isArray(raw) ? raw : [raw];
+
+                    // Si tu insert debe ser secuencial (por PKs, triggers, etc.)
+                    for (const item of items) {
+                        const enviosItems = new EnviosItems(
+                            insertId,
+                            item?.codigo ?? "",
+                            item?.imagen ?? "",
+                            item?.descripcion ?? "",
+                            item?.ml_id ?? "",
+                            item?.dimensions ?? "",
+                            item?.cantidad ?? "",          // si esperas número, usa Number(item?.cantidad) || 0
+                            item?.variacion ?? "",
+                            item?.seller_sku ?? "",
+                            item?.descargado ?? "",
+                            item?.detallesProducto ?? "",
+                            item?.superado ?? "",
+                            item?.elim ?? "",
+                            company,
+                            connection
+                        );
+                        await enviosItems.insert();
+                    }
+
+                    // Si tu insert puede ser en paralelo:
+                    // await Promise.all(items.map(item => new EnviosItems(...).insert()));
                 }
 
 

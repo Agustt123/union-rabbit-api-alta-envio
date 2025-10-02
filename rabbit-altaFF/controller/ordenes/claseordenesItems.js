@@ -14,6 +14,7 @@ class OrdenesItems {
     cantidad = 0,
     variacion = "",
     seller_sku = "",
+    lote = "",
     connection = null
   ) {
     this.didOrden = didOrden;
@@ -25,6 +26,7 @@ class OrdenesItems {
     this.cantidad = cantidad;
     this.variacion = variacion;
     this.seller_sku = seller_sku;
+    this.lote = lote;
     this.connection = connection; // Asegurándose de que idEmpresa sea siempre un string
   }
 
