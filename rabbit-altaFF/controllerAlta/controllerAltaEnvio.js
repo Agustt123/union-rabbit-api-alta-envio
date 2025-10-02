@@ -441,7 +441,7 @@ async function insertOrderItems(data, items, orderId, connection) {
       item.cantidad,
       item.variacion,
       item.seller_sku,
-      data.data.lote,
+      item.lote || "", // Asegurarse de que lote tenga un valor predeterminado
       connection
     );
 
