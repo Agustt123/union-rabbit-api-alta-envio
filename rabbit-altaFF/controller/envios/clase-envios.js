@@ -39,7 +39,7 @@ class Envios {
       peso: data.peso ?? "0",
       destination_types: data.destination_types ?? " ",
       estado: data.estado ?? 1,
-      estimated_delivery_extended: data.estimated_delivery_extended ?? " ",
+      estimated_delivery_extended: data.deadLine ?? " ",
       // estado_envio: data.estado_envio ?? 0,
 
       volumen: data.volumen ?? "0",
