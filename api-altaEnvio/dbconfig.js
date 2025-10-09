@@ -49,7 +49,8 @@ async function getConnection(idempresa) {
             host: 'bhsmysql1.lightdata.com.ar',  // Host fijo
             database: empresa.dbname,           // Base de datos desde Redis
             user: empresa.dbuser,               // Usuario desde Redis
-            password: empresa.dbpass,           // Contraseña desde Redis
+            password: empresa.dbpass,
+            multipleStatements: true,         // Contraseña desde Redis
         };
         /*  const config = {
               host: 'localhost',  // Host fijo

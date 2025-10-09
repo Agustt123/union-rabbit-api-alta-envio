@@ -19,6 +19,8 @@ const { getListadoEnvioFoto } = require("../funciones/fotoEnvio/getListadoEnvioF
 const { descargarFoto } = require("../funciones/fotoEnvio/descargarFoto");
 const { ListarEnvio } = require("../funciones/listadoEnvio/ListarEnvio");
 const { envioExterior } = require("../controllerAlta/controllerAltaEnvioExteriores");
+const { deleteShipment } = require("../controller/eliminarEnvio/eliminarEnvio.js");
+
 
 const camposRequeridos = [
   "data",
@@ -130,6 +132,22 @@ router.post("/altaEnvio", async (req, res) => {
       success: false,
       error: error.message || error,
     });
+  }
+});
+
+router.post("/deleteEnvio", async (req, res) => {
+  const data = req.body;
+  const did = data.did
+  const userId = data.userId; // Asegúrate de que userId esté incluido en el cuerpo de la solicitud
+  const connection = await getConnection(data.idEmpresa);
+  try {
+    const result = await deleteShipment(connection, did, userId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.end();
   }
 });
 router.post("/getListadoEnvios", async (req, res) => {
