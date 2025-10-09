@@ -135,7 +135,7 @@ router.post("/altaEnvio", async (req, res) => {
   }
 });
 
-router.post("/deleteEnvio", async (req, res) => {
+router.post("/eliminarEnvio", async (req, res) => {
   const data = req.body;
   const did = data.did
   const userId = data.userId; // Asegúrate de que userId esté incluido en el cuerpo de la solicitud

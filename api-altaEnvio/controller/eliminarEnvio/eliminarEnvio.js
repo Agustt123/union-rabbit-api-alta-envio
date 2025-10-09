@@ -27,6 +27,8 @@ async function deleteShipment(dbConnection, shipmentId, userId) {
         quien: userId
     });
 
+
+
     return {
         success: true,
         message: "Envio eliminado correctamente",
