@@ -44,6 +44,7 @@ class Envios {
       hora_desde = "00:00:00",
       hora_hasta = "00:00:00",
       pais = null,
+      piso = "",
 
       destination_latitude = 0,
       destination_longitude = 0,
@@ -133,6 +134,7 @@ class Envios {
     this.destination_longitude = destination_longitude;
     this.delivery_preference = delivery_preference;
     this.obs = obs;
+    this.piso = piso
     this.costoActualizado = costoActualizado || 0;
     this.prioridad = prioridad;
     this.conHorario = conHorario;
