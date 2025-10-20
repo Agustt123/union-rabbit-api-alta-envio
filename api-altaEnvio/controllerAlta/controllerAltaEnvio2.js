@@ -15,6 +15,7 @@ const { json } = require("stream/consumers");
 const { checkToken } = require("../fuctions/checkTokenCliente");
 const CamposExtras = require("../controller/envios/clase-campos-extras");
 const CostoEnvio = require("../controller/envios/clase-costo-envio");
+const EnviosFenicio = require("../controller/envios/clase-envios-fenicio");
 
 
 
@@ -293,6 +294,15 @@ async function AltaEnvio2(company, connection, data) {
                         connection
                     );
                     await costoEnvio.insert();
+                }
+                if (data.data.enviosFenicio) {
+                    const enviosFenicio = new EnviosFenicio(
+                        insertId,
+                        JSON.stringify(data.data.enviosFenicio) || data.data.enviosFenicio,
+                        company,
+                        connection
+                    );
+                    await enviosFenicio.insert();
                 }
 
 
