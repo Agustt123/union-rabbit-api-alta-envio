@@ -73,6 +73,7 @@ class EnviosFlex {
             const updateQuery = 'UPDATE envios SET did = ? WHERE id = ?';
             await executeQuery(connection, updateQuery, [insertId, insertId]);
 
+
             return { insertId, did: insertId };
         } catch (error) {
             throw error;
@@ -95,6 +96,7 @@ class EnviosFlex {
 
             const insertResult = await executeQuery(connection, insertQuery, values);
             const insertId = insertResult.insertId;
+            console.log(insertId, "dsadsa");
 
             return { insertId, did: did || insertId };
         } catch (error) {

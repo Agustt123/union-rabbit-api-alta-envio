@@ -142,7 +142,7 @@ async function armadojsonFenicio(income) {
     const data = {
         data: {
             didDeposito: 1,
-            didEmpresa,                // <- antes tenías idEmpresa:275; uso la var que traés
+            idEmpresa: didEmpresa,                // <- antes tenías idEmpresa:275; uso la var que traés
 
             operador,
 
@@ -216,8 +216,8 @@ async function armadojsonFenicio(income) {
                 localidad: fromAddress?.locality || '',
                 provincia: fromAddress?.region || '',
                 pais: fromAddress?.country || '',
-                latitud: fromAddress?.latitude ?? null,
-                longitud: fromAddress?.longitude ?? null,
+                latitud: fromAddress?.latitude ?? 0,
+                longitud: fromAddress?.longitude ?? 0,
                 obs: fromAddress?.additionalInformation || '',
             },
 
@@ -237,132 +237,3 @@ async function armadojsonFenicio(income) {
 
 module.exports = { armadojsonFenicio };
 
-// ---- Runner CLI: permite probar en Node.js
-// Uso:
-//   node Armadojson\ Fenicio.js fenicio.json
-// o
-//   cat fenicio.json | node Armadojson\ Fenicio.js
-if (require.main === module) {
-    (async () => {
-        try {
-            const fs = require('fs');
-            const path = process.argv[2];
-            let inputStr = '';
-
-            if (path) {
-                inputStr = fs.readFileSync(path, 'utf8');
-            } else {
-                // Si no pasás archivo ni stdin, usamos un JSON HARDCODEADO de ejemplo
-                const sample = {
-                    "didEmpresa": 123,
-                    "ff": 1,
-                    "ia": 1,
-                    "didCliente": 456,
-                    "didCuenta": 789,
-                    "serviceType": "001",
-                    "webhookConfiguration": {
-                        "url": "https://demo.fenicio.com.uy/ws.php/standard-callback",
-                        "authorizationKey": "d61568c59b41c6d8edfc1ca30277b82b"
-                    },
-                    "order": {
-                        "id": "1760",
-                        "currency": "UYU",
-                        "customer": {
-                            "name": "Emmanuel",
-                            "lastName": "Quintana",
-                            "document": {
-                                "number": "51654101",
-                                "country": "UY",
-                                "type": "CI_UY"
-                            },
-                            "email": "emmanuel.quintana@fenicio.io",
-                            "phone": "+59892222222"
-                        },
-                        "deliveryInformation": {
-                            "recipientName": "Emmanuel Quintana",
-                            "fromAddress": {
-                                "country": "Uruguay",
-                                "region": "Montevideo",
-                                "locality": "Montevideo",
-                                "street": "Pablo de maria",
-                                "doorNumber": "1011",
-                                "apartmentNumber": null,
-                                "postcode": null,
-                                "latitude": null,
-                                "longitude": null,
-                                "additionalInformation": "Retira portería"
-                            },
-                            "toAddress": {
-                                "country": "Uruguay",
-                                "region": "Montevideo",
-                                "locality": "Montevideo",
-                                "street": "Obligado",
-                                "doorNumber": "1234",
-                                "apartmentNumber": null,
-                                "postcode": null,
-                                "latitude": -34.9071875,
-                                "longitude": -56.1607425,
-                                "additionalInformation": "Entre calles: X e Y"
-                            },
-                            "deliveryDate": {
-                                "from": "2025-01-01T09:00:00-0300",
-                                "to": "2025-01-01T12:00:00-0300"
-                            }
-                        },
-                        "items": [
-                            {
-                                "id": "008::UNICO",
-                                "quantity": 1,
-                                "name": "Cafetera Express Peabody Color Roja 1000w 20 Bares",
-                                "price": 9200,
-                                "weight": 2.5,
-                                "length": 30,
-                                "width": 25,
-                                "height": 20
-                            }
-                        ],
-                        "packages": [
-                            {
-                                "code": "DEFAULT",
-                                "quantity": 1
-                            }
-                        ],
-                        "serviceType": "001", // didservicios 1 
-                        "webhookConfiguration": { //ENVIOS_FENICIO DIDENVIO,DATA  == FLEX 18 
-                            "url": "https://demo.fenicio.com.uy/ws.php/standard-callback",
-                            "authorizationKey": "d61568c59b41c6d8edfc1ca30277b82b"
-                        }
-                    }
-                };
-                inputStr = JSON.stringify(sample);
-            }
-
-            // Si hay datos por stdin, los usamos en vez del hardcoded
-            if (!path) {
-                const stdinData = await new Promise((resolve) => {
-                    let data = '';
-                    const { stdin } = process;
-                    stdin.setEncoding('utf8');
-                    stdin.on('data', (chunk) => (data += chunk));
-                    stdin.on('end', () => resolve(data));
-                    // Si no llega nada por stdin en 50ms, seguimos con el sample
-                    setTimeout(() => resolve(''), 50);
-                });
-                if (stdinData && stdinData.trim()) inputStr = stdinData;
-            }
-
-            let json;
-            try {
-                json = JSON.parse(inputStr);
-            } catch (e) {
-                throw new Error('El contenido no es JSON válido: ' + e.message);
-            }
-
-            const out = await armadojsonFenicio(json);
-            console.log(JSON.stringify(out, null, 2));
-        } catch (err) {
-            console.error('Error:', (err && (err.stack || err.message)) || err);
-            process.exit(1);
-        }
-    })();
-}

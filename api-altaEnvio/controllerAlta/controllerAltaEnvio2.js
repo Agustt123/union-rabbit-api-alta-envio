@@ -23,19 +23,6 @@ const EnviosFenicio = require("../controller/envios/clase-envios-fenicio");
 
 async function AltaEnvio2(company, connection, data) {
     try {
-        /*  if (!data.data || !data.data.enviosDireccionesDestino ||
-              !data.data.enviosDireccionesDestino.calle ||
-  
-              !data.data.enviosDireccionesDestino.cp
-          ) {
-  
-              return {
-                  success: false,
-                  error: -1,
-                  message: "Datos de envío inválidos.",
-              };
-          }
-  */
 
         data.data.pais = company.pais
         console.log("Datos de envío:", data.data);
@@ -46,7 +33,13 @@ async function AltaEnvio2(company, connection, data) {
         else {
             data.data.estado = data.data.estado || 1
         }
-        data.data.destination_shipping_zip_code = data.data.enviosDireccionesDestino.cp;
+
+        if (data.data.enviosDireccionesDestino) {
+
+
+            data.data.destination_shipping_zip_code = data.data.enviosDireccionesDestino.cp;
+        }
+        console.log("llegue1");
         const tokenData = await checkToken(data.data.token, connection);
         console.log("Token Data:", tokenData);
 
@@ -55,7 +48,7 @@ async function AltaEnvio2(company, connection, data) {
             data.data.didCuenta = tokenData.didCuenta;
 
         }
-        console.log(data.data.didCliente, "didCliente");
+
 
 
         const email = data.data.destination_receiver_email;
@@ -69,7 +62,7 @@ async function AltaEnvio2(company, connection, data) {
         try {
             let insertId;
 
-            if (data.data.flex === 1) {
+            if (data.data.flex == 1) {
                 console.log("Procesando como Fleeeex");
 
                 const envioflex = new EnviosFlex(

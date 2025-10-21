@@ -6,12 +6,13 @@ const axios = require('axios'); // <- agregado
 // ⚠️ Asegurate de tener el archivo del armador en el mismo directorio
 const { armadojsonFenicio } = require('./fenicio.js');
 
+
 const app = express();
 const PORT = process.env.PORT || 13000;
 const SAVE_DIR = 'orders';
 
 // adónde posteamos el payload armado
-const TARGET_URL = process.env.TARGET_URL || 'http://localhost:13000/mock/receive'; // <- agregado
+const TARGET_URL = process.env.TARGET_URL || 'https://altaenvios.lightdata.com.ar/api/altaenvio'; // <- agregado
 
 // Mapa de claves -> IDs (empresa/cuenta/cliente)
 const Aclaves = Object.create(null);
@@ -92,7 +93,9 @@ app.post('/fenicio/createShipping', async (req, res) => {
 
         // === POST simple con axios ===
         try {
-            const r = await axios.post(TARGET_URL, armado.data, {
+            console.log(JSON.stringify(armado));
+
+            const r = await axios.post(TARGET_URL, armado, {
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 10000,
             });
