@@ -32,6 +32,7 @@ app.use(cors({
 const router = require('./route/route-envios');
 const enviospack = require('./route/route-enviopack');
 const FF = require('../rabbit-altaFF/route/route-ff');
+const { alta } = require('./route/route-altaCP');
 
 // Middleware para asegurar que las empresas estén actualizadas
 app.use(async (req, res, next) => {
@@ -45,6 +46,7 @@ app.use(async (req, res, next) => {
 app.use('/api', router);
 app.use('/api2', enviospack);
 app.use('/ff', FF);
+app.use('/altaCp', alta);
 // Ruta raíz que devuelve un mensaje "Hola"
 app.get('/', (req, res) => {
   res.status(200).json({

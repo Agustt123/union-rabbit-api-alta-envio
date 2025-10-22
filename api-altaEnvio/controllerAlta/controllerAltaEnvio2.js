@@ -16,6 +16,7 @@ const { checkToken } = require("../fuctions/checkTokenCliente");
 const CamposExtras = require("../controller/envios/clase-campos-extras");
 const CostoEnvio = require("../controller/envios/clase-costo-envio");
 const EnviosFenicio = require("../controller/envios/clase-envios-fenicio");
+const { obtenerTokenCliente } = require("../fuctions/obtenerTokenCliente");
 
 
 
@@ -334,14 +335,20 @@ async function AltaEnvio2(company, connection, data) {
 
 
 
-                let respuesta = await sendToShipmentStateMicroService(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
-                console.log(respuesta, "respuesta");
+                let respuesta = sendToShipmentStateMicroService(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
+
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
+                const tokenCLiente = await obtenerTokenCliente(connection, data.data.didCliente) || 0
+
+
+
                 logPurple("FINAL");
                 return {
                     estado: true,
                     insertId: insertId,
-                    dataqr: qr
+                    dataqr: qr,
+                    token: tokenCLiente,
+                    didEmpresa: company.did
                 }
             }
 

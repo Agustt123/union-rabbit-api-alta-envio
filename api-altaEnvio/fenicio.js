@@ -14,6 +14,39 @@ async function obtenerFechaActual() {
         unix: Math.floor(now.getTime() / 1000),
     };
 }
+// ---- helper: fecha y hora actual en AR (yyyy-mm-dd HH:mm:ss)
+function obtenerFechaHoraActual(tz = 'America/Argentina/Buenos_Aires') {
+    const now = new Date();
+
+    // formatToParts para sacar componentes en la TZ deseada
+    const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    }).formatToParts(now);
+
+    const get = (t) => parts.find(p => p.type === t)?.value ?? '';
+
+    const yyyy = get('year');
+    const mm = get('month');
+    const dd = get('day');
+    const HH = get('hour');
+    const MI = get('minute');
+    const SS = get('second');
+
+    return {
+        fecha: `${yyyy}-${mm}-${dd}`,                 // yyyy-mm-dd
+        hora: `${HH}:${MI}:${SS}`,                    // HH:mm:ss
+        fecha_hora: `${yyyy}-${mm}-${dd} ${HH}:${MI}:${SS}`, // yyyy-mm-dd HH:mm:ss
+        unix: Math.floor(now.getTime() / 1000),       // epoch seconds (UTC)
+    };
+}
+
 
 // ---- helper: utilidades seguras
 const toNumber = (v, def = 0) => (v == null || v === '' || isNaN(Number(v)) ? def : Number(v));
@@ -91,6 +124,7 @@ async function armadojsonFenicio(income) {
     const volumen = calcVolumenTotal(items);
     const valor_declarado = calcValorDeclarado(items);
     const bultos = calcBultos(packages);
+    const fecha_venta = obtenerFechaHoraActual();
 
     // preferencia de entrega
     let delivery_preference = 'C'; // C: Comercial, R: Residencial
@@ -150,9 +184,11 @@ async function armadojsonFenicio(income) {
             flex,
             turbo,
             status_order: '',
-            fecha_inicio: fechactual.fecha,
+
             fechaunix: fechactual.unix,
             lote: 'fenicio',
+            fecha_venta: fecha_venta,
+            estado: 7,
 
             // Campos ML reutilizados para ID de envío/venta
             ml_shipment_id: String(order?.id || ''),
@@ -179,7 +215,7 @@ async function armadojsonFenicio(income) {
             tracking_number,
 
             // ventana de entrega
-            fecha_venta: delivery?.deliveryDate?.from || '',
+            fecha_venta: fecha_venta.fecha_hora,
 
             destination_receiver_name: receiverName,
             destination_receiver_phone: receiverPhone,

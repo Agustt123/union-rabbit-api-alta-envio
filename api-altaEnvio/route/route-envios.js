@@ -114,7 +114,7 @@ router.post("/altaEnvio", async (req, res) => {
         });
       }
 
-      res.status(200).json({ estado: true, did: result.insertId, qr: result.dataqr });
+      res.status(200).json({ estado: true, did: result.insertId, qr: result.dataqr, token: result.token, didEmpresa: result.didEmpresa });
     } catch (error) {
       console.error("Error en AltaEnvio:", error);
       res.status(500).json({
