@@ -46,7 +46,7 @@ app.use(async (req, res, next) => {
 app.use('/api', router);
 app.use('/api2', enviospack);
 app.use('/ff', FF);
-app.use('/alta-basica', alta);
+app.use('/api/alta-basica', alta);
 // Ruta raíz que devuelve un mensaje "Hola"
 app.get('/', (req, res) => {
   res.status(200).json({
