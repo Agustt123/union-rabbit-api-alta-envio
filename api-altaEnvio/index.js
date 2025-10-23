@@ -17,7 +17,7 @@ const TARGET_URL = process.env.TARGET_URL || 'https://altaenvios.lightdata.com.a
 // Mapa de claves -> IDs (empresa/cuenta/cliente)
 const Aclaves = Object.create(null);
 Aclaves['c5e84237cf3a3ff415289ecf637ae2be31eb04c206f4cb8ff32305fdc5d9c121'] = {
-    didCliente: 1,
+    didCliente: 5,
     didCuenta: 2,
     didEmpresa: 275,
 };
@@ -90,12 +90,12 @@ app.post('/fenicio/createShipping', async (req, res) => {
         const armado = await armadojsonFenicio(income);
 
         console.log('[payload]', JSON.stringify(armado.data, null, 2));
-
+        let r;
         // === POST simple con axios ===
         try {
             console.log(JSON.stringify(armado));
 
-            const r = await axios.post(TARGET_URL, armado, {
+            r = await axios.post(TARGET_URL, armado, {
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 10000,
             });
@@ -105,11 +105,13 @@ app.post('/fenicio/createShipping', async (req, res) => {
             console.error(`[POST -> ${TARGET_URL}] ERROR status=${status} msg=${postErr.message}`);
         }
 
+        const urlImp = `http://files.lightdata.app/print/etiqueta?token=${r.data.token}&didEmpresa=${clave.didEmpresa}&didEnvio=${r.data.did}`;
+
 
         // Respuesta a Fenicio
         const resp = {
-            trackingCode: 'REDF',
-            labelUrl: 'https://preenvios.lightdata.app/labels/TRK.pdf',
+            trackingCode: `${r.data.did}d54df4s8a${clave.didCliente}`,
+            labelUrl: urlImp,
         };
 
         if (process.env.DEBUG_PAYLOAD === '1') {

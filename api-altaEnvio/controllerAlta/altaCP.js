@@ -18,7 +18,7 @@ async function altaCP(connection, data, company) {
     console.log(didEnvio, data.didExterno, data.clienteEnEmpresaDueña, data.empresaDueña);
 
 
-    const altaExterna = await envioExterior(didEnvio, data.didExterno, data.clienteEnEmpresaDueña, data.flex, data.empresaDueña);
+    const altaExterna = await envioExterior(didEnvio, data.didExterno, data.NombreClienteEnEmpresaDueña, data.flex, data.empresaDueña);
     return { estado: true, data: didEnvio }
 
 
