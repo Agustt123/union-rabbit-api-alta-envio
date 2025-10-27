@@ -40,7 +40,7 @@ class EnvioExterior {
 
     async checkAndUpdateDidEnvio(connection) {
         try {
-            const checkDidEnvioQuery = 'SELECT id FROM envios_exteriores WHERE didExterno = ?';
+            const checkDidEnvioQuery = 'SELECT id FROM envios_exteriores WHERE didExterno = ? AND superado = 0 AND elim = 0';
             const results = await executeQuery(connection, checkDidEnvioQuery, [this.didExterno]);
 
             if (results.length > 0) {
@@ -70,16 +70,7 @@ class EnvioExterior {
             const values = filteredColumns.map((column) => this[column]);
             const insertQuery = `INSERT INTO envios_exteriores (${filteredColumns.join(', ')}) VALUES (${filteredColumns.map(() => '?').join(', ')})`;
 
-
-
-            logYellow("Insert Query", insertQuery);
-            logBlue("Values:", values);
-
             const insertResult = await executeQuery(connection, insertQuery, values);
-
-            const resultId = insertResult.insertId;
-
-
 
             return { insertId: insertResult.insertId };
         } catch (error) {

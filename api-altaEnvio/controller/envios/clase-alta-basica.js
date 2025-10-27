@@ -181,8 +181,6 @@ class EnviosBasico {
                 ", "
             )}) VALUES (${filteredColumns.map(() => "?").join(", ")})`;
             const result = await executeQuery(connection, insertQuery, values);
-            logYellow(`Insert Query: ${JSON.stringify(insertQuery)}`);
-            logBlue(`Values: ${JSON.stringify(values)}`);
 
             const insertId = result.insertId;
             if (did === 0 || did === "0") {
