@@ -64,7 +64,7 @@ class EnviosDireccionesDestino {
 
 
 
-            const results = await executeQuery(connection, checkDidEnvioQuery, [this.didEnvio], true);
+            const results = await executeQuery(connection, checkDidEnvioQuery, [this.didEnvio]);
 
             if (results.length > 0) {
                 // Si `didEnvio` ya existe, actualizarlo

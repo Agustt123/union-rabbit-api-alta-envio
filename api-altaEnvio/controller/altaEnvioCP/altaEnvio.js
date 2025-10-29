@@ -7,16 +7,17 @@ async function altaEnvioBasica(connection, body, company) {
         didCliente: body.clientId,
         didCuenta: body.accountId,
         flex: body.flex,
-        externo: body.externo,
+        exterior: body.externo,
         quien: body.userId,
         choferAsignado: body.dirverId,
-        ml_qr_seguridad: JSON.stringify(body.dataQr), //body.dataQr,
+        ml_qr_seguridad: JSON.stringify(body.dataQr),
         idEmpresa: body.companyId
     }
 
+    const envio = new EnviosBasico(data, company, connection);
 
-    const envio = new EnviosBasico(data, company, connection)
     const result = await envio.insert();
+
     return { didEnvio: result.did }
 };
 

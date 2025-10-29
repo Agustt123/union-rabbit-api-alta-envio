@@ -61,7 +61,7 @@ class OrdenesItems {
         "SELECT id,didOrden FROM ordenes_items WHERE didOrden = ?";
       const results = await executeQuery(connection, checkDidEnvioQuery, [
         this.didOrden,
-      ], true);
+      ]);
       console.log(results, "dsa");
 
       if (results.length > 0) {
@@ -96,11 +96,7 @@ class OrdenesItems {
         ", "
       )}) VALUES (${filteredColumns.map(() => "?").join(", ")})`;
 
-
-
-      const insertResult = await executeQuery(connection, insertQuery, values, true);
-
-
+      const insertResult = await executeQuery(connection, insertQuery, values);
 
       return { insertId: insertResult.insertId };
     } catch (error) {
