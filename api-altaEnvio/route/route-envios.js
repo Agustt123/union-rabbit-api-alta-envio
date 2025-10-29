@@ -120,6 +120,7 @@ router.post("/altaEnvio", async (req, res) => {
       res.status(500).json({
         mensaje: "Error al insertar.",
         estado: false,
+        company: company.did,
         error: error.message || error,
       });
     } finally {
