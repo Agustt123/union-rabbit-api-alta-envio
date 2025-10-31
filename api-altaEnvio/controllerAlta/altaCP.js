@@ -13,10 +13,9 @@ async function altaCP(connection, data, company) {
     await sendToShipmentStateMicroService(company.did, data.quien, didEnvio, 7);
 
     if (data.externo == 0) {
-        return { estado: true, data: didEnvio }
     }
 
-    await envioExterior(didEnvio, data.didExterno, data.nombreClienteEnEmpresaDueña, data.flex, company.did);
+    await envioExterior(didEnvio, data.didExterno, data.nombreClienteEnEmpresaDueña, data.flex, data.empresaDueña);
 
     return {
         estado: true,
