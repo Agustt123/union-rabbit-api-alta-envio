@@ -15,7 +15,7 @@ async function altaCP(connection, data, company) {
     if (data.externo == 0) {
     }
 
-    await envioExterior(didEnvio, data.didExterno, data.nombreClienteEnEmpresaDueña, data.flex, data.empresaDueña);
+    await envioExterior(didEnvio, data.didExterno, data.nombreClienteEnEmpresaDueña, data.flex, company.did);
 
     return {
         estado: true,
