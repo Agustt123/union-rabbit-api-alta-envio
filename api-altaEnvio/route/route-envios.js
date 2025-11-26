@@ -491,7 +491,7 @@ router.post("/enviosMLredis", async (req, res) => {
 
       await connection.commit();
     }
-    console.log("Envío procesado exitosamente:", newDid);
+    // console.log("Envío procesado exitosamente:", newDid);
 
     return res.status(200).json({
       estado: true,
