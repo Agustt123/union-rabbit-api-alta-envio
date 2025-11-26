@@ -3,7 +3,7 @@ const router = express.Router();
 
 const EnviosFlex = require("../controller/envios/clase-enviosflex");
 
-const { redisClient, getConnection, getCompanyById } = require("../dbconfig");
+const { redisClient, getConnection, getCompanyById, getCompanyByCodigo } = require("../dbconfig");
 
 const validateData = require("../middleware/middleware");
 
@@ -86,10 +86,18 @@ router.post("/cargardatos", async (req, res) => {
 router.post("/altaEnvio", async (req, res) => {
   const data = req.body;
   console.log(data, "data cargardatos");
+  let company;
+  if (data.data.codigo) {
+
+    data.data.idEmpresa = await getCompanyByCodigo(data.data.codigo);
+    console.log("sdadsasd", data.data.idEmpresa);
+
+
+  }
 
 
   try {
-    const company = await getCompanyById(data.data.idEmpresa);
+    company = await getCompanyById(data.data.idEmpresa);
 
     if (!company || !company.did) {
       return res.status(400).json({

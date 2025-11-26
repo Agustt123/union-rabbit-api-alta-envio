@@ -2,7 +2,6 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { logRed, logGreen } = require('./logsCustom.js');
 
-// 👉 Endpoint al que querés pegarle SIEMPRE
 const API_ENDPOINT = "https://serverestado.lightdata.app/estados";
 
 // ---------------- UTILIDADES ----------------
@@ -14,7 +13,7 @@ function getFechaUTC3() {
     return fecha.toISOString();
 }
 
-// Token SHA256 basado en la fecha (ddmmaaaa)
+
 function generarTokenFechaHoy() {
     const ahora = new Date();
     ahora.setHours(ahora.getHours() - 3);
@@ -29,7 +28,6 @@ function generarTokenFechaHoy() {
     return hash;
 }
 
-// ---------------- FUNCIÓN PRINCIPAL ----------------
 
 async function sendToShipmentStateMicroServiceAPI(companyId, userId, shipmentId, estado) {
 

@@ -64,7 +64,7 @@ async function AltaEnvio2(company, connection, data) {
         try {
             let insertId;
 
-            if (data.data.flex == 1) {
+            if (data.data.flex == 1 && !data.data.codigo) {
                 console.log("Procesando como Fleeeex");
 
                 const envioflex = new EnviosFlex(
@@ -337,7 +337,7 @@ async function AltaEnvio2(company, connection, data) {
 
 
                 let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
-                console.log(respuesta, "fsdfsdfds");
+
 
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
                 const tokenCLiente = await obtenerTokenCliente(connection, data.data.didCliente) || 0

@@ -163,5 +163,25 @@ async function getCompanyById(companyId) {
         throw error;
     }
 }
+async function getCompanyByCodigo(codigo) {
+    try {
+        // Si la lista está vacía, cargar desde Redis
+        if (!companiesList || Object.keys(companiesList).length === 0) {
+            await loadCompaniesFromRedis();
+        }
 
-module.exports = { getConnection, getFromRedis, redisClient, getProdDbConfig, executeQuery, getCompanyById };
+        // Buscar company donde company.codigo === codigo
+        for (const company of Object.values(companiesList)) {
+            if (company.codigo == codigo) {
+                return company.did;
+            }
+        }
+
+        return null; // No encontrada
+    } catch (error) {
+        logRed(`Error en getCompanyByCodigo: ${error.stack}`);
+        throw error;
+    }
+}
+
+module.exports = { getConnection, getFromRedis, redisClient, getProdDbConfig, executeQuery, getCompanyById, getCompanyByCodigo };
