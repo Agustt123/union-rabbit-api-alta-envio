@@ -24,10 +24,11 @@ const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({
-  origin: '*', // Permite solo este origen
-  methods: ['GET', 'POST'], // Limitar los métodos HTTP
-  allowedHeaders: ['Content-Type'], // Permitir ciertos encabezados
+  origin: '*',  // O mejor, especificá dominio
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
+
 // Importar rutas
 const router = require('./route/route-envios');
 const enviospack = require('./route/route-enviopack');
