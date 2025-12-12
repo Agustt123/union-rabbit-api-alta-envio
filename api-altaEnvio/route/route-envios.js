@@ -21,6 +21,7 @@ const { ListarEnvio } = require("../funciones/listadoEnvio/ListarEnvio");
 const { envioExterior } = require("../controllerAlta/controllerAltaEnvioExteriores");
 const { deleteShipment } = require("../controller/eliminarEnvio/eliminarEnvio.js");
 const { AltaEnvioWms } = require("../controllerAlta/controllerAltaWms");
+const { AltaEnvioMisPicho } = require("../controllerAlta/controllerAltaEnvioMisPicho.js");
 
 
 const camposRequeridos = [
@@ -144,6 +145,65 @@ router.post("/altaEnvio", async (req, res) => {
     });
   }
 });
+router.post("/altaEnvioMisPichos", async (req, res) => {
+  const data = req.body;
+  console.log(data, "data cargardatos");
+  let company;
+
+  try {
+    company = await getCompanyById(data.didempresa || data.idEmpresa);
+
+    if (!company || !company.did) {
+      return res.status(400).json({
+        message: "Empresa no encontrada o inválida.",
+        success: false,
+      });
+    }
+
+    const connection = await getConnection(company.did);
+
+    try {
+      const result = await AltaEnvioMisPicho(company, connection, data);
+
+      if (!result || result.estado === false) {
+        logRed("Error al cargar los datos:", result);
+        return res.status(500).json({
+          mensaje: "Error al insertar.",
+          estado: false,
+          error: result?.message || "Error desconocido",
+        });
+      }
+
+      res.status(200).json({
+        estado: true,
+        did: result.insertId,
+        qr: result.dataqr,
+        token: result.token,
+        didEmpresa: result.didEmpresa
+      });
+
+    } catch (error) {
+      console.error("Error en AltaEnvio:", error);
+      res.status(500).json({
+        mensaje: "Error al insertar.",
+        estado: false,
+        company: company.did,
+        error: error.message || error,
+      });
+    } finally {
+      connection.end();
+    }
+
+  } catch (error) {
+    console.error("Error obteniendo la empresa o la conexión:", error);
+    res.status(500).json({
+      message: "Error interno al procesar la solicitud.",
+      success: false,
+      error: error.message || error,
+    });
+  }
+});
+
 router.post("/altaEnvioWms", async (req, res) => {
   const data = req.body;
   console.log(data, "data cargardatos");

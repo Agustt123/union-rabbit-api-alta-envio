@@ -161,7 +161,7 @@ class Envios {
         this.elim = 52; // Cambiar a 52 si elim está vacío
       }
 
-      if (this.did === 0 || this.did === "0") {
+      if (this.did == 0 || this.did == "0") {
         return this.createNewRecordWithIdUpdate(this.connection);
       } else {
         return this.checkAndUpdateDid(this.connection);
