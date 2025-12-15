@@ -68,9 +68,9 @@ async function sendToShipmentStateMicroServiceAPI(
     userId,
     shipmentId,
     estado,
+    db,
     latitud = null,
     longitud = null,
-    db
 ) {
     const message = {
         didempresa: companyId,
