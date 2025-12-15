@@ -97,7 +97,7 @@ async function getFromRedis(key) {
 
 function getProdDbConfig(company) {
     return {
-        host: "bhsmysql1.lightdata.com.ar",
+        host: "10.60.0.125",
         user: company.dbuser,
         password: company.dbpass,
         database: company.dbname
