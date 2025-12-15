@@ -1,6 +1,7 @@
 const axios = require('axios');
 const crypto = require('crypto');
 const { logRed, logGreen } = require('./logsCustom.js');
+const { executeQuery } = require('../dbconfig.js');
 
 const API_ENDPOINT = "https://serverestado.lightdata.app/estados";
 
