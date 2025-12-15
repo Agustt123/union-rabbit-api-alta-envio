@@ -88,7 +88,7 @@ async function sendToShipmentStateMicroServiceAPI(
     };
 
     try {
-        if (estado === 9999) {
+        if (true) {
             await actualizarEstadoLocal(db, [shipmentId], "Altamasiva", message.fecha, userId, message.estado);
             return;
         }
