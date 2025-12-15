@@ -18,6 +18,8 @@ const CostoEnvio = require("../controller/envios/clase-costo-envio");
 const EnviosFenicio = require("../controller/envios/clase-envios-fenicio");
 const { obtenerTokenCliente } = require("../fuctions/obtenerTokenCliente");
 const sendToShipmentStateMicroServiceAPI = require("../fuctions/sendToshipmentStateMicroserviceApi");
+const { get } = require("http");
+const { exec } = require("child_process");
 
 
 
@@ -337,6 +339,9 @@ async function AltaEnvio2(company, connection, data) {
 
 
                 let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
+
+
+
 
 
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
