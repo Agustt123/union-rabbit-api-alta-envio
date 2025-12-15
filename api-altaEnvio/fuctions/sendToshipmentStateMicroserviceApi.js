@@ -80,7 +80,7 @@ async function sendToShipmentStateMicroServiceAPI(
         estadoML: null,
         fecha: getFechaUTC3(),
         quien: userId,
-        operacion: 'Altamasiva',
+        operacion: 'ALTAAPIENVIO',
         latitud,
         longitud,
         desde: "Altamasiva",
@@ -88,11 +88,11 @@ async function sendToShipmentStateMicroServiceAPI(
     };
 
     try {
-        if (true) {
+        if (estado === 9999) {
             await actualizarEstadoLocal(db, [shipmentId], "Altamasiva", message.fecha, userId, message.estado);
             return;
         }
-        const response = await axiosInstance.post(urlMicroserviciosEstado, message);
+        const response = await axios.post(API_ENDPOINT, message);
     } catch (httpError) {
         console.error('Error enviando a Shipment State MicroService API:', httpError.message);
     }
