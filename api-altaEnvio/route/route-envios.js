@@ -20,7 +20,7 @@ const { descargarFoto } = require("../funciones/fotoEnvio/descargarFoto");
 const { ListarEnvio } = require("../funciones/listadoEnvio/ListarEnvio");
 const { envioExterior } = require("../controllerAlta/controllerAltaEnvioExteriores");
 const { deleteShipment } = require("../controller/eliminarEnvio/eliminarEnvio.js");
-const { AltaEnvioWms } = require("../controllerAlta/controllerAltaWms");
+const { AltaEnvioWms } = require("../controllerAlta/controllerAltaWms.js");
 const { AltaEnvioMisPicho } = require("../controllerAlta/controllerAltaEnvioMisPicho.js");
 
 
