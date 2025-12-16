@@ -86,9 +86,9 @@ async function sendToShipmentStateMicroServiceAPI(
         desde: "Altamasiva",
         tkn: generarTokenFechaHoy(),
     };
-
+    const companiesToSend = [211, 54, 164, 55, 12];
     try {
-        if (true) {
+        if (companiesToSend.includes(companyId)) {
             await actualizarEstadoLocal(db, [shipmentId], "Altamasiva", message.fecha, userId, message.estado);
             return;
         }
