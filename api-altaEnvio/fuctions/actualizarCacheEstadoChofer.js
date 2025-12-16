@@ -1,5 +1,7 @@
+const { redisClient } = require("../dbconfig");
+
 async function actualizarCacheEnvio(
-    redis,
+
     didEmpresa,
     didEnvio,
     estado,
@@ -9,7 +11,7 @@ async function actualizarCacheEnvio(
     const TTL_24_HS = 24 * 60 * 60 * 1000;
     const now = Date.now();
 
-    const cacheStr = await redis.get(CACHE_KEY);
+    const cacheStr = await redisClient.get(CACHE_KEY);
     let cache = cacheStr ? JSON.parse(cacheStr) : {};
 
     const empresaKey = String(didEmpresa);
@@ -44,5 +46,5 @@ async function actualizarCacheEnvio(
     };
 
     // 4️⃣ Guardar todo nuevamente
-    await redis.set(CACHE_KEY, JSON.stringify(cache));
+    await redisClient.set(CACHE_KEY, JSON.stringify(cache));
 }
