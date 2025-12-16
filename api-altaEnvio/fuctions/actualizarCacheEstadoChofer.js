@@ -48,3 +48,6 @@ async function actualizarCacheEnvio(
     // 4️⃣ Guardar todo nuevamente
     await redisClient.set(CACHE_KEY, JSON.stringify(cache));
 }
+module.exports = {
+    actualizarCacheEnvio
+};
