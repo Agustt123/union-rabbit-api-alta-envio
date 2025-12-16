@@ -88,7 +88,7 @@ async function sendToShipmentStateMicroServiceAPI(
     };
     const companiesToSend = [211, 54, 164, 55, 12];
     try {
-        if (companiesToSend.includes(companyId)) {
+        if (!companiesToSend.includes(companyId)) {
             await actualizarEstadoLocal(db, [shipmentId], "Altamasiva", message.fecha, userId, message.estado);
             return;
         }
