@@ -337,7 +337,7 @@ async function AltaEnvioWms(company, connection, data) {
 
 
 
-                let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7);
+                let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7, connection);
 
 
                 const qr = { local: 1, did: insertId, cliente: data.data.didCliente, empresa: company.did }
