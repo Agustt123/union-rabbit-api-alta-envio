@@ -21,7 +21,6 @@ const { obtenerTokenCliente } = require("../fuctions/obtenerTokenCliente");
 const { get } = require("http");
 const { exec } = require("child_process");
 const { sendToShipmentStateMicroServiceAPI } = require("../fuctions/sendToshipmentStateMicroserviceApi");
-const { actualizarCacheEnvioSafe } = require("../fuctions/actualizarCacheEstadoChofer");
 
 
 
@@ -343,7 +342,7 @@ async function AltaEnvio2(company, connection, data) {
                 let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7, connection);
 
 
-                actualizarCacheEnvioSafe(company.did, insertId, data.data.estado || 7, -1);
+
 
 
 
