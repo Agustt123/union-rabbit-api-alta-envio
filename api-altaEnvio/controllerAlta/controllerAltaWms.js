@@ -17,7 +17,7 @@ const CamposExtras = require("../controller/envios/clase-campos-extras");
 const CostoEnvio = require("../controller/envios/clase-costo-envio");
 const EnviosFenicio = require("../controller/envios/clase-envios-fenicio");
 const { obtenerTokenCliente } = require("../fuctions/obtenerTokenCliente");
-const sendToShipmentStateMicroServiceAPI = require("../fuctions/sendToshipmentStateMicroserviceApi");
+const { sendToShipmentStateMicroServiceAPI } = require("../fuctions/sendToshipmentStateMicroserviceApi");
 
 
 
