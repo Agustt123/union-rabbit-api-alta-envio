@@ -80,7 +80,7 @@ async function AltaEnvioMisPicho(company, connection, data) {
                 company.did,
                 data.data.quien || 0,
                 insertId,
-                data.data.estado || 1,
+                1,
                 connection
             );
 
