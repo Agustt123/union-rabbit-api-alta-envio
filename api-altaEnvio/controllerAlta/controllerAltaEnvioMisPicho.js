@@ -16,9 +16,10 @@ async function AltaEnvioMisPicho(company, connection, data) {
             monto_total_a_cobrar: data.data.total_a_cobrar || 0,
             valor_declarado: data.data.valor_declarado || 0,
 
+
             delivery_preference: data.data.delivery_preference || "",
             ml_shipment_id: data.data.ml_shipment_id || "",
-            ml_qr_seguridad: data.data.qr_seguridad || "",
+            ml_qr_seguridad: data.data.ml_qr_seguridad || "",
             ml_id_venta: data.data.id_venta || "",
             ml_vendedor_id: data.data.idenvio || "",
             didCliente: data.data.didCliente,
@@ -79,7 +80,7 @@ async function AltaEnvioMisPicho(company, connection, data) {
                 company.did,
                 data.data.quien || 0,
                 insertId,
-                data.data.estado || 7,
+                data.data.estado || 1,
                 connection
             );
 
