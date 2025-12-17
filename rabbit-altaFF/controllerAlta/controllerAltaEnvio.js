@@ -152,10 +152,11 @@ async function handleFulfillment(data, connection, company) {
   const queryCheck = `
     SELECT ml_vendedor_id, ml_shipment_id, estado, did 
     FROM envios 
-    WHERE ml_shipment_id = ? AND superado = 0`;
+    WHERE ml_shipment_id = ? AND elim IN (0,52) and didCuenta =? AND superado = 0`;
 
   const result = await executeQuery(connection, queryCheck, [
     data.data.ml_shipment_id,
+    data.data.didCuenta
 
   ]);
 
