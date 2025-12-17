@@ -15,6 +15,7 @@ async function AltaEnvioMisPicho(company, connection, data) {
             obs: data.data.obs || "",
             monto_total_a_cobrar: data.data.total_a_cobrar || 0,
             valor_declarado: data.data.valor_declarado || 0,
+            estado: data.data.estado = 1,
 
 
             delivery_preference: data.data.delivery_preference || "",
@@ -80,7 +81,7 @@ async function AltaEnvioMisPicho(company, connection, data) {
                 company.did,
                 data.data.quien || 0,
                 insertId,
-                1,
+                data.data.estado_envio || "7",
                 connection
             );
 

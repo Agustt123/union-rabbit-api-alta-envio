@@ -10,6 +10,7 @@ class Envios {
       flex = 0,
       turbo = 0,
       exterior = 0,
+      estado = "",
 
       fecha_inicio = new Date(),
       fechaunix = this.generateFechaUnix(),
@@ -89,6 +90,7 @@ class Envios {
 
     this.tamaño = tamaño;
     this.costo_envio_ml = costo_envio_ml;
+    this.estado = estado;
 
     let fechaDeadlineRaw = deadline || new Date().toLocaleDateString("es-AR");
     let partesFecha = fechaDeadlineRaw.split("/");
