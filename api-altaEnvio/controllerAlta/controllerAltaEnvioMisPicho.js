@@ -1,13 +1,13 @@
 const Envios = require("../controller/envios/clase-envios");
 const EnviosDireccionesDestino = require("../controller/envios/clase-envios_direcciones_destino");
 const { logYellow, logGreen, logPurple, logBlue } = require("../fuctions/logsCustom");
-const sendToShipmentStateMicroServiceAPI = require("../fuctions/sendToshipmentStateMicroserviceApi");
+const { sendToShipmentStateMicroServiceAPI } = require("../fuctions/sendToshipmentStateMicroserviceApi");
 
 async function AltaEnvioMisPicho(company, connection, data) {
     try {
 
         const dataEnvio = {
-            did: data.data.idenvio || 0,
+            did: data.didenvio || 0,
             destination_receiver_name: data.data.destinatario,
             destination_receiver_email: data.data.email,
             fecha_venta: data.data.fechaVenta,
@@ -15,8 +15,10 @@ async function AltaEnvioMisPicho(company, connection, data) {
             obs: data.data.obs || "",
             monto_total_a_cobrar: data.data.total_a_cobrar || 0,
             valor_declarado: data.data.valor_declarado || 0,
-            did: data.data.idenvio || 0,
+
             delivery_preference: data.data.delivery_preference || "",
+            ml_shipment_id: data.data.id_shipment || "",
+            ml_qr_seguridad: data.data.qr_seguridad || "",
             ml_id_venta: data.data.id_venta || "",
             ml_vendedor_id: data.data.id_seller || "",
             didCliente: data.data.didCliente,
