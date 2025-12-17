@@ -77,7 +77,8 @@ async function AltaEnvioMisPicho(company, connection, data) {
                 company.did,
                 data.data.quien || 0,
                 insertId,
-                data.data.estado || 7
+                data.data.estado || 7,
+                connection
             );
 
             const qr = {
