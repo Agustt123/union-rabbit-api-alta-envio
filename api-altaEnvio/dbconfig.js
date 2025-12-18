@@ -1,5 +1,9 @@
 const mysql = require('mysql');
 const redis = require('redis');
+const axios = require('axios');
+const https = require('https');
+const { MicroservicioEstadosService } = require('./fuctions/microservicio_estado.js');
+
 const { logYellow, logRed } = require("./fuctions/logsCustom")
 const redisClient = redis.createClient({
     socket: {
@@ -18,6 +22,23 @@ redisClient.on('error', (err) => {
     console.log('Redis conectado');
 })();
 let companiesList = {};
+
+
+const httpsAgent = new https.Agent({
+    keepAlive: true,
+    maxSockets: 100,
+    timeout: 5000, // tiempo máximo de socket en ms
+    family: 4, // fuerza IPv4, evita delay IPv6
+});
+
+// 🔹 Axios preconfigurado (usa el agente y timeout)
+const axiosInstance = axios.create({
+    httpsAgent,
+    timeout: 5000, // 5 segundos máximo por request
+});
+
+const microservicioEstadosService = new MicroservicioEstadosService(60000, axiosInstance, "https://serverestado.lightdata.app/estados");
+
 async function getConnection(idempresa) {
     try {
         //     console.log("idempresa recibido:", idempresa);
@@ -184,4 +205,4 @@ async function getCompanyByCodigo(codigo) {
     }
 }
 
-module.exports = { getConnection, getFromRedis, redisClient, getProdDbConfig, executeQuery, getCompanyById, getCompanyByCodigo };
+module.exports = { getConnection, getFromRedis, redisClient, getProdDbConfig, executeQuery, getCompanyById, getCompanyByCodigo, microservicioEstadosService };

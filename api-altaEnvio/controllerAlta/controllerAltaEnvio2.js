@@ -341,6 +341,9 @@ async function AltaEnvio2(company, connection, data) {
 
 
                 let respuesta = await sendToShipmentStateMicroServiceAPI(company.did, data.data.quien || 0, insertId, data.data.estado || 7, connection);
+
+                console.log(respuesta);
+
                 actualizarCacheEnvio(company.did, insertId, data.data.estado || 7, data.data.chofer || 0)
 
 

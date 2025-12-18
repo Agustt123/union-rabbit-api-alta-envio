@@ -1,7 +1,9 @@
 const axios = require('axios');
 const crypto = require('crypto');
 const { logRed, logGreen } = require('./logsCustom.js');
-const { executeQuery } = require('../dbconfig.js');
+const { executeQuery, microservicioEstadosService } = require('../dbconfig.js');
+const { MicroservicioEstadosService } = require('./microservicio_estado.js');
+const sendToShipmentStateMicroService = require('./sendToshipmentStateMicroservice.js');
 
 const API_ENDPOINT = "https://serverestado.lightdata.app/estados";
 
@@ -86,15 +88,23 @@ async function sendToShipmentStateMicroServiceAPI(
         desde: "Altamasiva",
         tkn: generarTokenFechaHoy(),
     };
-    const companiesToSend = [211, 54, 164, 55, 12];
-    try {
-        if (!companiesToSend.includes(companyId)) {
-            await actualizarEstadoLocal(db, [shipmentId], "Altamasiva", message.fecha, userId, message.estado);
-            return;
+
+
+    if (microservicioEstadosService.estaCaido()) {
+        await actualizarEstadoLocal(db, [shipmentId], "ALTAENVIO", getFechaUTC3(), userId, estado);
+
+        await sendToShipmentStateMicroService(companyId, userId, shipmentId, estado);
+    }
+    else {
+        try {
+            await microservicioEstadosService.sendEstadoAPI(message);
+        } catch (error) {
+            logRed(`Error enviando a Shipment State MicroService API: ${error.message}`);
+            microservicioEstadosService.setEstadoCaido();
+            await actualizarEstadoLocal(db, [shipmentId], "colecta", getFechaUTC3(), userId, 0);
+            await sendToShipmentStateMicroService(companyId, userId, shipmentId, estado);
+
         }
-        const response = await axios.post(API_ENDPOINT, message);
-    } catch (httpError) {
-        console.error('Error enviando a Shipment State MicroService API:', httpError.message);
     }
 }
 
