@@ -101,7 +101,7 @@ async function sendToShipmentStateMicroServiceAPI(
         } catch (error) {
             logRed(`Error enviando a Shipment State MicroService API: ${error.message}`);
             microservicioEstadosService.setEstadoCaido();
-            await actualizarEstadoLocal(db, [shipmentId], "colecta", getFechaUTC3(), userId, 0);
+            await actualizarEstadoLocal(db, [shipmentId], "mlia", getFechaUTC3(), userId, 7);
             await sendToShipmentStateMicroService(companyId, userId, shipmentId, estado);
 
         }
