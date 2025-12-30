@@ -2,6 +2,13 @@ const Envios = require("../controller/envios/clase-envios");
 const EnviosDireccionesDestino = require("../controller/envios/clase-envios_direcciones_destino");
 const { logYellow, logGreen, logPurple, logBlue } = require("../fuctions/logsCustom");
 const { sendToShipmentStateMicroServiceAPI } = require("../fuctions/sendToshipmentStateMicroserviceApi");
+function formatFechaVenta(fechaVenta) {
+    if (!fechaVenta) return null;
+
+    const [day, month, year] = fechaVenta.split("/");
+
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")} 00:00:00`;
+}
 
 async function AltaEnvioMisPicho(company, connection, data) {
     try {
@@ -10,7 +17,7 @@ async function AltaEnvioMisPicho(company, connection, data) {
             did: data.didenvio || 0,
             destination_receiver_name: data.data.destinatario,
             destination_receiver_email: data.data.email,
-            fecha_venta: data.data.fechaVenta,
+            fecha_venta: formatFechaVenta(data.data.fechaVenta),
             peso: data.data.peso,
             obs: data.data.obs || "",
             monto_total_a_cobrar: data.data.total_a_cobrar || 0,
